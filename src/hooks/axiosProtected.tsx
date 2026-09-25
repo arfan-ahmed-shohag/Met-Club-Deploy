@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 
 const instance = axios.create({
-    baseURL: "https://meteorologyclub.com/api/api/v1",
+    baseURL: "https://api.meteorologyclub.com/api/v1",
     withCredentials: true,
 });
 
