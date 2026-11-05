@@ -27,6 +27,15 @@ export function getLocalizedPath(pathname: string, locale: AppLocale) {
         { bn: "/learning-zone", en: "/en/learning-zone" },
         { bn: "/select-difficulty", en: "/en/select-difficulty" },
         { bn: "/learning-selection", en: "/en/learning-selection" },
+        { bn: "/registration", en: "/en/registration" },
+        { bn: "/lesson", en: "/en/lesson" },
+        { bn: "/start-quiz", en: "/en/start-quiz" },
+        { bn: "/quiz", en: "/en/quiz" },
+        { bn: "/about", en: "/en/about" },
+        { bn: "/location", en: "/en/location" },
+        { bn: "/tutorials", en: "/en/tutorials" },
+        { bn: "/blogs", en: "/en/blogs" },
+        { bn: "/profile", en: "/en/profile" },
     ];
 
     for (const item of localizedPaths) {

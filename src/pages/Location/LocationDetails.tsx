@@ -124,7 +124,7 @@ export default function LocationDetails() {
                         {/* Dark overlay to make text visible */}
                         <div className="absolute inset-0 bg-black/60 z-0"></div>
 
-                        <div className="container mx-auto px-4 max-w-6xl relative z-10">
+                        <div className="site-container relative z-10 px-4 sm:px-6 lg:px-8">
                             {/* Centered Title */}
                             <div className="text-center mb-12">
                                 <h2 className="text-4xl md:text-5xl font-extrabold text-red-600 inline-block relative drop-shadow-md" style={{ color: "#b91c1c", textShadow: "-1px -1px 0 rgba(255,255,255,0.96), 1px -1px 0 rgba(255,255,255,0.96), -1px 1px 0 rgba(255,255,255,0.96), 1px 1px 0 rgba(255,255,255,0.96), 0 2px 0 rgba(185,28,28,0.20), 0 8px 20px rgba(127,29,29,0.24)" }}>
@@ -175,7 +175,7 @@ export default function LocationDetails() {
 
                 <div className="space-y-16">
                     {schools.length === 0 && (
-                        <div className="container mx-auto text-center text-gray-500 pt-10">
+                        <div className="site-container px-4 pt-10 text-center text-gray-500 sm:px-6 lg:px-8">
                             এই লোকেশনে এখনো কোনো স্কুল বা মেম্বার যোগ করা হয়নি।
                         </div>
                     )}
@@ -183,7 +183,7 @@ export default function LocationDetails() {
                         <section key={school.id} className="relative z-10">
                             {/* School Banner (Full Width Background) */}
                             <div className="bg-gradient-to-r from-red-800 to-red-600 shadow-xl mb-10 w-full">
-                                <div className="container mx-auto px-4 md:px-0 text-white p-8 md:p-10 relative overflow-hidden flex flex-col md:flex-row justify-between items-center max-w-6xl">
+                                <div className="site-container relative flex flex-col items-center justify-between overflow-hidden px-4 py-8 text-white sm:px-6 md:flex-row md:py-10 lg:px-8">
                                     <div className="z-10 md:w-3/5">
                                         <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight drop-shadow-md mb-3">
                                             {school.nameBn}
@@ -207,7 +207,7 @@ export default function LocationDetails() {
                             </div>
 
                             {/* Members Section (Centered) */}
-                            <div className="container mx-auto px-4 md:px-0 max-w-6xl">
+                            <div className="site-container px-4 sm:px-6 lg:px-8">
                                 <div>
                                     <h3 className="text-xl md:text-2xl font-bold text-red-800 mb-6 flex items-center gap-2">
                                         <Users className="w-6 h-6" />

@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import metClubLogo from "../../assets/images/logo_original.png";
 import { FiPlay } from "react-icons/fi";
 import useLogout from "../../hooks/useLogout";
-import { getLocalizedPath, getStoredLocale } from "../../utils/language";
+import { getLocalizedPath, getStoredLocale, setStoredLocale } from "../../utils/language";
 import useAuth from "../../hooks/useAuth";
 import { profileImageUrl } from "../../lib/profile";
 
@@ -57,11 +57,22 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
+    const location = useLocation();
     const handleLogout = useLogout();
     const locale = getStoredLocale();
     const { user, isAuthenticated, isLoading, error, reloadUser } = useAuth();
     const avatar = user ? Array.from(new Intl.Segmenter(locale, { granularity: "grapheme" }).segment(user.fullName.trim()))[0]?.segment.toLocaleUpperCase(locale) : "";
     const roleLabel = user?.role === "admin" ? (locale === "en" ? "Admin" : "অ্যাডমিন") : (locale === "en" ? "Student" : "শিক্ষার্থী");
+    const canSwitchLanguage = getLocalizedPath(location.pathname, locale === "en" ? "bn" : "en") !== location.pathname;
+
+    const handleLanguageSwitch = (targetLocale: "bn" | "en") => {
+        if (targetLocale === locale) return;
+        const targetPath = getLocalizedPath(location.pathname, targetLocale);
+        if (targetPath === location.pathname) return;
+        setStoredLocale(targetLocale);
+        navigate({ pathname: targetPath, search: location.search, hash: location.hash });
+        setDropdownOpen(false);
+    };
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -77,7 +88,7 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
     return (
         <div className="h-18.5">
             <div
-                className="fixed top-0 left-0 right-0 z-50 w-full flex items-center justify-between px-6 py-3"
+                className="fixed top-0 left-0 right-0 z-50 w-full flex items-center justify-between py-3"
                 style={{
                     background: "rgba(255,255,255,0.12)",
                     backdropFilter: "blur(28px) saturate(180%)",
@@ -114,7 +125,7 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                     }}
                 />
 
-                <div className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-0">
+                <div className="site-container relative z-10 flex items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
                     {/* LEFT LOGO */}
                     <Link to={getLocalizedPath("/", locale)} className="relative z-10 shrink-0">
                         <div className="flex items-center gap-2 group">
@@ -149,11 +160,35 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                     </span>
 
                     {/* RIGHT USER */}
-                    <div className="relative z-30 shrink-0 flex items-center gap-2" ref={dropdownRef}>
+                    <div className="relative z-30 shrink-0 flex items-center gap-6" ref={dropdownRef}>
+                        {canSwitchLanguage && (
+                            <div
+                                role="group"
+                                aria-label={locale === "en" ? "Select language" : "ভাষা নির্বাচন করুন"}
+                                className="inline-flex items-center rounded bg-white shadow-sm backdrop-blur-sm overflow-hidden"
+                            >
+                                <button
+                                    type="button"
+                                    onClick={() => handleLanguageSwitch("bn")}
+                                    aria-pressed={locale === "bn"}
+                                    className={`px-3 py-1.5 text-xs font-semibold transition-colors sm:text-sm cursor-pointer ${locale === "bn" ? "bg-red-600 text-white shadow-md" : "text-red-900 hover:bg-white/60"}`}
+                                >
+                                    BN
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => handleLanguageSwitch("en")}
+                                    aria-pressed={locale === "en"}
+                                    className={`px-3 py-1.5 text-xs font-semibold transition-colors sm:text-sm cursor-pointer ${locale === "en" ? "bg-red-600 text-white" : "text-red-900 hover:bg-white/60"}`}
+                                >
+                                    EN
+                                </button>
+                            </div>
+                        )}
                         {!isAuthenticated && (
                         <Link
                             to={getLocalizedPath("/login", locale)}
-                            className="rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-md transition-colors hover:bg-red-700"
+                            className="rounded bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-md transition-colors hover:bg-red-600"
                         >
                             {locale === "en" ? "Login" : "লগইন"}
                         </Link>
@@ -175,7 +210,7 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                             aria-expanded={dropdownOpen}
                             aria-controls="user-menu"
                             aria-label={user.fullName}
-                            className="flex items-center gap-2 rounded-2xl px-3 py-1.5 transition-all duration-200 select-none"
+                            className="flex items-center gap-1.5 rounded p-1.5 transition-all duration-200 select-none"
                             style={{
                                 background: dropdownOpen ? "rgba(255,255,255,0.42)" : "rgba(255,255,255,0.30)",
                                 border: "1.5px solid rgba(255,255,255,0.45)",
@@ -260,8 +295,17 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                                         <p className="truncate text-xs text-red-900/75" title={user.email}>{user.email}</p>
                                     </div>
                                 </div>
-
-                                
+                                <Link
+                                    to={getLocalizedPath("/blogs", locale)}
+                                    onClick={() => setDropdownOpen(false)}
+                                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-red-900 transition-colors hover:bg-red-100/60"
+                                >
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
+                                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" />
+                                    </svg>
+                                    {locale === "en" ? "Blog" : "ব্লগ"}
+                                </Link>
 
                                 <button
                                     onClick={() => {

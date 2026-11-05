@@ -106,9 +106,9 @@ export default function Chapter() {
           }}
         />
 
-        <div className="relative z-10 flex flex-1 flex-col items-center justify-start sm:justify-center px-4 sm:px-6 lg:px-12 py-6 sm:py-10">
+        <div className="relative z-10 flex flex-1 flex-col items-center justify-start py-6 sm:justify-center sm:py-10">
           {/* Chapters Grid */}
-          <div className="w-full max-w-6xl mx-auto">
+          <div className="site-container px-4 sm:px-6 lg:px-8">
             <div className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8 lg:hidden items-stretch">
               {chapters.map((topic: ChapterTopic, index: number) => (
                 <TopicCard key={topic.id} topic={topic} index={index} />

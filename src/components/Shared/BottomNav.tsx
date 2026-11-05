@@ -106,7 +106,7 @@ export default function BottomNav({
         }}
       />
 
-      <div className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between gap-2">
+      <div className="site-container relative z-10 flex items-center justify-between gap-2 px-4 sm:px-6 lg:px-8">
         {/* ── Previous ── */}
         <button
           onClick={onPrev}

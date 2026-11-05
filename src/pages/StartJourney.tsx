@@ -7,13 +7,13 @@ import citizenScienceImg from "../assets/images/citizen_science_img-cutout.webp"
 import bgImage from "../assets/images/start-journey-page-bg.jpeg";
 import TopNav from "../components/Shared/TopBar";
 import useAxiosProtected from "../hooks/axiosProtected";
-import { useLocaleRouteSync } from "../hooks/useLocaleRouteSync";
+import { getStoredLocale } from "../utils/language";
 
 
 
 export default function StartJourney() {
 
-  useLocaleRouteSync("/start-journey", "/en/start-journey");
+  const isEnglish = getStoredLocale() === "en";
 
 
   const axios = useAxiosProtected();
@@ -44,7 +44,7 @@ export default function StartJourney() {
         }}
       />
 
-      <TopNav brandName="মেট ক্লাব" />
+      <TopNav brandName={isEnglish ? "Met Club" : "মেট ক্লাব"} />
 
       {/* ── Main Content ── */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 pt-12 pb-12">
@@ -58,7 +58,7 @@ export default function StartJourney() {
                 "-1px -1px 0 rgba(255,255,255,0.96), 1px -1px 0 rgba(255,255,255,0.96), -1px 1px 0 rgba(255,255,255,0.96), 1px 1px 0 rgba(255,255,255,0.96), 0 2px 0 rgba(185,28,28,0.20), 0 8px 20px rgba(127,29,29,0.24)",
             }}
           >
-            মেট ক্লাবে স্বাগতম !
+            {isEnglish ? "Welcome to the Met Club!" : "মেট ক্লাবে স্বাগতম!"}
           </h1>
           <p
             className="text-lg md:text-xl mt-4"
@@ -68,33 +68,33 @@ export default function StartJourney() {
               textShadow: "0 1px 6px rgba(255,255,255,0.28)",
             }}
           >
-            প্রস্তুতির জন্য আপনার পথ নির্বাচন করুন
+            {isEnglish ? "Choose your path to preparation." : "প্রস্তুতির জন্য আপনার পথ নির্বাচন করুন।"}
           </p>
         </div>
 
         {/* Cards Grid */}
-        <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-stretch">
+        <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-stretch">
           <div className="card1 h-full">
             <ZoneCard
-              title="লার্ন উইথ ফান"
+              title={isEnglish ? "Learn with Fun" : "লার্ন উইথ ফান"}
               titleColor="#991b1b"
               borderColor="#f87171"
               btnBg="linear-gradient(135deg, #ef4444, #dc2626)"
               btnShadow="rgba(239,68,68,0.42)"
-              btnLabel="পড়া শুরু করুন"
-              link="/learning-selection"
+              btnLabel={isEnglish ? "Start Learning" : "পড়া শুরু করুন"}
+              link={isEnglish ? "/en/learning-selection" : "/learning-selection"}
               description={
                 <>
-                  <strong>আপনার জ্ঞান বৃদ্ধি করুন!</strong>
+                  <strong>{isEnglish ? "Enhance your knowledge!" : "আপনার জ্ঞান বৃদ্ধি করুন!"}</strong>
                   <br />
-                  আবহাওয়া, জলবায়ু এবং দুর্যোগ সম্পর্কে জানুন।
+                  {isEnglish ? "Learn about weather, climate, and disasters." : "আবহাওয়া, জলবায়ু এবং দুর্যোগ সম্পর্কে জানুন।"}
                 </>
               }
               blobColor="#fca5a5"
               illustration={
                 <img
                   src={storyImg}
-                  alt="Story Zone"
+                  alt={isEnglish ? "Learn with Fun" : "লার্নিং জোন"}
                   className="w-36 h-36 md:w-40 md:h-40 object-contain mx-auto drop-shadow-[0_10px_15px_rgba(0,0,0,0.15)]"
                 />
               }
@@ -103,26 +103,26 @@ export default function StartJourney() {
 
           <div className="card2 h-full">
             <ZoneCard
-              title="কমিউনিটি রেসকিউ মিশন"
+              title={isEnglish ? "Community Rescue Mission" : "কমিউনিটি রেসকিউ মিশন"}
               titleColor="#9a3412"
               borderColor="#fb923c"
               btnBg="linear-gradient(135deg, #fb923c, #f97316)"
               btnShadow="rgba(249,115,22,0.42)"
-              btnLabel={isChapterOneCompleted ? "সিমুলেশনে প্রবেশ করুন" : "প্রথম অধ্যায় সম্পন্ন করুন"}
+              btnLabel={isEnglish ? (isChapterOneCompleted ? "Enter Simulation" : "Complete First Chapter") : (isChapterOneCompleted ? "সিমুলেশনে প্রবেশ করুন" : "প্রথম অধ্যায় সম্পন্ন করুন")}
               // disabled={!isChapterOneCompleted}
               link="https://game.meteorologyclub.com/"
               description={
                 <>
-                  <strong>আপনার দক্ষতা পরীক্ষা করুন!</strong>
+                  <strong>{isEnglish ? "Test your skills!" : "আপনার দক্ষতা পরীক্ষা করুন!"}</strong>
                   <br />
-                  বাস্তব জীবনের সিমুলেশনে সিদ্ধান্ত নিন।
+                  {isEnglish ? "Make decisions in real-life simulations." : "বাস্তব জীবনের সিমুলেশনে সিদ্ধান্ত নিন।"}
                 </>
               }
               blobColor="#fdba74"
               illustration={
                 <img
                   src={simulationImg}
-                  alt="Simulation Zone"
+                  alt={isEnglish ? "Simulation Zone" : "সিমুলেশন জোন"}
                   className="w-36 h-36 md:w-40 md:h-40 object-contain mx-auto drop-shadow-[0_10px_15px_rgba(0,0,0,0.15)]"
                 />
               }
@@ -131,28 +131,28 @@ export default function StartJourney() {
         </div>
 
         {/* Resource Cards */}
-        <div className="mt-8 w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10 px-2 animate-[dropIn_0.5s_ease-out]">
+        <div className="mt-8 w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10 px-2 animate-[dropIn_0.5s_ease-out]">
           <div className="card3 h-full">
             <ZoneCard
-              title="নাসা লার্নিং রিসোর্স"
+              title={isEnglish ? "NASA Learning Resources" : "নাসা লার্নিং রিসোর্স"}
               titleColor="#7f1d1d"
               borderColor="#f87171"
               btnBg="linear-gradient(135deg, #ef4444, #dc2626)"
               btnShadow="rgba(220, 38, 38, 0.42)"
-              btnLabel="রিসোর্সে প্রবেশ করুন"
+              btnLabel={isEnglish ? "Access Resources" : "রিসোর্সে প্রবেশ করুন"}
               link="https://www.nasa.gov/learning-resources/"
               description={
                 <>
-                  <strong>আকর্ষণীয় তথ্য এক্সপ্লোর করুন!</strong>
+                  <strong>{isEnglish ? "Explore interesting facts!" : "আকর্ষণীয় তথ্য এক্সপ্লোর করুন!"}</strong>
                   <br />
-                  মহাকাশ, জলবায়ু ও দুর্যোগ সম্পর্কে জানুন।
+                  {isEnglish ? "Learn about space, climate, and disasters." : "মহাকাশ, জলবায়ু ও দুর্যোগ সম্পর্কে জানুন।"}
                 </>
               }
               blobColor="#fca5a5"
               illustration={
                 <img
                   src={nasaResourceImg}
-                  alt="NASA Learning Resource"
+                  alt={isEnglish ? "NASA Learning Resources" : "নাসা লার্নিং রিসোর্স"}
                   className="w-36 h-36 md:w-40 md:h-40 object-contain mx-auto drop-shadow-[0_10px_15px_rgba(0,0,0,0.15)]"
                 />
               }
@@ -161,25 +161,25 @@ export default function StartJourney() {
 
           <div className="card4 h-full">
             <ZoneCard
-              title="সিটিজেন সায়েন্স পোর্টাল"
+              title={isEnglish ? "Citizen Science Portal" : "সিটিজেন সায়েন্স পোর্টাল"}
               titleColor="#14532d"
               borderColor="#4ade80"
               btnBg="linear-gradient(135deg, #16a34a, #15803d)"
               btnShadow="rgba(21, 128, 61, 0.42)"
-              btnLabel="পোর্টালে প্রবেশ করুন"
+              btnLabel={isEnglish ? "Enter Portal" : "পোর্টালে প্রবেশ করুন"}
               link="https://ee.kobotoolbox.org/x/HtTB5kOn"
               description={
                 <>
-                  <strong>গবেষণায় অংশ নিন!</strong>
+                  <strong>{isEnglish ? "Take part in research!" : "গবেষণায় অংশ নিন!"}</strong>
                   <br />
-                  আমাদের পোর্টালে আপনার ডেটা প্রদান করুন।
+                  {isEnglish ? "Submit your data to our portal." : "আমাদের পোর্টালে আপনার ডেটা প্রদান করুন।"}
                 </>
               }
               blobColor="#86efac"
               illustration={
                 <img
                   src={citizenScienceImg}
-                  alt="Citizen Science Portal"
+                  alt={isEnglish ? "Citizen Science Portal" : "সিটিজেন সায়েন্স পোর্টাল"}
                   className="w-36 h-36 md:w-40 md:h-40 object-contain mx-auto drop-shadow-[0_10px_15px_rgba(0,0,0,0.15)]"
                 />
               }

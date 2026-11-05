@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import axiosPublic from "../../../hooks/axiosPublic";
 import axios from "axios";
 import { setSessionToken } from "../../../lib/authSession";
@@ -13,6 +13,7 @@ type LoginFormValues = {
 
 export default function Login() {
     const navigate = useNavigate();
+    const location = useLocation();
     const axiosInstance = axiosPublic();
     const {
         register,
@@ -26,6 +27,11 @@ export default function Login() {
             const res = await axiosInstance.post("/auth/login", data);
             setSessionToken(res.data.data.accessToken);
             toast.success(res.data.message || "লগইন সফল! এখন যাত্রা শুরু করুন।", {id: "error"});
+            const requestedPage = (location.state as { from?: { pathname?: string; search?: string; hash?: string } } | null)?.from;
+            if (requestedPage?.pathname === "/blogs/write" || requestedPage?.pathname === "/en/blogs/write") {
+                navigate(`${requestedPage.pathname}${requestedPage.search || ""}${requestedPage.hash || ""}`, { replace: true });
+                return;
+            }
             if(res.data.data.user.role === "admin") {
                 navigate("/admin/overview");
                 return;

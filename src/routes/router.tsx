@@ -3,7 +3,8 @@ import type { RouteObject } from "react-router";
 import { lazy } from "react";
 import LoginPage from "../App";
 import { SuspenseWrapper } from "./SuspenseWrapper";
-import { getStoredLocale } from "../utils/language";
+import { getStoredLocale, setStoredLocale } from "../utils/language";
+import ProtectedRoute from "../components/Layouts/ProtectedRoute";
 
 // Lazy load page components
 const StartJourney = lazy(() => import("../pages/StartJourney"));
@@ -25,6 +26,10 @@ const ManageSchools = lazy(() => import("../pages/Admin/ManageSchools"));
 const CreateSchool = lazy(() => import("../pages/Admin/CreateSchool"));
 const Section = lazy(() => import("../pages/LearnignZone/LessionSection/Section"));
 const Tutorials = lazy(() => import("../pages/Tutorials/Tutorials"));
+const Blogs = lazy(() => import("../pages/Blogs/Blogs"));
+const BlogDetails = lazy(() => import("../pages/Blogs/BlogDetails"));
+const WriteBlog = lazy(() => import("../pages/Blogs/WriteBlog"));
+const ManageBlogs = lazy(() => import("../pages/Admin/ManageBlogs"));
 const EnglishLoginPage = lazy(() => import("../pages/EnglishVersion/Home"));
 const EnglishAbout = lazy(() => import("../pages/EnglishVersion/About/About"));
 const EnglishStartJourney = lazy(() => import("../pages/EnglishVersion/StartJourney/StartJourney"));
@@ -67,6 +72,12 @@ function redirectToStoredLocale(requestUrl: string, bnPath: string, enPath: stri
   return redirect(`${targetBase}${suffix}${url.search}`);
 }
 
+function syncStartJourneyLocale(requestUrl: string) {
+  const pathname = new URL(requestUrl).pathname;
+  setStoredLocale(pathname.startsWith("/en/") ? "en" : "bn");
+  return null;
+}
+
 const routes: RouteObject[] = [
 
   {
@@ -104,12 +115,12 @@ const routes: RouteObject[] = [
   {
     path: "/start-journey",
     element: <SuspenseWrapper><StartJourney /></SuspenseWrapper>,
-    loader: ({ request }) => redirectToStoredLocale(request.url, "/start-journey", "/en/start-journey"),
+    loader: ({ request }) => syncStartJourneyLocale(request.url),
   },
   {
     path: "/en/start-journey",
     element: <SuspenseWrapper><EnglishStartJourney /></SuspenseWrapper>,
-    loader: ({ request }) => redirectToStoredLocale(request.url, "/start-journey", "/en/start-journey"),
+    loader: ({ request }) => syncStartJourneyLocale(request.url),
   },
   {
     path: "/learning-selection",
@@ -242,6 +253,36 @@ const routes: RouteObject[] = [
     loader: ({ request }) => redirectToStoredLocale(request.url, "/tutorials", "/en/tutorials"),
   },
   {
+    path: "/blogs",
+    element: <SuspenseWrapper><Blogs /></SuspenseWrapper>,
+    loader: ({ request }) => redirectToStoredLocale(request.url, "/blogs", "/en/blogs"),
+  },
+  {
+    path: "/en/blogs",
+    element: <SuspenseWrapper><Blogs /></SuspenseWrapper>,
+    loader: ({ request }) => redirectToStoredLocale(request.url, "/blogs", "/en/blogs"),
+  },
+  {
+    path: "/blogs/write",
+    element: <SuspenseWrapper><ProtectedRoute><WriteBlog /></ProtectedRoute></SuspenseWrapper>,
+    loader: ({ request }) => redirectToStoredLocale(request.url, "/blogs", "/en/blogs"),
+  },
+  {
+    path: "/en/blogs/write",
+    element: <SuspenseWrapper><ProtectedRoute><WriteBlog /></ProtectedRoute></SuspenseWrapper>,
+    loader: ({ request }) => redirectToStoredLocale(request.url, "/blogs", "/en/blogs"),
+  },
+  {
+    path: "/blogs/:id",
+    element: <SuspenseWrapper><BlogDetails /></SuspenseWrapper>,
+    loader: ({ request }) => redirectToStoredLocale(request.url, "/blogs", "/en/blogs"),
+  },
+  {
+    path: "/en/blogs/:id",
+    element: <SuspenseWrapper><BlogDetails /></SuspenseWrapper>,
+    loader: ({ request }) => redirectToStoredLocale(request.url, "/blogs", "/en/blogs"),
+  },
+  {
     path: "/profile",
     element: <SuspenseWrapper><Profile /></SuspenseWrapper>,
     loader: ({ request }) => redirectToStoredLocale(request.url, "/profile", "/en/profile"),
@@ -288,6 +329,10 @@ const routes: RouteObject[] = [
       {
         path: "tutorials",
         element: <SuspenseWrapper><ManageTutorials /></SuspenseWrapper>,
+      },
+      {
+        path: "blogs",
+        element: <SuspenseWrapper><ManageBlogs /></SuspenseWrapper>,
       },
       {
         path: "create-tutorial",

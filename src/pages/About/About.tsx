@@ -38,7 +38,7 @@ export default function About() {
                 {/* Overlay for text readability */}
                 <div className="absolute inset-0 bg-black/45 z-10"></div>
 
-                <div className="relative z-20 text-center px-4 max-w-6xl mx-auto header-anim">
+                <div className="site-container relative z-20 text-center px-4 sm:px-6 lg:px-8 header-anim">
                     <div
                         className="text-3xl md:text-5xl font-bold mb-6 animate-slide-up delay-100"
                         style={{ color: "#b91c1c", textShadow: titleShadow }}
@@ -63,8 +63,8 @@ export default function About() {
             </section>
 
             {/* Mission & Vision - Solid Background, Solid Cards */}
-            <section id="mission-vision" className="relative z-10 py-10 md:py-15 lg:py-20 px-4 bg-linear-to-br from-red-50 to-orange-50">
-                <div className="container mx-auto max-w-6xl">
+            <section id="mission-vision" className="relative z-10 py-10 md:py-15 lg:py-20 bg-linear-to-br from-red-50 to-orange-50">
+                <div className="site-container px-4 sm:px-6 lg:px-8">
                     <div className="grid md:grid-cols-2 gap-8 mb-16">
                         <div className="group rounded-3xl p-10 hover:scale-105 transition-all duration-500 animate-slide-right"
                             style={{
@@ -164,9 +164,9 @@ export default function About() {
             </section>
 
             {/* Objectives - Image Background, Glassy Cards */}
-            <section id="objectives" className="relative z-10 py-10 md:py-15 lg:py-20 px-4 bg-cover bg-center" style={{ backgroundImage: `url(${startJourneyBg})` }}>
+            <section id="objectives" className="relative z-10 py-10 md:py-15 lg:py-20 bg-cover bg-center" style={{ backgroundImage: `url(${startJourneyBg})` }}>
                 <div className="absolute inset-0 bg-white/40 pointer-events-none backdrop-blur-[1px]"></div>
-                <div className="container mx-auto max-w-6xl relative z-10">
+                <div className="site-container relative z-10 px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
                         <h2 className="text-4xl md:text-5xl font-black mb-4" style={{ color: "#b91c1c", textShadow: titleShadow }}>আমাদের উদ্দেশ্য</h2>
                         <p className="text-lg md:text-xl font-semibold" style={{ color: "#1f2937", textShadow: subtitleShadow }}>
@@ -207,14 +207,14 @@ export default function About() {
             </section>
 
             {/* Structure - Solid Background, Solid Cards */}
-            <section id="structure" className="relative z-10 py-10 md:py-15 lg:py-20 px-4 bg-linear-to-br from-orange-50 to-red-50">
-                <div className="container mx-auto max-w-6xl">
+            <section id="structure" className="relative z-10 py-10 md:py-15 lg:py-20 bg-linear-to-br from-orange-50 to-red-50">
+                <div className="site-container px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
                         <h2 className="text-4xl md:text-5xl font-black mb-4" style={{ color: "#b91c1c", textShadow: titleShadow }}>সংগঠন কাঠামো</h2>
                         <p className="text-lg md:text-xl font-semibold" style={{ color: "#1f2937", textShadow: subtitleShadow }}>যুব নেতৃত্ব এবং সহযোগিতার মাধ্যমে শক্তিশালী</p>
                     </div>
 
-                    <div className="max-w-6xl mx-auto space-y-12">
+                    <div className="space-y-12">
                         {/* Technical Advisor Section */}
                         <div>
                             <div className="w-full max-w-3xl mx-auto mb-8">
@@ -313,8 +313,8 @@ export default function About() {
             </section>
 
             {/* Activities - Image Background, Glassy Cards */}
-            <section id="activities" className="relative z-10 py-10 md:py-15 lg:py-20 px-4 bg-cover bg-center" style={{ backgroundImage: `url(${aboutBg})` }}>
-                <div className="container mx-auto max-w-6xl relative z-10">
+            <section id="activities" className="relative z-10 py-10 md:py-15 lg:py-20 bg-cover bg-center" style={{ backgroundImage: `url(${aboutBg})` }}>
+                <div className="site-container relative z-10 px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
                         <h2 className="text-4xl md:text-5xl font-black mb-4" style={{ color: "#b91c1c", textShadow: titleShadow }}>আমাদের কার্যক্রম</h2>
                         <p className="text-lg md:text-xl font-semibold" style={{ color: "#ffffff", textShadow: subtitleShadow }}>হাতে-কলমে শিক্ষা এবং সম্প্রদায় সম্পৃক্ততা</p>
@@ -353,7 +353,7 @@ export default function About() {
 
             {/* Impact - Solid Background, Solid Cards */}
             <section id="impact" className="relative z-10 py-10 md:py-15 lg:py-20 bg-red-50">
-                <div className="container mx-auto max-w-6xl">
+                <div className="site-container px-4 sm:px-6 lg:px-8">
                     <div className="text-center">
                         <div className="flex items-center justify-center space-x-4 mb-6">
                             <img src={logo} alt="MET CLUB LOGO" className='w-40 h-40' />
@@ -370,8 +370,8 @@ export default function About() {
             </section>
 
             {/* Locations - Image Background, Glassy Cards */}
-            <section id="locations" className="relative z-10 py-10 md:py-15 lg:py-20 px-4 bg-cover bg-center" style={{ backgroundImage: `url(${chapterBg})` }}>
-                <div className="container mx-auto max-w-6xl relative z-10">
+            <section id="locations" className="relative z-10 py-10 md:py-15 lg:py-20 bg-cover bg-center" style={{ backgroundImage: `url(${chapterBg})` }}>
+                <div className="site-container relative z-10 px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
                         <h2 className="text-4xl md:text-5xl font-black mb-4" style={{ color: "#b91c1c", textShadow: titleShadow }}>কার্যক্রমের এলাকা</h2>
                         <p className="text-lg md:text-xl font-semibold" style={{ color: "#1f2937", textShadow: subtitleShadow }}>বাংলাদেশ জুড়ে সম্প্রসারণ</p>
@@ -415,8 +415,8 @@ export default function About() {
             </section>
 
             {/* Values - Solid Background, Solid Cards */}
-            <section id="values" className="relative z-10 py-10 md:py-15 lg:py-20 px-4 bg-linear-to-br from-red-50 to-orange-50">
-                <div className="container mx-auto max-w-6xl">
+            <section id="values" className="relative z-10 py-10 md:py-15 lg:py-20 bg-linear-to-br from-red-50 to-orange-50">
+                <div className="site-container px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
                         <h2 className="text-4xl md:text-5xl font-black mb-4" style={{ color: "#b91c1c", textShadow: titleShadow }}>আমাদের মূল্যবোধ</h2>
                         <p className="text-lg md:text-xl font-semibold" style={{ color: "#1f2937", textShadow: subtitleShadow }}>শিশু সুরক্ষা এবং অন্তর্ভুক্তিতে প্রতিশ্রুতিবদ্ধ</p>
@@ -461,8 +461,8 @@ export default function About() {
                 </div>
             </section>
 
-            <footer className="relative z-10 bg-[linear-gradient(180deg,rgba(20,6,6,0.9),rgba(20,6,6,1))] text-white py-10 md:py-15 lg:py-20 px-4 border-t border-red-900">
-                <div className="container mx-auto max-w-6xl">
+            <footer className="relative z-10 bg-[linear-gradient(180deg,rgba(20,6,6,0.9),rgba(20,6,6,1))] text-white py-10 md:py-15 lg:py-20 border-t border-red-900">
+                <div className="site-container px-4 sm:px-6 lg:px-8">
                     <div className="flex flex-col lg:flex-row items-center justify-center space-x-4">
                         <img src={logo} alt="MET CLUB LOGO" className='w-32 h-32' />
                         <div>

@@ -96,8 +96,8 @@ export default function Tutorials() {
             />
             <TopNav title="টিউটোরিয়াল ভিডিও" brandName="মেট ক্লাব" />
 
-            <div className="px-4 py-8 sm:px-6 lg:px-8">
-                <div className="mx-auto max-w-6xl">
+            <div className="py-8">
+                <div className="site-container px-4 sm:px-6 lg:px-8">
 
                     {isLoading ? (
                         <div className="rounded-3xl border border-slate-200 bg-white p-10 text-center text-slate-500 shadow-sm">

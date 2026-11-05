@@ -1,4 +1,6 @@
-const API_ORIGIN = "http://localhost:5000";
+const API_ORIGIN = (import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1")
+  .replace(/\/api\/v1\/?$/, "")
+  .replace(/\/$/, "");
 
 export const resolveMediaUrl = (value?: string | null) => {
   if (!value) return "";

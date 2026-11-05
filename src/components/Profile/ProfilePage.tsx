@@ -289,7 +289,7 @@ export default function ProfilePage({ isEnglish = false }: { isEnglish?: boolean
   return <div className="relative min-h-screen overflow-hidden pb-12 text-gray-800 antialiased" style={{ backgroundImage: `url(${bgImage})`, backgroundSize: "cover", backgroundPosition: "center bottom", fontFamily: "'Noto Sans Bengali', sans-serif" }}>
     <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.40),rgba(219,234,254,0.18),rgba(255,255,255,0.46))]" />
     <TopNav title={t("প্রোফাইল", "Profile")} brandName={t("মেট ক্লাব", "Met Club")} />
-    <main className="relative z-10 mx-auto mt-10 max-w-5xl px-4">
+    <main className="site-container relative z-10 mt-10 px-4 sm:px-6 lg:px-8">
       {user ? <UserProfile key={user.id} user={user} isEnglish={isEnglish} /> : <div role={error ? "alert" : "status"} className="rounded-3xl p-8 text-center" style={glassCard}>
         <p>{!isAuthenticated ? t("ব্যক্তিগত তথ্য দেখতে লগইন করুন।", "Log in to view your personal information.") : isLoading ? t("প্রোফাইল লোড হচ্ছে...", "Loading your profile...") : t("প্রোফাইল লোড করা যায়নি। আবার চেষ্টা করুন।", "Your profile could not be loaded. Please try again.")}</p>
         {!isAuthenticated ? <Link to={isEnglish ? "/en/login" : "/login"} className={`${primaryClass} mt-4 inline-block`}>{t("লগইন করুন", "Login")}</Link> : !isLoading && <button type="button" onClick={() => void reloadUser()} className={`${primaryClass} mt-4`}>{t("আবার চেষ্টা করুন", "Try again")}</button>}
