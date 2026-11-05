@@ -2,10 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import metClubLogo from "../../assets/images/logo_original.png";
 import { FiPlay } from "react-icons/fi";
+import { LogIn, LogOut } from "lucide-react";
 import useLogout from "../../hooks/useLogout";
 import { getLocalizedPath, getStoredLocale, setStoredLocale } from "../../utils/language";
 import useAuth from "../../hooks/useAuth";
 import { profileImageUrl } from "../../lib/profile";
+import HeaderNavigation from "./HeaderNavigation";
 
 interface TopNavProps {
     title?: string;
@@ -16,6 +18,7 @@ interface TopNavProps {
 const menuItems = [
     {
         label: "প্রোফাইল দেখুন",
+        englishLabel: "View profile",
         href: "/profile",
         icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
@@ -26,11 +29,13 @@ const menuItems = [
     },
     {
         label: "টিউটোরিয়াল",
+        englishLabel: "Tutorials",
         href: "/tutorials",
         icon: <FiPlay />,
     },
     {
         label: "মেট ক্লাব সম্পর্কে জানুন",
+        englishLabel: "About MET Club",
         href: "/",
         icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
@@ -85,6 +90,45 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    const mobileAccountLinkClass = "header-navigation-link flex w-full items-center gap-3 rounded px-3 py-2 text-left text-sm font-semibold";
+    const renderMobileAccount = (closeMenu: () => void) => (
+        <div className="space-y-1">
+            {user && (
+                <div className="mb-2 flex items-center gap-3 px-3 py-2">
+                    <span className="relative grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-full bg-red-600 text-sm font-bold text-white" style={{ textShadow: "none" }}>
+                        {avatar}
+                        {user.profileImg && <img src={profileImageUrl(user.profileImg)} alt="" className="absolute inset-0 h-full w-full object-cover" onError={(event) => { event.currentTarget.style.display = "none"; }} />}
+                    </span>
+                    <div className="min-w-0">
+                        <p className="break-words text-sm font-semibold">{user.fullName}</p>
+                        <p className="text-xs">{roleLabel}</p>
+                    </div>
+                </div>
+            )}
+            {isAuthenticated ? (
+                <>
+                    {user && menuItems.filter((item) => item.href !== "/").map((item) => {
+                        const target = getLocalizedPath(item.href, locale);
+                        return (
+                            <Link key={item.href} to={target} onClick={closeMenu} aria-current={location.pathname === target ? "page" : undefined} data-active={location.pathname === target} className={mobileAccountLinkClass}>
+                                {item.icon}{locale === "en" ? item.englishLabel : item.label}
+                            </Link>
+                        );
+                    })}
+                    {!user && isLoading && <p role="status" className="px-3 py-2 text-sm">{locale === "en" ? "Loading your profile…" : "প্রোফাইল লোড হচ্ছে…"}</p>}
+                    {!user && error && <button type="button" onClick={() => void reloadUser()} className={mobileAccountLinkClass}>{locale === "en" ? "Retry profile" : "আবার চেষ্টা করুন"}</button>}
+                    <button type="button" onClick={() => { closeMenu(); void handleLogout(); }} className={mobileAccountLinkClass}>
+                        <LogOut size={17} aria-hidden="true" />{locale === "en" ? "Logout" : "লগআউট"}
+                    </button>
+                </>
+            ) : (
+                <Link to={getLocalizedPath("/login", locale)} onClick={closeMenu} className={mobileAccountLinkClass}>
+                    <LogIn size={17} aria-hidden="true" />{locale === "en" ? "Login" : "লগইন"}
+                </Link>
+            )}
+        </div>
+    );
+
     return (
         <div className="h-18.5">
             <div
@@ -125,12 +169,12 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                     }}
                 />
 
-                <div className="site-container relative z-10 flex items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+                <div className="site-container relative z-10 flex items-center justify-between gap-2 xl:gap-4">
                     {/* LEFT LOGO */}
                     <Link to={getLocalizedPath("/", locale)} className="relative z-10 shrink-0">
                         <div className="flex items-center gap-2 group">
 
-                            <img src={metClubLogo} alt="মেট ক্লাব লোগো" className="h-12 w-12 object-contain" />
+                            <img src={metClubLogo} alt={locale === "en" ? "Met Club logo" : "মেট ক্লাব লোগো"} className="h-12 w-12 object-contain" />
 
 
                             <span
@@ -147,20 +191,17 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                         </div>
                     </Link>
 
-                    {/* TITLE */}
-                    <span
-                        className="pointer-events-none absolute left-1/2 -translate-x-1/2 text-[12px] sm:text-sm md:text-base lg:text-lg font-semibold truncate max-w-[44vw] sm:max-w-[50vw] md:max-w-[56vw]"
-                        style={{
-                            color: "rgba(127,29,29,0.85)",
-                            textShadow:
-                                "-0.6px -0.6px 0 rgba(255,255,255,0.95), 0.6px -0.6px 0 rgba(255,255,255,0.95), -0.6px 0.6px 0 rgba(255,255,255,0.95), 0.6px 0.6px 0 rgba(255,255,255,0.95), 0 2px 8px rgba(127,29,29,0.18)",
-                        }}
-                    >
-                        {title}
-                    </span>
+                    {title && <span className="sr-only">{title}</span>}
+                    <HeaderNavigation
+                        key={`${location.pathname}:${locale}`}
+                        locale={locale}
+                        pathname={location.pathname}
+                        onNavigate={() => setDropdownOpen(false)}
+                        renderMobileAccount={renderMobileAccount}
+                    />
 
                     {/* RIGHT USER */}
-                    <div className="relative z-30 shrink-0 flex items-center gap-6" ref={dropdownRef}>
+                    <div className="relative z-30 order-2 ml-auto flex shrink-0 items-center gap-2 sm:gap-3 xl:ml-0 xl:gap-4" ref={dropdownRef}>
                         {canSwitchLanguage && (
                             <div
                                 role="group"
@@ -185,6 +226,7 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                                 </button>
                             </div>
                         )}
+                        <div className="hidden items-center xl:flex">
                         {!isAuthenticated && (
                         <Link
                             to={getLocalizedPath("/login", locale)}
@@ -304,13 +346,13 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                                         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
                                         <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" />
                                     </svg>
-                                    {locale === "en" ? "Blog" : "ব্লগ"}
+                                    {locale === "en" ? "Blogs" : "ব্লগ"}
                                 </Link>
 
                                 <button
                                     onClick={() => {
                                         setDropdownOpen(false);
-                                        navigate("/learning-zone");
+                                        navigate(getLocalizedPath("/learning-zone", locale));
                                     }}
                                     className="w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors duration-150"
                                     style={{
@@ -329,7 +371,7 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                                         <path d="M15 18l-6-6 6-6" />
                                         <path d="M9 12h11" />
                                     </svg>
-                                    চ্যাপ্টার তালিকায় ফিরে যান
+                                    {locale === "en" ? "Back to chapters" : "চ্যাপ্টার তালিকায় ফিরে যান"}
                                 </button>
 
                                 <div className="py-1.5">
@@ -350,7 +392,7 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                                             onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                                         >
                                             <span style={{ color: "#ef4444" }}>{item.icon}</span>
-                                            {item.label}
+                                            {locale === "en" ? item.englishLabel : item.label}
                                         </Link>
                                     ))}
                                 </div>
@@ -379,13 +421,14 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                                             <polyline points="16 17 21 12 16 7" />
                                             <line x1="21" y1="12" x2="9" y2="12" />
                                         </svg>
-                                        লগআউট
+                                        {locale === "en" ? "Logout" : "লগআউট"}
                                     </button>
                                 </div>
                             </div>
                         )}
                         </>
                         )}
+                        </div>
                     </div>
                 </div>
             </div>
