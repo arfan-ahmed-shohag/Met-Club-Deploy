@@ -3,18 +3,15 @@ import { Link, useNavigate } from "react-router";
 import metClubLogo from "../../assets/images/logo_original.png";
 import { FiPlay } from "react-icons/fi";
 import useLogout from "../../hooks/useLogout";
+import { getLocalizedPath, getStoredLocale } from "../../utils/language";
+import useAuth from "../../hooks/useAuth";
+import { profileImageUrl } from "../../lib/profile";
 
 interface TopNavProps {
     title?: string;
     tone?: "default" | "red";
     brandName: string;
 }
-
-const user = {
-    name: "রাহেলা বেগম",
-    role: "শিক্ষার্থী",
-    avatar: "রা",
-};
 
 const menuItems = [
     {
@@ -34,7 +31,7 @@ const menuItems = [
     },
     {
         label: "মেট ক্লাব সম্পর্কে জানুন",
-        href: "/about",
+        href: "/",
         icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
                 <circle cx="12" cy="12" r="10" />
@@ -61,6 +58,10 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
     const dropdownRef = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
     const handleLogout = useLogout();
+    const locale = getStoredLocale();
+    const { user, isAuthenticated, isLoading, error, reloadUser } = useAuth();
+    const avatar = user ? Array.from(new Intl.Segmenter(locale, { granularity: "grapheme" }).segment(user.fullName.trim()))[0]?.segment.toLocaleUpperCase(locale) : "";
+    const roleLabel = user?.role === "admin" ? (locale === "en" ? "Admin" : "অ্যাডমিন") : (locale === "en" ? "Student" : "শিক্ষার্থী");
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -115,7 +116,7 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
 
                 <div className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-0">
                     {/* LEFT LOGO */}
-                    <Link to="/" className="relative z-10 shrink-0">
+                    <Link to={getLocalizedPath("/", locale)} className="relative z-10 shrink-0">
                         <div className="flex items-center gap-2 group">
 
                             <img src={metClubLogo} alt="মেট ক্লাব লোগো" className="h-12 w-12 object-contain" />
@@ -149,8 +150,31 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
 
                     {/* RIGHT USER */}
                     <div className="relative z-30 shrink-0 flex items-center gap-2" ref={dropdownRef}>
+                        {!isAuthenticated && (
+                        <Link
+                            to={getLocalizedPath("/login", locale)}
+                            className="rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-md transition-colors hover:bg-red-700"
+                        >
+                            {locale === "en" ? "Login" : "লগইন"}
+                        </Link>
+                        )}
+                        {isAuthenticated && !user && (
+                            isLoading ? (
+                                <span role="status" aria-label={locale === "en" ? "Loading your profile" : "প্রোফাইল লোড হচ্ছে"} className="h-8 w-8 animate-spin rounded-full border-2 border-red-200 border-t-red-600" />
+                            ) : error ? (
+                                <button type="button" onClick={() => void reloadUser()} className="rounded-xl bg-white/70 px-3 py-2 text-sm text-red-700">
+                                    {locale === "en" ? "Retry profile" : "আবার চেষ্টা করুন"}
+                                </button>
+                            ) : null
+                        )}
+                        {user && (
+                        <>
                         <button
+                            type="button"
                             onClick={() => setDropdownOpen((prev) => !prev)}
+                            aria-expanded={dropdownOpen}
+                            aria-controls="user-menu"
+                            aria-label={user.fullName}
                             className="flex items-center gap-2 rounded-2xl px-3 py-1.5 transition-all duration-200 select-none"
                             style={{
                                 background: dropdownOpen ? "rgba(255,255,255,0.42)" : "rgba(255,255,255,0.30)",
@@ -164,7 +188,7 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                             }}
                         >
                             <span
-                                className="flex items-center justify-center rounded-full text-white font-bold text-sm"
+                                className="relative flex items-center justify-center overflow-hidden rounded-full text-white font-bold text-sm"
                                 style={{
                                     width: 32,
                                     height: 32,
@@ -173,13 +197,14 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                                     flexShrink: 0,
                                 }}
                             >
-                                {user.avatar}
+                                {avatar}
+                                {user.profileImg && <img key={user.profileImg} src={profileImageUrl(user.profileImg)} alt="" className="absolute inset-0 h-full w-full object-cover" onError={(event) => { event.currentTarget.style.display = "none"; }} />}
                             </span>
                             <span
-                                className="font-semibold hidden sm:block"
+                                className="hidden max-w-40 truncate font-semibold sm:block"
                                 style={{ color: "#7f1d1d", fontSize: "0.9rem", textShadow: "0 1px 4px rgba(255,255,255,0.28)" }}
                             >
-                                {user.name}
+                                {user.fullName}
                             </span>
                             <svg
                                 viewBox="0 0 24 24"
@@ -195,6 +220,7 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
 
                         {dropdownOpen && (
                             <div
+                                id="user-menu"
                                 className="absolute right-0 top-full mt-3 rounded-2xl overflow-hidden z-50"
                                 style={{
                                     width: 230,
@@ -214,7 +240,7 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                                     }}
                                 >
                                     <span
-                                        className="flex items-center justify-center rounded-full text-white font-bold"
+                                        className="relative flex items-center justify-center overflow-hidden rounded-full text-white font-bold"
                                         style={{
                                             width: 40,
                                             height: 40,
@@ -223,13 +249,15 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                                             flexShrink: 0,
                                         }}
                                     >
-                                        {user.avatar}
+                                        {avatar}
+                                        {user.profileImg && <img key={user.profileImg} src={profileImageUrl(user.profileImg)} alt="" className="absolute inset-0 h-full w-full object-cover" onError={(event) => { event.currentTarget.style.display = "none"; }} />}
                                     </span>
-                                    <div>
+                                    <div className="min-w-0">
                                         <div style={{ color: "#7f1d1d", fontWeight: 700, fontSize: "0.92rem", textShadow: "0 1px 3px rgba(255,255,255,0.25)" }}>
-                                            {user.name}
+                                            {user.fullName}
                                         </div>
-                                        <div style={{ color: "#b91c1c", fontSize: "0.78rem", fontWeight: 600 }}>{user.role}</div>
+                                        <div style={{ color: "#b91c1c", fontSize: "0.78rem", fontWeight: 600 }}>{roleLabel}</div>
+                                        <p className="truncate text-xs text-red-900/75" title={user.email}>{user.email}</p>
                                     </div>
                                 </div>
 
@@ -264,7 +292,7 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                                     {menuItems.map((item) => (
                                         <Link
                                             key={item.label}
-                                            to={item.href}
+                                            to={getLocalizedPath(item.href, locale)}
                                             className="flex items-center gap-3 px-4 py-2.5 transition-colors duration-150"
                                             style={{
                                                 color: "#7f1d1d",
@@ -311,6 +339,8 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                                     </button>
                                 </div>
                             </div>
+                        )}
+                        </>
                         )}
                     </div>
                 </div>

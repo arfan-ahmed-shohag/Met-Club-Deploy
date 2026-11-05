@@ -19,7 +19,7 @@ type Tutorial = {
 const resolveImageUrl = (value: string) => {
   if (!value) return "";
   if (value.startsWith("http")) return value;
-  return ("https://api.meteorologyclub.com" + value).replace("/api/v1", "");
+  return ("http://localhost:5000" + value).replace("/api/v1", "");
 };
 
 export default function ManageTutorials() {

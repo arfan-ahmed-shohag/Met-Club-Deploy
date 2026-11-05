@@ -33,7 +33,7 @@ export default function Hero() {
                     <p className="text-center md:text-xl lg:text-[16px]">
                         এসো আবহাওয়া শিখি খেলতে খেলতে
                     </p>
-                    <Link to={getLocalizedPath("/about", locale)} className="flex justify-center mt-6">
+                    <Link to={getLocalizedPath("/", locale)} className="flex justify-center mt-6">
                         <button className="px-6 py-3 cursor-pointer bg-white/85 text-red-700 font-semibold rounded-lg hover:bg-red-50 transition">
                             মেট ক্লাব সম্পর্কে জানুন
                         </button>

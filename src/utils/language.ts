@@ -22,7 +22,7 @@ export function setStoredLocale(locale: AppLocale) {
 export function getLocalizedPath(pathname: string, locale: AppLocale) {
     const localizedPaths: Array<{ bn: string; en: string }> = [
         { bn: "/", en: "/en" },
-        { bn: "/about", en: "/en/about" },
+        { bn: "/login", en: "/en/login" },
         { bn: "/start-journey", en: "/en/start-journey" },
         { bn: "/learning-zone", en: "/en/learning-zone" },
         { bn: "/select-difficulty", en: "/en/select-difficulty" },

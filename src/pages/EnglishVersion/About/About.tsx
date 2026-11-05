@@ -15,14 +15,14 @@ const titleShadow = "-1px -1px 0 rgba(255,255,255,0.96), 1px -1px 0 rgba(255,255
 const subtitleShadow = "0 1px 6px rgba(255,255,255,0.28)";
 
 export default function About() {
-    useLocaleRouteSync("/about", "/en/about");
+    useLocaleRouteSync("/", "/en");
 
     return (
         <div className="relative min-h-screen flex flex-col overflow-x-hidden -mt-18.5 bg-gray-50">
             <TopNav title="About Us" brandName="Met Club" />
 
             {/* Hero Section */}
-            <section className="relative z-10 min-h-screen flex items-center justify-center pt-24 pb-24 overflow-hidden">
+            <section className="relative z-10 min-h-screen flex items-center justify-center py-10 md:py-15 lg:py-20 overflow-hidden">
                 <video
                     autoPlay
                     loop
@@ -64,7 +64,7 @@ export default function About() {
             </section>
 
             {/* Mission & Vision - Solid Background, Solid Cards */}
-            <section id="mission-vision" className="relative z-10 min-h-screen py-20 lg:py-30 px-4 bg-linear-to-br from-red-50 to-orange-50">
+            <section id="mission-vision" className="relative z-10 py-10 md:py-15 lg:py-20 px-4 bg-linear-to-br from-red-50 to-orange-50">
                 <div className="container mx-auto max-w-6xl">
                     <div className="grid md:grid-cols-2 gap-8 mb-16">
                         <div className="group rounded-3xl p-10 hover:scale-105 transition-all duration-500 animate-slide-right"
@@ -114,7 +114,7 @@ export default function About() {
                         </div>
                     </div>
 
-                    <div className="py-12">
+                    <div>
                         <div className="text-center mb-10">
                             <h3 className="text-4xl md:text-5xl font-black mb-4" style={{ color: "#b91c1c", textShadow: titleShadow }}>What is Met Club?</h3>
                             <div className="w-24 h-1 bg-red-500 mx-auto mb-6"></div>
@@ -169,7 +169,7 @@ export default function About() {
             </section>
 
             {/* Objectives - Image Background, Glassy Cards */}
-            <section id="objectives" className="relative z-10 min-h-screen py-20 lg:py-30 px-4 bg-cover bg-center bg-fixed" style={{ backgroundImage: `url(${startJourneyBg})` }}>
+            <section id="objectives" className="relative z-10 py-10 md:py-15 lg:py-20 px-4 bg-cover bg-center" style={{ backgroundImage: `url(${startJourneyBg})` }}>
                 <div className="absolute inset-0 bg-white/40 pointer-events-none backdrop-blur-[1px]"></div>
                 <div className="container mx-auto max-w-6xl relative z-10">
                     <div className="text-center mb-16">
@@ -212,7 +212,7 @@ export default function About() {
             </section>
 
             {/* Structure - Solid Background, Solid Cards */}
-            <section id="structure" className="relative z-10 min-h-screen py-20 lg:py-30 px-4 bg-linear-to-br from-orange-50 to-red-50">
+            <section id="structure" className="relative z-10 py-10 md:py-15 lg:py-20 px-4 bg-linear-to-br from-orange-50 to-red-50">
                 <div className="container mx-auto max-w-6xl">
                     <div className="text-center mb-16">
                         <h2 className="text-4xl md:text-5xl font-black mb-4" style={{ color: "#b91c1c", textShadow: titleShadow }}>Organizational Structure</h2>
@@ -265,14 +265,14 @@ export default function About() {
             </section>
 
             {/* Activities - Image Background, Glassy Cards */}
-            <section id="activities" className="relative z-10 min-h-screen py-20 lg:py-30 px-4 bg-cover bg-center bg-fixed" style={{ backgroundImage: `url(${aboutBg})` }}>
+            <section id="activities" className="relative z-10 py-10 md:py-15 lg:py-20 px-4 bg-cover bg-center" style={{ backgroundImage: `url(${aboutBg})` }}>
                 <div className="container mx-auto max-w-6xl relative z-10">
                     <div className="text-center mb-16">
                         <h2 className="text-4xl md:text-5xl font-black mb-4" style={{ color: "#b91c1c", textShadow: titleShadow }}>Our Activities</h2>
                         <p className="text-lg md:text-xl font-semibold" style={{ color: "#ffffff", textShadow: subtitleShadow }}>Hands-on learning and community engagement</p>
                     </div>
 
-                    <div className="grid md:grid-cols-5 gap-6 mb-12">
+                    <div className="grid md:grid-cols-5 gap-6">
                         {[
                             { icon: '👥', title: 'Club meetings' },
                             { icon: '🌤️', title: 'Weather observation' },
@@ -304,7 +304,7 @@ export default function About() {
             </section>
 
             {/* Impact - Solid Background, Solid Cards */}
-            <section id="impact" className="relative z-10 min-h-screen py-20 lg:py-30 bg-red-50">
+            <section id="impact" className="relative z-10 py-10 md:py-15 lg:py-20 bg-red-50">
                 <div className="container mx-auto max-w-6xl">
                     <div className="text-center">
                         <div className="flex items-center justify-center space-x-4 mb-6">
@@ -314,7 +314,7 @@ export default function About() {
                         <p className="text-xl md:text-2xl font-bold mb-8 text-red-800">
                             We build a safer path by understanding weather forecasts.
                         </p>
-                        <div className="max-w-4xl mx-auto text-lg leading-relaxed font-semibold text-gray-800 mb-12">
+                        <div className="max-w-4xl mx-auto text-lg leading-relaxed font-semibold text-gray-800">
                             We believe children are powerful agents of change. Through Met Club, we equip them with knowledge, skills, and confidence so they can protect their families and communities from weather-related disasters.
                         </div>
 
@@ -324,7 +324,7 @@ export default function About() {
             </section>
 
             {/* Locations - Image Background, Glassy Cards */}
-            <section id="locations" className="relative z-10 min-h-screen py-20 lg:py-30 px-4 bg-cover bg-center bg-fixed" style={{ backgroundImage: `url(${chapterBg})` }}>
+            <section id="locations" className="relative z-10 py-10 md:py-15 lg:py-20 px-4 bg-cover bg-center" style={{ backgroundImage: `url(${chapterBg})` }}>
                 <div className="container mx-auto max-w-6xl relative z-10">
                     <div className="text-center mb-16">
                         <h2 className="text-4xl md:text-5xl font-black mb-4" style={{ color: "#b91c1c", textShadow: titleShadow }}>Activity Areas</h2>
@@ -363,14 +363,14 @@ export default function About() {
             </section>
 
             {/* Values - Solid Background, Solid Cards */}
-            <section id="values" className="relative z-10 min-h-screen py-20 lg:py-30 px-4 bg-linear-to-br from-red-50 to-orange-50">
+            <section id="values" className="relative z-10 py-10 md:py-15 lg:py-20 px-4 bg-linear-to-br from-red-50 to-orange-50">
                 <div className="container mx-auto max-w-6xl">
                     <div className="text-center mb-16">
                         <h2 className="text-4xl md:text-5xl font-black mb-4" style={{ color: "#b91c1c", textShadow: titleShadow }}>Our Values</h2>
                         <p className="text-lg md:text-xl font-semibold" style={{ color: "#1f2937", textShadow: subtitleShadow }}>Committed to child protection and inclusion</p>
                     </div>
 
-                    <div className="grid md:grid-cols-5 gap-6 mb-12">
+                    <div className="grid md:grid-cols-5 gap-6">
                         {[
                             { icon: '👥', title: 'Club meetings', color: 'from-teal-400 to-cyan-500' },
                             { icon: '🌤️', title: 'Weather observation', color: 'from-blue-400 to-indigo-500' },
@@ -409,7 +409,7 @@ export default function About() {
                 </div>
             </section>
 
-            <footer className="relative z-10 bg-[linear-gradient(180deg,rgba(20,6,6,0.9),rgba(20,6,6,1))] text-white py-12 px-4 border-t border-red-900">
+            <footer className="relative z-10 bg-[linear-gradient(180deg,rgba(20,6,6,0.9),rgba(20,6,6,1))] text-white py-10 md:py-15 lg:py-20 px-4 border-t border-red-900">
                 <div className="container mx-auto max-w-6xl">
                     <div className="flex flex-col lg:flex-row items-center justify-center space-x-4">
                         <img src={logo} alt="MET CLUB LOGO" className='w-32 h-32' />

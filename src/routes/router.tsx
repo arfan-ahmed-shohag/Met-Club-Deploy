@@ -1,8 +1,7 @@
 import { createBrowserRouter, redirect, ScrollRestoration, Outlet } from "react-router";
 import type { RouteObject } from "react-router";
 import { lazy } from "react";
-import LoginGuard from "../components/HomeRedirect/HomeRedirect";
-import App from "../App";
+import LoginPage from "../App";
 import { SuspenseWrapper } from "./SuspenseWrapper";
 import { getStoredLocale } from "../utils/language";
 
@@ -26,7 +25,7 @@ const ManageSchools = lazy(() => import("../pages/Admin/ManageSchools"));
 const CreateSchool = lazy(() => import("../pages/Admin/CreateSchool"));
 const Section = lazy(() => import("../pages/LearnignZone/LessionSection/Section"));
 const Tutorials = lazy(() => import("../pages/Tutorials/Tutorials"));
-const EnglishHome = lazy(() => import("../pages/EnglishVersion/Home"));
+const EnglishLoginPage = lazy(() => import("../pages/EnglishVersion/Home"));
 const EnglishAbout = lazy(() => import("../pages/EnglishVersion/About/About"));
 const EnglishStartJourney = lazy(() => import("../pages/EnglishVersion/StartJourney/StartJourney"));
 const EnglishChapter = lazy(() => import("../pages/EnglishVersion/Chapter/Chapter"));
@@ -72,11 +71,7 @@ const routes: RouteObject[] = [
 
   {
     path: "/",
-    element:
-      <LoginGuard>
-        <App />
-      </LoginGuard>
-    ,
+    element: <SuspenseWrapper><About /></SuspenseWrapper>,
     loader: () => {
       if (getStoredLocale() === "en") {
         return redirect("/en");
@@ -87,11 +82,7 @@ const routes: RouteObject[] = [
   },
   {
     path: "/en",
-    element:
-      <LoginGuard>
-        <SuspenseWrapper><EnglishHome /></SuspenseWrapper>
-      </LoginGuard>
-    ,
+    element: <SuspenseWrapper><EnglishAbout /></SuspenseWrapper>,
     loader: () => {
       if (getStoredLocale() === "bn") {
         return redirect("/");
@@ -99,6 +90,16 @@ const routes: RouteObject[] = [
 
       return null;
     },
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
+    loader: ({ request }) => redirectToStoredLocale(request.url, "/login", "/en/login"),
+  },
+  {
+    path: "/en/login",
+    element: <SuspenseWrapper><EnglishLoginPage /></SuspenseWrapper>,
+    loader: ({ request }) => redirectToStoredLocale(request.url, "/login", "/en/login"),
   },
   {
     path: "/start-journey",
@@ -214,13 +215,11 @@ const routes: RouteObject[] = [
   },
   {
     path: "/about",
-    element: <SuspenseWrapper><About /></SuspenseWrapper>,
-    loader: ({ request }) => redirectToStoredLocale(request.url, "/about", "/en/about"),
+    loader: () => redirect(getStoredLocale() === "en" ? "/en" : "/"),
   },
   {
     path: "/en/about",
-    element: <SuspenseWrapper><EnglishAbout /></SuspenseWrapper>,
-    loader: ({ request }) => redirectToStoredLocale(request.url, "/about", "/en/about"),
+    loader: () => redirect(getStoredLocale() === "en" ? "/en" : "/"),
   },
   {
     path: "/location/:id",

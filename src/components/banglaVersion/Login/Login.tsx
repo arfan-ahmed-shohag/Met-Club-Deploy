@@ -3,6 +3,8 @@ import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router";
 import axiosPublic from "../../../hooks/axiosPublic";
 import axios from "axios";
+import { setSessionToken } from "../../../lib/authSession";
+import { normalizeEmail, validateEmail, validateLoginPassword } from "../../../utils/userValidation";
 
 type LoginFormValues = {
     email: string;
@@ -15,13 +17,14 @@ export default function Login() {
     const {
         register,
         handleSubmit,
+        setError,
         formState: { errors, isSubmitting },
     } = useForm<LoginFormValues>();
 
     const onSubmit = async (data: LoginFormValues) => {
         try {
             const res = await axiosInstance.post("/auth/login", data);
-            localStorage.setItem("token", res.data.data.accessToken);
+            setSessionToken(res.data.data.accessToken);
             toast.success(res.data.message || "লগইন সফল! এখন যাত্রা শুরু করুন।", {id: "error"});
             if(res.data.data.user.role === "admin") {
                 navigate("/admin/overview");
@@ -30,7 +33,11 @@ export default function Login() {
             navigate("/start-journey");
         } catch (error) {
             if(axios.isAxiosError(error)) {
-                toast.error(error.response?.data.errorMessage, {id: "error"});
+                const fieldErrors = error.response?.data.errors;
+                for (const field of ["email", "password"] as const) {
+                    if (typeof fieldErrors?.[field] === "string") setError(field, { type: "server", message: fieldErrors[field] });
+                }
+                toast.error(error.response?.data.errorMessage || "লগইন করা যায়নি। আবার চেষ্টা করুন।", {id: "error"});
             }
             else {
                 toast.error("লগইন ব্যর্থ হয়েছে।", {id: "error"});
@@ -48,17 +55,19 @@ export default function Login() {
                     লগইন করুন
                 </h1>
 
-                <form className="space-y-4 md:space-y-6 lg:space-y-2 xl:space-y-6" onSubmit={handleSubmit(onSubmit)}>
+                <form noValidate className="space-y-4 md:space-y-6 lg:space-y-2 xl:space-y-6" onSubmit={handleSubmit(onSubmit)}>
                     <div>
-                        <label htmlFor="username" className="block mb-2 text-sm font-medium text-slate-800">
-                            আইডি / নাম
+                        <label htmlFor="email" className="block mb-2 text-sm font-medium text-slate-800">
+                            ইমেইল
                         </label>
                         <input
-                            type="text"
-                            id="username"
-                            placeholder="আপনার আইডি লিখুন"
+                            type="email"
+                            id="email"
+                            autoComplete="email"
+                            placeholder="আপনার ইমেইল লিখুন"
                             {...register("email", {
-                                required: "আইডি / নাম আবশ্যক",
+                                setValueAs: normalizeEmail,
+                                validate: validateEmail,
                             })}
                             className={`bg-white/40 border border-slate-300/70 text-slate-900 rounded-xl block w-full p-3 focus:ring-2 focus:ring-red-300 focus:border-red-300 focus:outline-none placeholder:text-slate-500 ${errors.email ? "border-red-500" : "border-slate-300/70"}`}
                         />
@@ -72,13 +81,10 @@ export default function Login() {
                         <input
                             type="password"
                             id="password"
+                            autoComplete="current-password"
                             placeholder="••••••••"
                             {...register("password", {
-                                required: "পাসওয়ার্ড আবশ্যক",
-                                minLength: {
-                                    value: 6,
-                                    message: "কমপক্ষে ৬ অক্ষর দিন",
-                                },
+                                validate: validateLoginPassword,
                             })}
                             className={`bg-white/40 border border-slate-300/70 text-slate-900 rounded-xl block w-full p-3 focus:ring-2 focus:ring-red-300 focus:border-red-300 focus:outline-none placeholder:text-slate-500 ${errors.password ? "border-red-500" : "border-slate-300/70"}`}
                         />

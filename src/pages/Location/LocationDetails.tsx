@@ -87,7 +87,7 @@ export default function LocationDetails() {
                     <h2 className="text-3xl font-bold text-red-600 mb-4">তথ্য পাওয়া যায়নি</h2>
                     <p className="text-gray-600 mb-6">এই লোকেশনের জন্য কোনো তথ্য পাওয়া যায়নি।</p>
                     <button
-                        onClick={() => navigate('/about')}
+                        onClick={() => navigate('/')}
                         className="px-6 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors"
                     >
                         ফিরে যান

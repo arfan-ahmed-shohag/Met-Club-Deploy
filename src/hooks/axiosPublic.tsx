@@ -1,12 +1,7 @@
-import axios from "axios";
-
-const instance = axios.create({
-    baseURL: "https://api.meteorologyclub.com/api/v1",
-    withCredentials: true,
-});
+import { publicApi } from "../lib/api";
 
 const axiosPublic = () => {
-    return instance
+    return publicApi
 }
 
 export default axiosPublic;
