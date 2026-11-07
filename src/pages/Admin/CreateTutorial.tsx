@@ -68,7 +68,7 @@ export default function CreateTutorial() {
     if (!form.thumbnailImage) return null;
     if (typeof form.thumbnailImage === "string") {
       if (form.thumbnailImage.startsWith("http")) return form.thumbnailImage;
-      return ("http://localhost:5000" + form.thumbnailImage).replace("/api/v1", "");
+      return ("https://api.meteorologyclub.com" + form.thumbnailImage).replace("/api/v1", "");
     }
     return URL.createObjectURL(form.thumbnailImage);
   };

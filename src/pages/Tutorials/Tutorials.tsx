@@ -17,7 +17,7 @@ type Tutorial = {
 const resolveImageUrl = (value: string) => {
     if (!value) return "";
     if (value.startsWith("http")) return value;
-    return ("http://localhost:5000" + value).replace("/api/v1", "");
+    return ("https://api.meteorologyclub.com" + value).replace("/api/v1", "");
 };
 
 const getYoutubeEmbedUrl = (input: string) => {

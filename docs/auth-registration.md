@@ -2,7 +2,7 @@
 
 The navbar fetches the authenticated user's public profile from `GET /auth/me`. It shows Login for guests and the returned name, role, email and optional profile image for an authenticated user. Profile data is kept in memory; login, registration, logout, token refresh and cross-tab account changes update the same session store. Public routes remain accessible.
 
-Set `VITE_API_URL` to change the backend URL. `src/lib/api.ts` otherwise uses the existing development URL, `http://localhost:5000/api/v1`.
+Set `VITE_API_URL` to change the backend URL. `src/lib/api.ts` otherwise uses the existing development URL, `https://api.meteorologyclub.com/api/v1`.
 
 Registration validates the following in both clients and API requests:
 

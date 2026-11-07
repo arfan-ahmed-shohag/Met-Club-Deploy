@@ -2,7 +2,7 @@ import axios from "axios";
 import type { InternalAxiosRequestConfig } from "axios";
 import { clearSession, getAccessToken, getSessionVersion, updateSessionToken } from "./authSession";
 
-const baseURL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1").replace(/\/$/, "");
+const baseURL = (import.meta.env.VITE_API_URL || "https://api.meteorologyclub.com/api/v1").replace(/\/$/, "");
 export const publicApi = axios.create({ baseURL, withCredentials: true });
 export const protectedApi = axios.create({ baseURL, withCredentials: true });
 
