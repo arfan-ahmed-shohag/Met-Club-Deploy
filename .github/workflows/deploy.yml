@@ -26,9 +26,13 @@ jobs:
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             nvm use 24
 
+            corepack enable
+            corepack prepare pnpm@latest --activate
+
             cd ~/Met_Club/frontend
 
             git pull origin deploy
+            git checkout deploy
             pnpm install --frozen-lockfile
             pnpm run build
 
