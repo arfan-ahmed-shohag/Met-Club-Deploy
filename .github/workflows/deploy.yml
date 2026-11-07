@@ -38,6 +38,8 @@ jobs:
 
             sudo rm -rf /var/www/met-club/*
 
+            sudo mkdir -p /var/www/met-club
+
             sudo cp -r dist/* /var/www/met-club/
 
             sudo chown -R www-data:www-data /var/www/met-club
