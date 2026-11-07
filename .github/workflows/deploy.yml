@@ -1,3 +1,4 @@
+
 name: Deploy React App
 
 on:
@@ -12,6 +13,7 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: SSH and Deploy
         uses: appleboy/ssh-action@v1.0.3
@@ -20,10 +22,10 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-           set -e 
+            set -e
 
             export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
             nvm use 24
 
             corepack enable
@@ -33,15 +35,9 @@ jobs:
 
             git pull origin deploy
             git checkout deploy
+
             pnpm install --frozen-lockfile
             pnpm run build
 
-            sudo rm -rf /var/www/met-club/*
-
-            sudo mkdir -p /var/www/met-club
-
-            sudo cp -r dist/* /var/www/met-club/
-
-            sudo chown -R www-data:www-data /var/www/met-club
-
-            sudo systemctl reload nginx
+            rm -rf /var/www/met-club/*
+            cp -r dist/. /var/www/met-club/
