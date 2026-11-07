@@ -41,5 +41,3 @@ jobs:
 
             rm -rf /var/www/met_club_frontend/*
             cp -r dist/. /var/www/met_club_frontend/
-
-            systemctl reload nginx
