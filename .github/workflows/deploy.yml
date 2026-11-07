@@ -41,3 +41,6 @@ jobs:
 
             rm -rf /var/www/met-club/*
             cp -r dist/. /var/www/met-club/
+
+            chown -R www-data:www-data /var/www/met-club
+            systemctl reload nginx
