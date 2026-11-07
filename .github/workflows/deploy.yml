@@ -39,8 +39,7 @@ jobs:
             pnpm install --frozen-lockfile
             pnpm run build
 
-            rm -rf /var/www/met-club/*
-            cp -r dist/. /var/www/met-club/
+            rm -rf /var/www/met_club_frontend/*
+            cp -r dist/. /var/www/met_club_frontend/
 
-            chown -R www-data:www-data /var/www/met-club
             systemctl reload nginx
