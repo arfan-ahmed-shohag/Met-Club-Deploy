@@ -1,5 +1,5 @@
 import { Link, NavLink } from "react-router";
-import { FiGrid, FiFileText, FiPlusCircle, FiPlayCircle, FiMapPin, FiBookOpen, FiImage } from "react-icons/fi";
+import { FiGrid, FiFileText, FiPlusCircle, FiPlayCircle, FiMapPin, FiBookOpen, FiImage, FiVideo } from "react-icons/fi";
 import { LogOut } from "lucide-react";
 import useLogout from "../../../hooks/useLogout";
 
@@ -10,6 +10,7 @@ const sidebarLinks = [
   { name: "টিউটোরিয়াল পরিচালনা", path: "/admin/tutorials", icon: FiPlayCircle },
   { name: "ব্লগ পর্যালোচনা", path: "/admin/blogs", icon: FiBookOpen },
   { name: "ফটো গ্যালারি", path: "/admin/gallery", icon: FiImage },
+  { name: "হোম ভিডিও", path: "/admin/videos", icon: FiVideo },
   { name: "টিউটোরিয়াল তৈরি করুন", path: "/admin/create-tutorial", icon: FiPlusCircle },
   { name: "স্কুল পরিচালনা", path: "/admin/schools", icon: FiMapPin },
 ];

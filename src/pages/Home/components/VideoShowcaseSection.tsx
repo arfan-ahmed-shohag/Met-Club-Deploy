@@ -1,8 +1,11 @@
-import { Play, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Play, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { JSX } from "react";
 import axiosPublic from "../../../hooks/axiosPublic";
-import { galleryPhotos, type HomeVideo } from "./homeData";
+import { resolveMediaUrl } from "../../../utils/media";
+
+const PAGE_SIZE = 10;
+type HomeVideo = { id: string; name: string; title: string; thumbnailImage: string; videoLink: string };
 
 const getYoutubeId = (videoLink: string) => {
     try {
@@ -16,34 +19,33 @@ const getYoutubeId = (videoLink: string) => {
 export default function VideoShowcase({ isEnglish }: { isEnglish: boolean }): JSX.Element {
     const axios = axiosPublic();
     const [videos, setVideos] = useState<HomeVideo[]>([]);
+    const [page, setPage] = useState(1);
+    const [pageCount, setPageCount] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
+    const [loadError, setLoadError] = useState(false);
     const [selectedVideo, setSelectedVideo] = useState<HomeVideo | null>(null);
     const [isVideoModalClosing, setIsVideoModalClosing] = useState(false);
     const carouselRef = useRef<HTMLDivElement>(null);
     const videoDragRef = useRef({ active: false, startX: 0, scrollLeft: 0, moved: false });
     const modalCloseTimerRef = useRef<number | null>(null);
 
-    const demoVideos: HomeVideo[] = galleryPhotos.map((photo, index) => ({
-        id: -100 - index,
-        tutorialNumber: index + 1,
-        name: isEnglish ? `MET Club story ${String(index + 1).padStart(2, "0")}` : `মেট ক্লাবের গল্প ${String(index + 1).padStart(2, "০")}`,
-        title: isEnglish
-            ? ["Weather learning and community safety", "Learning through observation", "Getting ready for changing weather", "Students explore their environment", "Building safer communities", "Learning together at school", "Discovering local weather", "From knowledge to action", "Learning with the community", "Prepared for every season"][index]
-            : ["আবহাওয়া শিক্ষা ও কমিউনিটির নিরাপত্তা", "পর্যবেক্ষণের মাধ্যমে শেখা", "বদলে যাওয়া আবহাওয়ার প্রস্তুতি", "শিক্ষার্থীদের পরিবেশ অনুসন্ধান", "নিরাপদ কমিউনিটি গড়ে তোলা", "স্কুলে একসাথে শেখা", "স্থানীয় আবহাওয়া চেনা", "জ্ঞান থেকে কাজে এগিয়ে যাওয়া", "কমিউনিটির সঙ্গে শেখা", "সব ঋতুর জন্য প্রস্তুতি"][index],
-        thumbnailImage: photo.src,
-        videoLink: "https://www.youtube.com/watch?v=M7lc1UVf-VE",
-    }));
-
     useEffect(() => {
         let cancelled = false;
-        axios.get("/tutorials").then(({ data }) => {
-            const availableVideos = (data?.data || []).filter((video: HomeVideo) => getYoutubeId(video.videoLink)).slice(0, 10);
-            if (!cancelled) setVideos(availableVideos.length ? [...availableVideos, ...demoVideos].slice(0, 10) : demoVideos);
-        }).catch((error) => {
-            console.error("Failed to load homepage videos:", error);
-            if (!cancelled) setVideos(demoVideos);
-        });
+        setIsLoading(true);
+        setLoadError(false);
+        void axios.get("/videos", { params: { page, limit: PAGE_SIZE } })
+            .then(({ data }) => {
+                if (cancelled) return;
+                setVideos(Array.isArray(data?.data) ? data.data.slice(0, PAGE_SIZE) : []);
+                setPageCount(Math.ceil((Number(data?.meta?.total) || 0) / PAGE_SIZE));
+            })
+            .catch((error) => {
+                console.error("Failed to load homepage videos:", error);
+                if (!cancelled) { setVideos([]); setLoadError(true); }
+            })
+            .finally(() => { if (!cancelled) setIsLoading(false); });
         return () => { cancelled = true; };
-    }, [axios, isEnglish]);
+    }, [axios, page]);
 
     useEffect(() => () => {
         if (modalCloseTimerRef.current !== null) window.clearTimeout(modalCloseTimerRef.current);
@@ -61,12 +63,23 @@ export default function VideoShowcase({ isEnglish }: { isEnglish: boolean }): JS
 
     return (
         <section className="overflow-hidden bg-red-950 py-[60px] lg:py-[80px]" aria-labelledby="home-videos-title">
-            <div className="relative z-10 mb-8 px-4 text-center sm:mb-10">
+            <div className="relative z-10 mb-8 flex flex-col items-center gap-5 px-4 text-center sm:mb-10">
                     <p className="mb-2 text-sm font-bold uppercase tracking-[.16em] text-red-300">{isEnglish ? "OUR STORIES" : "আমাদের গল্প"}</p>
                     <h2 id="home-videos-title" className="text-[36px] font-black leading-tight text-white">{isEnglish ? "Stories from our learning community" : "আমাদের শেখার কমিউনিটির গল্প"}</h2>
                     <p className="mx-auto mt-2 max-w-2xl text-base leading-relaxed text-red-100/70 sm:text-lg">{isEnglish ? "Watch learners share their experiences and discover how MET Club makes weather learning practical." : "শিক্ষার্থীদের অভিজ্ঞতা শুনে দেখো, মেট ক্লাব কীভাবে আবহাওয়া শেখাকে হাতে-কলমে করে তোলে।"}</p>
+                {pageCount > 1 && <nav className="flex items-center gap-3" aria-label={isEnglish ? "Video pages" : "ভিডিও পৃষ্ঠা"}>
+                    <button type="button" onClick={() => { setPage((current) => Math.max(1, current - 1)); if (carouselRef.current) carouselRef.current.scrollLeft = 0; }} disabled={page === 1 || isLoading} aria-label={isEnglish ? "Previous videos" : "আগের ভিডিও"} className="grid h-10 w-10 place-items-center rounded-full border border-red-300/40 bg-white/10 text-white transition hover:bg-white/20 disabled:opacity-40"><ArrowLeft size={18} /></button>
+                    <span className="min-w-16 text-sm font-semibold text-red-100">{page} / {pageCount}</span>
+                    <button type="button" onClick={() => { setPage((current) => Math.min(pageCount, current + 1)); if (carouselRef.current) carouselRef.current.scrollLeft = 0; }} disabled={page >= pageCount || isLoading} aria-label={isEnglish ? "Next videos" : "পরের ভিডিও"} className="grid h-10 w-10 place-items-center rounded-full border border-red-300/40 bg-white/10 text-white transition hover:bg-white/20 disabled:opacity-40"><ArrowRight size={18} /></button>
+                </nav>}
             </div>
-            {videos.length ? <div className="relative w-full">
+            {isLoading ? <div className="chapter-slider flex gap-6 overflow-hidden px-0 pb-5" aria-busy="true" role="status">
+                    <span className="sr-only">{isEnglish ? "Loading videos" : "ভিডিও লোড হচ্ছে"}</span>
+                    {Array.from({ length: 5 }, (_, index) => <div key={index} aria-hidden="true" className="flex h-[457px] w-[290px] shrink-0 flex-col rounded-[28px] border border-white/10 bg-[linear-gradient(322deg,#222221_2%,#40302d_97%)] p-6 shadow-[inset_4px_8px_16px_rgba(255,255,255,.12)] md:h-[492px] md:w-[375px] md:rounded-[38px]">
+                        <div className="mb-3 min-h-0 flex-1 animate-pulse rounded-[20px] bg-white/10 md:mb-4 md:rounded-[30px]" />
+                        <div className="flex items-center gap-3"><div className="h-12 w-12 shrink-0 animate-pulse rounded-full bg-white/15 md:h-[52px] md:w-[52px]"/><div className="flex-1 space-y-2"><div className="h-4 w-3/4 animate-pulse rounded bg-white/15"/><div className="h-3 w-full animate-pulse rounded bg-white/10"/><div className="h-3 w-2/3 animate-pulse rounded bg-white/10"/></div></div>
+                    </div>)}
+                </div> : videos.length ? <div className="relative w-full">
                     <div
                         ref={carouselRef}
                         className="chapter-slider flex cursor-grab snap-x snap-mandatory gap-6 overflow-x-auto px-0 pb-5 select-none active:cursor-grabbing"
@@ -91,19 +104,18 @@ export default function VideoShowcase({ isEnglish }: { isEnglish: boolean }): JS
                         }}
                     >
                         {videos.map((video) => {
-                            const youtubeId = getYoutubeId(video.videoLink);
-                            const image = video.thumbnailImage?.startsWith("http") ? video.thumbnailImage : `https://api.meteorologyclub.com${video.thumbnailImage || ""}`.replace("/api/v1", "");
+                            const image = resolveMediaUrl(video.thumbnailImage);
                             return <button key={video.id} type="button" onClick={() => setSelectedVideo(video)} className="group flex h-[457px] w-[290px] shrink-0 snap-start flex-col rounded-[28px] border border-white/10 bg-[linear-gradient(322deg,#222221_2%,#40302d_97%)] p-6 text-left shadow-[inset_4px_8px_16px_rgba(255,255,255,.2),inset_2px_4px_16px_rgba(255,255,255,.16)] transition duration-300 md:h-[492px] md:w-[375px] md:rounded-[38px]">
                                 <div className="relative mb-3 min-h-0 flex-1 overflow-hidden rounded-[20px] bg-slate-900 md:mb-4 md:rounded-[30px]">
-                                    <img src={image || `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`} onError={(event) => { event.currentTarget.src = `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`; }} alt={video.title} loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                                    <img src={image} alt={video.title} loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
                                     <div className="absolute inset-0 bg-slate-950/25 transition group-hover:bg-slate-950/10"/>
                                     <span className="absolute left-1/2 top-1/2 grid h-[60px] w-[60px] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white/45 p-[7px] shadow-[0_4px_18px_rgba(0,0,0,.3)] transition group-hover:scale-110"><span className="grid h-full w-full place-items-center rounded-full bg-white text-red-600"><Play size={19} fill="currentColor" className="ml-0.5"/></span></span>
                                 </div>
-                                <div className="flex items-center gap-3 text-white"><img src={image || `https://img.youtube.com/vi/${youtubeId}/default.jpg`} alt="" className="h-12 w-12 shrink-0 rounded-full border border-white/25 object-cover md:h-[52px] md:w-[52px]"/><div className="min-w-0"><h3 className="truncate text-sm font-semibold leading-5 md:text-base md:leading-6">{video.name}</h3><p className="mt-0.5 line-clamp-2 text-xs leading-4 text-white/60 md:text-sm md:leading-5">{video.title}</p></div></div>
+                                <div className="flex items-center gap-3 text-white"><img src={image} alt="" className="h-12 w-12 shrink-0 rounded-full border border-white/25 object-cover md:h-[52px] md:w-[52px]"/><div className="min-w-0"><h3 className="truncate text-sm font-semibold leading-5 md:text-base md:leading-6">{video.name}</h3><p className="mt-0.5 line-clamp-2 text-xs leading-4 text-white/60 md:text-sm md:leading-5">{video.title}</p></div></div>
                             </button>;
                         })}
                     </div>
-                </div> : <p className="mx-5 rounded-2xl border border-red-100 bg-white px-5 py-8 text-center text-slate-600">{isEnglish ? "Videos will appear here soon." : "শিগগিরই এখানে ভিডিও দেখা যাবে।"}</p>}
+                </div> : <p className="mx-5 rounded-2xl border border-white/15 bg-white/5 px-5 py-8 text-center text-red-100/80" role={loadError ? "alert" : "status"}>{loadError ? (isEnglish ? "Videos could not be loaded." : "ভিডিও লোড করা যায়নি।") : (isEnglish ? "Videos will appear here soon." : "শিগগিরই এখানে ভিডিও দেখা যাবে।")}</p>}
             {selectedVideo && <div className={`fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/85 p-4 backdrop-blur-sm ${isVideoModalClosing ? "animate-[videoModalFadeOut_.22s_ease-in_both]" : "animate-[videoModalFadeIn_.28s_ease-out_both]"}`} onClick={closeVideoModal} role="dialog" aria-modal="true" aria-label={selectedVideo.title}>
                 <div className={`relative w-full max-w-5xl overflow-hidden rounded-2xl bg-black shadow-2xl ${isVideoModalClosing ? "animate-[videoModalScaleOut_.22s_ease-in_both]" : "animate-[videoModalScaleIn_.38s_cubic-bezier(.16,1,.3,1)_both]"}`} onClick={(event) => event.stopPropagation()}>
                     <button type="button" onClick={closeVideoModal} aria-label={isEnglish ? "Close video" : "ভিডিও বন্ধ করুন"} className="absolute right-3 top-3 z-10 grid h-10 w-10 place-items-center rounded-full bg-white/90 text-red-800 shadow"><X size={22}/></button>

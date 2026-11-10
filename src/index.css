@@ -7,6 +7,14 @@
 
 @import "tailwindcss";
 
+button:not(:disabled) {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
 @theme {
   --color-red-50: #fff7f5;
   --color-red-100: #f9e7e4;
