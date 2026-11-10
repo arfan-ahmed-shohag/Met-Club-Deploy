@@ -1,4 +1,4 @@
-﻿import { ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
+﻿import { ChevronLeft, ChevronRight, Eye, Globe2, Sparkles, Users } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import coverVideo from "../../assets/videos/Drone shot for cover.mp4";
@@ -71,7 +71,7 @@ function ChapterOverview({ isEnglish }: { isEnglish: boolean }) {
     };
 
     return (
-        <section className="bg-linear-to-b from-white to-red-50/70 py-14 sm:py-18" aria-labelledby="chapter-overview-title">
+        <section className="bg-linear-to-b from-white to-red-50/70 py-[60px] lg:py-[80px]" aria-labelledby="chapter-overview-title">
             <div className="site-container px-4 sm:px-6 lg:px-8">
                 <div className="mb-5 text-center sm:mb-6">
                     <p className="mb-2 text-sm font-bold uppercase tracking-[.16em] text-red-600">{isEnglish ? "MET CLUB LEARNING" : "মেট ক্লাবের শেখার জগৎ"}</p>
@@ -150,6 +150,44 @@ export default function HomePage() {
     useLocaleRouteSync("/", "/en");
     const isEnglish = getStoredLocale() === "en";
     const t = (bangla: string, english: string) => isEnglish ? english : bangla;
+    const statsSectionRef = useRef<HTMLElement>(null);
+    const [statsCounts, setStatsCounts] = useState([0, 0, 0]);
+
+    useEffect(() => {
+        const section = statsSectionRef.current;
+        if (!section) return;
+
+        let frameId = 0;
+        let startedAt: number | null = null;
+        const targets = [10000, 2500, 750];
+        const observer = new IntersectionObserver(([entry]) => {
+            if (!entry.isIntersecting) return;
+            observer.disconnect();
+
+            const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            if (reducedMotion) {
+                setStatsCounts(targets);
+                return;
+            }
+
+            const countUp = (time: number) => {
+                startedAt ??= time;
+                const progress = Math.min((time - startedAt) / 1500, 1);
+                const easedProgress = 1 - Math.pow(1 - progress, 3);
+                setStatsCounts(targets.map((target) => Math.floor(target * easedProgress)));
+                if (progress < 1) frameId = window.requestAnimationFrame(countUp);
+                else setStatsCounts(targets);
+            };
+
+            frameId = window.requestAnimationFrame(countUp);
+        }, { threshold: 0.3 });
+
+        observer.observe(section);
+        return () => {
+            observer.disconnect();
+            window.cancelAnimationFrame(frameId);
+        };
+    }, []);
     return (
         <div className="relative flex min-h-screen flex-col overflow-x-hidden bg-gray-50">
             <TopNav title={t("হোম", "Home")} brandName={t("মেট ক্লাব", "Met Club")} />
@@ -158,7 +196,7 @@ export default function HomePage() {
                 <div className="absolute inset-0 z-10 bg-gradient-to-r from-red-950/85 via-red-950/65 to-slate-950/35" />
                 <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/40 via-transparent to-black/10" />
                 <WeatherCanvas />
-                <div className="site-container relative z-20 grid min-h-[min(820px,calc(100svh-4rem))] items-center gap-12 px-5 py-16 sm:px-8 lg:grid-cols-[1.08fr_.92fr] lg:gap-16">
+                <div className="site-container relative z-20 grid min-h-[min(820px,calc(100svh-4rem))] items-center gap-12 px-5 py-[60px] sm:px-8 lg:grid-cols-[1.08fr_.92fr] lg:gap-16 lg:py-[80px]">
                     <div className="max-w-2xl text-white">
                         <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/35 bg-white/10 px-4 py-2 text-sm font-bold shadow-lg backdrop-blur-md"><Sparkles className="h-4 w-4 text-amber-300" />{t("শিশুদের জন্য আবহাওয়া ও দুর্যোগ সচেতনতা", "Weather and disaster learning for every child")}</div>
                         <h1 className="mb-5 text-4xl font-black leading-[1.12] tracking-tight sm:text-5xl lg:text-6xl" style={{ textShadow: "0 4px 24px rgba(0,0,0,.32)" }}>{t("আবহাওয়া শিখি,", "Learn about weather,")}<br /><span className="text-red-200">{t("নিরাপদ সমাজ গড়ি", "build safer communities")}</span></h1>
@@ -182,7 +220,7 @@ export default function HomePage() {
                 </div>
             </main>
             <ChapterOverview isEnglish={isEnglish} />
-            <section className="relative overflow-hidden bg-white py-16 sm:py-24" aria-labelledby="about-met-club-title">
+            <section className="relative overflow-hidden bg-white py-[60px] lg:py-[80px]" aria-labelledby="about-met-club-title">
                 <div className="site-container relative grid items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">
                     <div className="relative mx-auto flex min-h-[300px] w-full max-w-xl items-center justify-center sm:min-h-[390px]">
                         <div className="absolute h-64 w-64 rounded-full bg-gradient-to-br from-red-100 to-orange-100 sm:h-80 sm:w-80" />
@@ -207,6 +245,35 @@ export default function HomePage() {
                         <Link to={isEnglish ? "/en/about" : "/about"} className="mt-8 inline-flex items-center gap-2 rounded-xl bg-red-700 px-6 py-3 font-bold text-white shadow-lg shadow-red-900/15 transition hover:-translate-y-0.5 hover:bg-red-800">
                             {isEnglish ? "Learn more" : "আরও জানুন"}<span aria-hidden="true">{String.fromCodePoint(0x2192)}</span>
                         </Link>
+                    </div>
+                </div>
+            </section>
+            <section ref={statsSectionRef} className="relative isolate overflow-hidden bg-red-950 py-[60px] lg:py-[80px]" aria-labelledby="met-club-stats-title">
+                <div className="pointer-events-none absolute inset-0 opacity-40" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px)", backgroundSize: "42px 42px" }} />
+                <div className="pointer-events-none absolute -left-32 top-0 h-96 w-96 rounded-full bg-red-700/30 blur-3xl" />
+                <div className="site-container relative px-4 sm:px-6 lg:px-8">
+                    <div className="mb-9 text-center">
+                        <p className="mb-2 text-sm font-bold uppercase tracking-[.16em] text-red-300">{isEnglish ? "OUR COMMUNITY" : "আমাদের কমিউনিটি"}</p>
+                        <h2 id="met-club-stats-title" className="text-[36px] font-black text-white">{isEnglish ? "Learning together, growing together" : "একসাথে শিখছি, একসাথে এগোচ্ছি"}</h2>
+                        <p className="mt-2 text-sm font-normal text-red-100/70 sm:text-base">{isEnglish ? "A snapshot of the learners and visitors connecting with MET Club." : "মেট ক্লাবের সঙ্গে যুক্ত শিক্ষার্থী ও দর্শনার্থীদের একটি সংক্ষিপ্ত চিত্র।"}</p>
+                    </div>
+                    <div className="grid grid-cols-1 gap-5 md:grid-cols-12">
+                        {[
+                            { icon: Eye, value: statsCounts[0], label: isEnglish ? "Total visitors" : "মোট দর্শনার্থী" },
+                            { icon: Users, value: statsCounts[1], label: isEnglish ? "Users in Bangladesh" : "বাংলাদেশের ব্যবহারকারী" },
+                            { icon: Globe2, value: statsCounts[2], label: isEnglish ? "Users from other countries" : "অন্যান্য দেশের ব্যবহারকারী" },
+                        ].map(({ icon: Icon, value, label }, index) => (
+                            <div key={label} className={`group relative min-h-56 overflow-hidden rounded-[2rem] p-7 transition-all duration-500 hover:-translate-y-2 md:col-span-4 sm:p-9 ${index === 2 ? "bg-red-300 text-red-950 hover:shadow-[0_24px_50px_rgba(248,113,113,.25)]" : "border border-white/10 bg-white/[0.06] text-white hover:border-red-300/50 hover:bg-white/[0.09] hover:shadow-[0_24px_50px_rgba(0,0,0,.25)]"}`} style={{ animation: "fadeSlideUp .55s ease both", animationDelay: (index * 120) + "ms" }}>
+                                <div className="relative z-10 flex h-full flex-col">
+                                    {index === 2 && <span className="mb-8 grid h-12 w-12 place-items-center rounded-xl bg-red-950 text-red-200 transition-transform duration-700 group-hover:rotate-[360deg]"><Icon size={23} aria-hidden="true" /></span>}
+                                    <p className={`text-5xl font-black tracking-tighter sm:text-6xl ${index === 2 ? "text-red-950" : "text-white"}`}>{value.toLocaleString(isEnglish ? "en-US" : "bn-BD")}<span className={index === 2 ? "text-white" : "text-red-300"}>+</span></p>
+                                    <p className={`mt-2 text-xs font-bold uppercase tracking-[.18em] ${index === 2 ? "text-red-950/65" : "text-red-100/60"}`}>{label}</p>
+                                    {index === 1 && <div className="mt-8 flex gap-1.5"><span className="h-1 flex-1 rounded-full bg-red-300 transition-all duration-700 group-hover:flex-[2]" /><span className="h-1 flex-1 rounded-full bg-red-300/80 transition-all duration-700 group-hover:flex-[1.5]" /><span className="h-1 flex-1 rounded-full bg-red-300/55 transition-all duration-700 group-hover:flex-[2.5]" /><span className="h-1 flex-1 rounded-full bg-white/10 transition-colors group-hover:bg-red-300/30" /></div>}
+                                </div>
+                                {index === 0 && <div className="absolute -bottom-5 -right-3 text-7xl font-black italic tracking-tighter text-white/[0.035] transition-all duration-700 group-hover:scale-110 group-hover:text-red-300/10 sm:text-8xl">MET</div>}
+                                {index === 2 && <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full border-[24px] border-white/15 transition-transform duration-1000 group-hover:scale-125" />}
+                            </div>
+                        ))}
                     </div>
                 </div>
             </section>
