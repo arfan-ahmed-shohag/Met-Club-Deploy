@@ -9,7 +9,7 @@ import { resolveMediaUrl } from "../../utils/media";
 import { profileImageUrl } from "../../lib/profile";
 
 type BlogPost = {
-    id: number;
+    id: string;
     title: string;
     content: string;
     featuredImage: string | null;

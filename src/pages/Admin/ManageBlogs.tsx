@@ -7,7 +7,7 @@ import { sanitizeBlogHtml } from "../../utils/blogContent";
 import { resolveMediaUrl } from "../../utils/media";
 
 type BlogPost = {
-    id: number;
+    id: string;
     title: string;
     content: string;
     featuredImage: string | null;
@@ -26,7 +26,7 @@ export default function ManageBlogs() {
     const [filter, setFilter] = useState<BlogFilter>("pending");
     const [isLoading, setIsLoading] = useState(true);
     const [loadError, setLoadError] = useState("");
-    const [publishingId, setPublishingId] = useState<number | null>(null);
+    const [publishingId, setPublishingId] = useState<string | null>(null);
 
     const loadPosts = useCallback(async () => {
         setIsLoading(true);

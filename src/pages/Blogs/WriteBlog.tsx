@@ -51,8 +51,21 @@ export default function WriteBlog() {
             }
             return imagePath as string;
         } catch (uploadError) {
-            const message = isAxiosError(uploadError) ? uploadError.response?.data?.errorMessage : undefined;
-            toast.error(message || (isEnglish ? "Image upload failed. Please try again." : "ছবি আপলোড হয়নি। আবার চেষ্টা করুন।"));
+            const responseData: unknown = isAxiosError(uploadError) ? uploadError.response?.data : undefined;
+            const responseBody = responseData && typeof responseData === "object"
+                ? responseData as { errorMessage?: unknown; message?: unknown }
+                : null;
+            const serverMessage = typeof responseBody?.errorMessage === "string"
+                ? responseBody.errorMessage
+                : typeof responseBody?.message === "string"
+                    ? responseBody.message
+                    : typeof responseData === "string" && responseData.trim()
+                        ? responseData
+                        : undefined;
+            const fallbackMessage = isAxiosError(uploadError) && !uploadError.response
+                ? (isEnglish ? "Could not connect to the upload server. Check your connection and try again." : "ছবি আপলোড সার্ভারের সঙ্গে সংযোগ করা যায়নি। ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।")
+                : (isEnglish ? "Image upload failed. Please try again." : "ছবি আপলোড হয়নি। আবার চেষ্টা করুন।");
+            toast.error(serverMessage || fallbackMessage);
             return null;
         } finally {
             setIsUploadingImage(false);
@@ -78,9 +91,11 @@ export default function WriteBlog() {
 
         const selection = inlineImageRangeRef.current || editor.getSelection(true) || { index: editor.getLength() - 1, length: 0 };
         inlineImageRangeRef.current = null;
-        if (selection.length > 0) editor.deleteText(selection.index, selection.length, "user");
-        editor.insertEmbed(selection.index, "image", resolveMediaUrl(imagePath), "user");
-        editor.setSelection(selection.index + 1, 0, "silent");
+        const insertIndex = Math.max(0, Math.min(selection.index, editor.getLength() - 1));
+        if (selection.length > 0) editor.deleteText(insertIndex, selection.length, "api");
+        editor.insertEmbed(insertIndex, "image", resolveMediaUrl(imagePath), "api");
+        editor.insertText(insertIndex + 1, "\n", "api");
+        editor.setSelection(insertIndex + 2, 0, "silent");
         editor.focus();
     };
 
@@ -112,8 +127,26 @@ export default function WriteBlog() {
             toast.success(isEnglish ? "Blog submitted for admin review." : "ব্লগটি admin-এর পর্যালোচনার জন্য জমা হয়েছে।");
             navigate(isEnglish ? "/en/blogs" : "/blogs");
         } catch (submitError) {
-            const message = isAxiosError(submitError) ? submitError.response?.data?.errorMessage : undefined;
-            setFormError(message || (isEnglish ? "Could not submit your blog. Please try again." : "ব্লগ জমা দেওয়া যায়নি। আবার চেষ্টা করুন।"));
+            const responseData: unknown = isAxiosError(submitError) ? submitError.response?.data : undefined;
+            const responseBody = responseData && typeof responseData === "object"
+                ? responseData as { errorMessage?: unknown; message?: unknown; errors?: unknown }
+                : null;
+            const fieldErrors = responseBody?.errors && typeof responseBody.errors === "object"
+                ? Object.values(responseBody.errors as Record<string, unknown>).filter((value): value is string => typeof value === "string")
+                : [];
+            const serverMessage = fieldErrors.length > 0
+                ? fieldErrors.join(" ")
+                : typeof responseBody?.errorMessage === "string"
+                    ? responseBody.errorMessage
+                    : typeof responseBody?.message === "string"
+                        ? responseBody.message
+                        : typeof responseData === "string" && responseData.trim()
+                            ? responseData
+                            : undefined;
+            const fallbackMessage = isAxiosError(submitError) && !submitError.response
+                ? (isEnglish ? "Could not connect to the blog server. Check your connection and try again." : "ব্লগ সার্ভারের সঙ্গে সংযোগ করা যায়নি। ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।")
+                : (isEnglish ? "Could not submit your blog. Please try again." : "ব্লগ জমা দেওয়া যায়নি। আবার চেষ্টা করুন।");
+            setFormError(serverMessage || fallbackMessage);
         } finally {
             setIsSubmitting(false);
         }

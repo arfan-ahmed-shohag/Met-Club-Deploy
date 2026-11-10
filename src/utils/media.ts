@@ -1,4 +1,8 @@
-const API_ORIGIN = (import.meta.env.VITE_API_URL || "https://api.meteorologyclub.com/api/v1")
+const defaultApiUrl = import.meta.env.DEV
+  ? "http://localhost:5000/api/v1"
+  : "https://api.meteorologyclub.com/api/v1";
+
+const API_ORIGIN = (import.meta.env.VITE_API_URL || defaultApiUrl)
   .replace(/\/api\/v1\/?$/, "")
   .replace(/\/$/, "");
 

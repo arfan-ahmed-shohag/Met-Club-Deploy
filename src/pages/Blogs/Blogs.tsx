@@ -11,7 +11,7 @@ import { blogHtmlFirstImage, blogHtmlToText } from "../../utils/blogContent";
 import { resolveMediaUrl } from "../../utils/media";
 
 type BlogPost = {
-    id: number;
+    id: string;
     title: string;
     content: string;
     featuredImage: string | null;
