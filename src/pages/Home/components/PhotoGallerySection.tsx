@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { JSX } from "react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, X } from "lucide-react";
 import axiosPublic from "../../../hooks/axiosPublic";
 import { resolveMediaUrl } from "../../../utils/media";
 
@@ -18,7 +18,22 @@ export default function PhotoGallerySection({ isEnglish }: { isEnglish: boolean 
     const [total, setTotal] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
     const [hasError, setHasError] = useState(false);
+    const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
     const pageCount = Math.ceil(total / PAGE_SIZE);
+
+    useEffect(() => {
+        if (!selectedImage) return;
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        const closeOnEscape = (event: KeyboardEvent) => {
+            if (event.key === "Escape") setSelectedImage(null);
+        };
+        window.addEventListener("keydown", closeOnEscape);
+        return () => {
+            document.body.style.overflow = previousOverflow;
+            window.removeEventListener("keydown", closeOnEscape);
+        };
+    }, [selectedImage]);
 
     useEffect(() => {
         let cancelled = false;
@@ -46,18 +61,22 @@ export default function PhotoGallerySection({ isEnglish }: { isEnglish: boolean 
         <div className={`gallery-marquee-track flex w-max ${reverse ? "gallery-marquee-reverse" : ""}`}>
             {[0, 1].map((copy) => (
                 <div key={copy} className="flex shrink-0 gap-4 pr-4" aria-hidden={copy === 1}>
-                    {images.map((image, index) => (
-                        <div key={`${copy}-${image.id}`} className="group relative h-[160px] w-[255px] shrink-0 overflow-hidden rounded-xl border border-red-100 shadow-sm md:h-[360px] md:w-[560px]">
-                            <img
-                                src={resolveMediaUrl(image.imageUrl)}
-                                alt={copy === 0 ? (image.alt || (isEnglish ? `MET Club moment ${index + 1}` : `মেট ক্লাবের মুহূর্ত ${index + 1}`)) : ""}
-                                loading="lazy"
-                                draggable={false}
-                                className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
-                            />
-                            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-red-950/25 via-transparent to-transparent opacity-60" />
-                        </div>
-                    ))}
+                    {images.map((image, index) => {
+                        const accessibleAlt = image.alt || (isEnglish ? `MET Club moment ${index + 1}` : `মেট ক্লাবের মুহূর্ত ${index + 1}`);
+                        const imageContent = <>
+                            <img src={resolveMediaUrl(image.imageUrl)} alt="" loading="lazy" draggable={false} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                            <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-red-950/25 via-transparent to-transparent opacity-60" />
+                        </>;
+                        return (
+                            <div key={`${copy}-${image.id}`} className="group relative h-[160px] w-[255px] shrink-0 overflow-hidden rounded-xl border border-red-100 shadow-sm md:h-[360px] md:w-[560px]">
+                                {copy === 0 ? (
+                                    <button type="button" onClick={() => setSelectedImage(image)} aria-label={isEnglish ? `View larger: ${accessibleAlt}` : `বড় করে দেখুন: ${accessibleAlt}`} className="absolute inset-0 block h-full w-full cursor-zoom-in text-left focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-red-600">
+                                        {imageContent}
+                                    </button>
+                                ) : <div aria-hidden="true" className="absolute inset-0">{imageContent}</div>}
+                            </div>
+                        );
+                    })}
                 </div>
             ))}
         </div>
@@ -92,6 +111,15 @@ export default function PhotoGallerySection({ isEnglish }: { isEnglish: boolean 
                             ? (isEnglish ? "Gallery images could not be loaded." : "গ্যালারির ছবি লোড করা যায়নি।")
                             : (isEnglish ? "Gallery photos will appear here soon." : "গ্যালারির ছবি শিগগিরই এখানে দেখা যাবে।")}
                 </p>
+            )}
+            {selectedImage && (
+                <div className="gallery-lightbox-backdrop fixed inset-0 z-[120] flex items-center justify-center bg-slate-950/90 p-4 backdrop-blur-sm sm:p-8" onMouseDown={(event) => { if (event.target === event.currentTarget) setSelectedImage(null); }} role="dialog" aria-modal="true" aria-label={isEnglish ? "Expanded gallery image" : "বড় করে দেখা গ্যালারি ছবি"}>
+                    <button type="button" autoFocus onClick={() => setSelectedImage(null)} aria-label={isEnglish ? "Close image preview" : "ছবির preview বন্ধ করুন"} className="absolute right-4 top-4 z-10 grid h-11 w-11 place-items-center rounded-full border border-white/25 bg-black/40 text-white transition hover:rotate-90 hover:bg-black/70 sm:right-7 sm:top-7"><X size={23} /></button>
+                    <figure className="gallery-lightbox-image max-h-full max-w-full" onMouseDown={(event) => event.stopPropagation()}>
+                        <img src={resolveMediaUrl(selectedImage.imageUrl)} alt={selectedImage.alt || (isEnglish ? "MET Club gallery photo" : "মেট ক্লাবের গ্যালারির ছবি")} className="max-h-[82vh] max-w-[92vw] rounded-2xl object-contain shadow-2xl sm:max-h-[86vh]" />
+                        {selectedImage.alt && <figcaption className="mt-3 text-center text-sm font-medium text-white/90">{selectedImage.alt}</figcaption>}
+                    </figure>
+                </div>
             )}
         </section>
     );

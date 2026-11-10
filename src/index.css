@@ -51,6 +51,24 @@
   to { transform: translateX(-50%); }
 }
 
+@keyframes galleryLightboxFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes galleryLightboxImageIn {
+  from { opacity: 0; transform: scale(.94); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.gallery-lightbox-backdrop {
+  animation: galleryLightboxFadeIn .22s ease-out both;
+}
+
+.gallery-lightbox-image {
+  animation: galleryLightboxImageIn .28s cubic-bezier(.2,.8,.2,1) both;
+}
+
 @keyframes videoModalFadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
