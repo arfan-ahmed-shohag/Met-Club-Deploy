@@ -35,6 +35,8 @@ export function getLocalizedPath(pathname: string, locale: AppLocale) {
         { bn: "/location", en: "/en/location" },
         { bn: "/tutorials", en: "/en/tutorials" },
         { bn: "/blogs", en: "/en/blogs" },
+        { bn: "/videos", en: "/en/videos" },
+        { bn: "/gallery", en: "/en/gallery" },
         { bn: "/profile", en: "/en/profile" },
     ];
 

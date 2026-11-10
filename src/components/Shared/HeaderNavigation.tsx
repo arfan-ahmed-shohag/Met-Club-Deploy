@@ -22,11 +22,11 @@ type HeaderNavigationProps = {
 const resources = [
     { bn: "কমিকস", en: "Comics", path: null },
     { bn: "ফ্লায়ার", en: "Flyer", path: null },
-    { bn: "ভিডিও", en: "Video", path: null },
+    { bn: "ভিডিও", en: "Videos", path: "/videos" },
     { bn: "প্রেস রিলিজ", en: "Press Release", path: null },
     { bn: "ব্লগ", en: "Blogs", path: "/blogs" },
     { bn: "গল্প", en: "Stories", path: null },
-    { bn: "ফটো গ্যালারি", en: "Photo Gallery", path: null },
+    { bn: "ফটো গ্যালারি", en: "Photo Gallery", path: "/gallery" },
 ];
 
 function isChapter(value: unknown): value is HeaderChapter {

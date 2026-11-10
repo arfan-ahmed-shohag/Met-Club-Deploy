@@ -2,11 +2,12 @@ import { useCallback, useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { isAxiosError } from "axios";
 import { ImagePlus, LoaderCircle, Pencil, Trash2, Upload, X } from "lucide-react";
+import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import useAxiosProtected from "../../hooks/axiosProtected";
 import { resolveMediaUrl } from "../../utils/media";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 9;
 const ACCEPTED_TYPES = new Set(["image/png", "image/jpeg", "image/webp", "image/gif"]);
 
 type GalleryImage = { id: string; imageUrl: string; alt: string; createdAt: string };
@@ -110,7 +111,17 @@ export default function ManageGallery() {
     };
 
     const deleteImage = async (image: GalleryImage) => {
-        if (!window.confirm("Remove this image from the gallery?")) return;
+        const confirmation = await Swal.fire({
+            title: "ছবিটি মুছে ফেলবেন?",
+            text: "এই ছবিটি গ্যালারি থেকে সরিয়ে দেওয়া হবে।",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#c3231a",
+            cancelButtonColor: "#64748b",
+            confirmButtonText: "হ্যাঁ, মুছে ফেলুন",
+            cancelButtonText: "বাতিল",
+        });
+        if (!confirmation.isConfirmed) return;
         setIsSaving(true);
         try {
             await axios.delete(`/gallery/${image.id}`);
@@ -131,7 +142,7 @@ export default function ManageGallery() {
             <section className="rounded-3xl border border-white/60 bg-white/90 p-5 shadow-xl backdrop-blur sm:p-8">
                 <p className="text-sm font-bold uppercase tracking-[.16em] text-red-700">Home page</p>
                 <h2 className="mt-2 text-3xl font-black text-slate-900">Photo gallery</h2>
-                <p className="mt-2 text-slate-600">Add and manage the photos displayed in the home page gallery. Images are loaded 10 at a time.</p>
+                <p className="mt-2 text-slate-600">Add and manage the photos displayed in the home page gallery. Images are loaded 9 at a time.</p>
                 <form onSubmit={(event) => void addImage(event)} className="mt-6 grid gap-4 rounded-2xl border border-slate-200 bg-white p-4 sm:grid-cols-[1fr_1fr_auto] sm:items-end sm:p-5">
                     <label className="block text-sm font-semibold text-slate-700">Image (PNG, JPEG, WEBP, GIF · max 5 MB)
                         <input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={(event) => setNewImage(event.currentTarget.files?.[0] || null)} className="mt-2 block w-full rounded-xl border border-slate-200 p-2 text-sm" />
@@ -147,14 +158,14 @@ export default function ManageGallery() {
 
             <section className="rounded-3xl border border-white/60 bg-white/90 p-5 shadow-xl backdrop-blur sm:p-8">
                 <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-                    <div><h3 className="text-xl font-black text-slate-900">Gallery images</h3><p className="mt-1 text-sm text-slate-500">{total} image{total === 1 ? "" : "s"} · 10 per page</p></div>
+                    <div><h3 className="text-xl font-black text-slate-900">Gallery images</h3><p className="mt-1 text-sm text-slate-500">{total} image{total === 1 ? "" : "s"} · 9 per page</p></div>
                     {pageCount > 1 && <div className="flex items-center gap-3 text-sm font-semibold text-slate-700">
                         <button type="button" disabled={page === 1 || isLoading} onClick={() => setPage((current) => Math.max(1, current - 1))} className="rounded-lg border px-3 py-2 disabled:opacity-40">Previous</button>
                         <span>{page} / {pageCount}</span>
                         <button type="button" disabled={page >= pageCount || isLoading} onClick={() => setPage((current) => Math.min(pageCount, current + 1))} className="rounded-lg border px-3 py-2 disabled:opacity-40">Next</button>
                     </div>}
                 </div>
-                {isLoading ? <div className="flex justify-center py-16 text-red-700" role="status"><LoaderCircle className="animate-spin" /></div> : images.length === 0 ? (
+                {isLoading ? <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3" aria-busy="true" role="status"><span className="sr-only">Loading gallery images</span>{Array.from({ length: PAGE_SIZE }, (_, index) => <article key={index} aria-hidden="true" className="animate-pulse overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"><div className="aspect-[16/10] bg-slate-200"/><div className="flex items-center justify-between gap-3 p-3"><div className="h-4 w-2/3 rounded bg-slate-200"/><div className="flex gap-2"><div className="h-9 w-9 rounded-lg bg-slate-100"/><div className="h-9 w-9 rounded-lg bg-slate-100"/></div></div></article>)}</div> : images.length === 0 ? (
                     <div className="rounded-2xl border border-dashed border-slate-300 py-16 text-center text-slate-500"><ImagePlus className="mx-auto mb-3" /><p>No gallery photos yet. Add the first one above.</p></div>
                 ) : <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{images.map((image) => (
                     <article key={image.id} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">

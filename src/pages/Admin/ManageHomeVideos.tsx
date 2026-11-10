@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { FormEvent } from "react";
 import { isAxiosError } from "axios";
 import { LoaderCircle, Pencil, Play, Plus, Trash2, X } from "lucide-react";
+import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import useAxiosProtected from "../../hooks/axiosProtected";
 import { resolveMediaUrl } from "../../utils/media";
@@ -98,7 +99,17 @@ export default function ManageHomeVideos() {
     };
 
     const remove = async (video: HomeVideo) => {
-        if (!window.confirm(`Remove “${video.name}” from the home page?`)) return;
+        const confirmation = await Swal.fire({
+            title: "ভিডিওটি মুছে ফেলবেন?",
+            text: `“${video.name}” হোম পেজ থেকে সরিয়ে দেওয়া হবে।`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#c3231a",
+            cancelButtonColor: "#64748b",
+            confirmButtonText: "হ্যাঁ, মুছে ফেলুন",
+            cancelButtonText: "বাতিল",
+        });
+        if (!confirmation.isConfirmed) return;
         setSaving(true);
         try {
             await axios.delete(`/videos/${video.id}`);

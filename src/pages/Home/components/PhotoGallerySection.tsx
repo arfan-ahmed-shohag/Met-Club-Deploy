@@ -4,7 +4,7 @@ import { ArrowLeft, ArrowRight, X } from "lucide-react";
 import axiosPublic from "../../../hooks/axiosPublic";
 import { resolveMediaUrl } from "../../../utils/media";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 9;
 
 type GalleryImage = {
     id: string;

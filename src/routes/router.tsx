@@ -33,6 +33,8 @@ const WriteBlog = lazy(() => import("../pages/Blogs/WriteBlog"));
 const ManageBlogs = lazy(() => import("../pages/Admin/ManageBlogs"));
 const ManageGallery = lazy(() => import("../pages/Admin/ManageGallery"));
 const ManageHomeVideos = lazy(() => import("../pages/Admin/ManageHomeVideos"));
+const VideoLibraryPage = lazy(() => import("../pages/Media/MediaLibraryPage").then((module) => ({ default: module.VideoLibraryPage })));
+const PhotoGalleryPage = lazy(() => import("../pages/Media/MediaLibraryPage").then((module) => ({ default: module.PhotoGalleryPage })));
 const EnglishLoginPage = lazy(() => import("../pages/EnglishVersion/Home"));
 const EnglishAbout = lazy(() => import("../pages/EnglishVersion/About/About"));
 const EnglishStartJourney = lazy(() => import("../pages/EnglishVersion/StartJourney/StartJourney"));
@@ -104,6 +106,26 @@ const routes: RouteObject[] = [
 
       return null;
     },
+  },
+  {
+    path: "/videos",
+    element: <SuspenseWrapper><VideoLibraryPage /></SuspenseWrapper>,
+    loader: ({ request }) => redirectToStoredLocale(request.url, "/videos", "/en/videos"),
+  },
+  {
+    path: "/en/videos",
+    element: <SuspenseWrapper><VideoLibraryPage /></SuspenseWrapper>,
+    loader: ({ request }) => redirectToStoredLocale(request.url, "/videos", "/en/videos"),
+  },
+  {
+    path: "/gallery",
+    element: <SuspenseWrapper><PhotoGalleryPage /></SuspenseWrapper>,
+    loader: ({ request }) => redirectToStoredLocale(request.url, "/gallery", "/en/gallery"),
+  },
+  {
+    path: "/en/gallery",
+    element: <SuspenseWrapper><PhotoGalleryPage /></SuspenseWrapper>,
+    loader: ({ request }) => redirectToStoredLocale(request.url, "/gallery", "/en/gallery"),
   },
   {
     path: "/login",
