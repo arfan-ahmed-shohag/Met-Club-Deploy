@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import metClubLogo from "../../assets/images/logo_original.png";
 import { FiPlay } from "react-icons/fi";
@@ -232,7 +232,7 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                                 style={{
                                     width: 32,
                                     height: 32,
-                                    background: "linear-gradient(135deg, #ef4444, #f97316)",
+                                    background: "linear-gradient(135deg, #DA291C, #FC4C02)",
                                     boxShadow: "0 2px 8px rgba(220,38,38,0.28)",
                                     flexShrink: 0,
                                 }}
@@ -242,14 +242,14 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                             </span>
                             <span
                                 className="hidden max-w-40 truncate font-semibold sm:block"
-                                style={{ color: "#7f1d1d", fontSize: "0.9rem",}}
+                                style={{ color: "#222221", fontSize: "0.9rem",}}
                             >
                                 {user.fullName}
                             </span>
                             <svg
                                 viewBox="0 0 24 24"
                                 fill="none"
-                                stroke="#ef4444"
+                                stroke="#DA291C"
                                 strokeWidth="2.5"
                                 className="w-4 h-4 transition-transform duration-200"
                                 style={{ transform: dropdownOpen ? "rotate(180deg)" : "rotate(0deg)" }}
@@ -284,7 +284,7 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                                         style={{
                                             width: 40,
                                             height: 40,
-                                            background: "linear-gradient(135deg, #ef4444, #f97316)",
+                                            background: "linear-gradient(135deg, #DA291C, #FC4C02)",
                                             fontSize: "1.05rem",
                                             flexShrink: 0,
                                         }}
@@ -293,10 +293,10 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                                         {user.profileImg && <img key={user.profileImg} src={profileImageUrl(user.profileImg)} alt="" className="absolute inset-0 h-full w-full object-cover" onError={(event) => { event.currentTarget.style.display = "none"; }} />}
                                     </span>
                                     <div className="min-w-0">
-                                        <div style={{ color: "#7f1d1d", fontWeight: 700, fontSize: "0.92rem",}}>
+                                        <div style={{ color: "#222221", fontWeight: 700, fontSize: "0.92rem",}}>
                                             {user.fullName}
                                         </div>
-                                        <div style={{ color: "#b91c1c", fontSize: "0.78rem", fontWeight: 600 }}>{roleLabel}</div>
+                                        <div style={{ color: "#9A3324", fontSize: "0.78rem", fontWeight: 600 }}>{roleLabel}</div>
                                         <p className="truncate text-xs text-red-900/75" title={user.email}>{user.email}</p>
                                     </div>
                                 </div>
@@ -319,7 +319,7 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                                     }}
                                     className="w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors duration-150"
                                     style={{
-                                        color: "#7f1d1d",
+                                        color: "#222221",
                                         fontSize: "0.9rem",
                                         fontWeight: 600,
                                         background: "transparent",
@@ -343,7 +343,7 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                                             to={getLocalizedPath(item.href, locale)}
                                             className="flex items-center gap-3 px-4 py-2.5 transition-colors duration-150"
                                             style={{
-                                                color: "#7f1d1d",
+                                                color: "#222221",
                                                 textDecoration: "none",
                                                 fontSize: "0.9rem",
                                                 fontWeight: 600,
@@ -352,7 +352,7 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                                             onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(239,68,68,0.10)")}
                                             onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                                         >
-                                            <span style={{ color: "#ef4444" }}>{item.icon}</span>
+                                            <span style={{ color: "#DA291C" }}>{item.icon}</span>
                                             {locale === "en" ? item.englishLabel : item.label}
                                         </Link>
                                     ))}

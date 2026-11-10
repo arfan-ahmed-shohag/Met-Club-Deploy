@@ -44,17 +44,17 @@ export default function BottomNav({
     background: current === 0
       ? (useSectionToneForButtons ? "rgba(254,226,226,0.7)" : "rgba(209,250,229,0.5)")
       : (useSectionToneForButtons ? "linear-gradient(135deg,#fee2e2,#fecaca)" : "linear-gradient(135deg,#d1fae5,#a7f3d0)"),
-    border: useSectionToneForButtons ? "2.5px solid #fca5a5" : "2.5px solid #6ee7b7",
+    border: useSectionToneForButtons ? "2.5px solid #D1CCBD" : "2.5px solid #6ee7b7",
     color: useSectionToneForButtons ? "#991b1b" : "#065f46",
     boxShadow: current > 0 ? (useSectionToneForButtons ? "0 4px 16px rgba(239,68,68,0.23)" : "0 4px 16px rgba(110,231,183,0.30)") : "none",
   };
 
   const nextStyle: React.CSSProperties = {
     background: answered
-      ? (useSectionToneForButtons ? "linear-gradient(135deg,#ef4444,#dc2626)" : "linear-gradient(135deg,#0ea5e9,#0284c7)")
+      ? (useSectionToneForButtons ? "linear-gradient(135deg,#DA291C,#DA291C)" : "linear-gradient(135deg,#0ea5e9,#0284c7)")
       : (useSectionToneForButtons ? "linear-gradient(135deg,#fee2e2,#fecaca)" : "linear-gradient(135deg,#e0f2fe,#bae6fd)"),
-    border: useSectionToneForButtons ? "2.5px solid #f87171" : "2.5px solid #38bdf8",
-    color: answered ? "#fff" : (useSectionToneForButtons ? "#fca5a5" : "#7dd3fc"),
+    border: useSectionToneForButtons ? "2.5px solid #FC4C02" : "2.5px solid #38bdf8",
+    color: answered ? "#fff" : (useSectionToneForButtons ? "#D1CCBD" : "#7dd3fc"),
     boxShadow: answered ? (useSectionToneForButtons ? "0 4px 16px rgba(239,68,68,0.33)" : "0 4px 16px rgba(14,165,233,0.35)") : "none",
   };
 
@@ -130,7 +130,7 @@ export default function BottomNav({
         <div className="flex flex-col items-center gap-1 shrink min-w-0 relative z-10">
           <span
             className="text-xs font-semibold"
-            style={{ color: isSectionTone ? "#7f1d1d" : "#1e3a8a" }}
+            style={{ color: isSectionTone ? "#222221" : "#1e3a8a" }}
           >
             {current + 1} / {total}
           </span>
@@ -147,12 +147,12 @@ export default function BottomNav({
                   background:
                     i < current
                       ? isSectionTone
-                        ? "linear-gradient(135deg,#f87171,#ef4444)"
-                        : "linear-gradient(135deg,#f87171,#ef4444)"
+                        ? "linear-gradient(135deg,#FC4C02,#DA291C)"
+                        : "linear-gradient(135deg,#FC4C02,#DA291C)"
                       : i === current
                         ? isSectionTone
-                          ? "linear-gradient(135deg,#dc2626,#b91c1c)"
-                          : "linear-gradient(135deg,#dc2626,#b91c1c)"
+                          ? "linear-gradient(135deg,#DA291C,#9A3324)"
+                          : "linear-gradient(135deg,#DA291C,#9A3324)"
                         : isSectionTone
                           ? "rgba(248,113,113,0.35)"
                           : "rgba(248,113,113,0.35)",

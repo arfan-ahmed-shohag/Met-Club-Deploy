@@ -75,7 +75,7 @@ export default function About() {
                 <div className="site-container relative z-20 text-center px-4 sm:px-6 lg:px-8 header-anim">
                     <div
                         className="text-3xl md:text-5xl font-bold mb-6 animate-slide-up delay-100"
-                        style={{ color: "#b91c1c", textShadow: titleShadow }}
+                        style={{ color: "#9A3324", textShadow: titleShadow }}
                     >
                         {t("আবহাওয়া চক্র", "Weather Cycle")}
                     </div>
@@ -103,7 +103,7 @@ export default function About() {
                         <div className="group rounded-3xl p-10 hover:scale-105 transition-all duration-500 animate-slide-right"
                             style={{
                                 background: "rgba(255,255,255,0.22)",
-                                border: "1.5px solid #fca5a599",
+                                border: "1.5px solid #D1CCBD99",
                                 backdropFilter: "blur(20px) saturate(160%)",
                                 WebkitBackdropFilter: "blur(20px) saturate(160%)",
                                 boxShadow: "0 10px 30px rgba(0,0,0,0.12)",
@@ -112,7 +112,7 @@ export default function About() {
                                 <div className="w-20 h-20 bg-linear-to-br from-red-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
                                     <Eye className="w-10 h-10 text-white" />
                                 </div>
-                                <h3 className="text-3xl md:text-4xl font-black" style={{ color: "#b91c1c", textShadow: titleShadow }}>{t("ভিশন", "Vision")}</h3>
+                                <h3 className="text-3xl md:text-4xl font-black" style={{ color: "#9A3324", textShadow: titleShadow }}>{t("ভিশন", "Vision")}</h3>
                             </div>
                             <p className="text-lg text-gray-800 font-semibold leading-relaxed">
                                 {t("একটি নিরাপদ ও সচেতন সমাজ গড়ে তুলতে শিশুদের আবহাওয়া পর্যবেক্ষণ, পূর্বাভাস এবং আগাম সতর্কতার শিক্ষা প্রদান করা।", "To educate children about weather observation, forecasting, and early warnings so they can help build a safer, more aware society.")}
@@ -126,7 +126,7 @@ export default function About() {
                         <div className="group rounded-3xl p-10 hover:scale-105 transition-all duration-500 animate-slide-left"
                             style={{
                                 background: "rgba(255,255,255,0.22)",
-                                border: "1.5px solid #fca5a599",
+                                border: "1.5px solid #D1CCBD99",
                                 backdropFilter: "blur(20px) saturate(160%)",
                                 WebkitBackdropFilter: "blur(20px) saturate(160%)",
                                 boxShadow: "0 10px 30px rgba(0,0,0,0.12)",
@@ -135,7 +135,7 @@ export default function About() {
                                 <div className="w-20 h-20 bg-linear-to-br from-red-500 to-red-700 rounded-2xl flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
                                     <Target className="w-10 h-10 text-white" />
                                 </div>
-                                <h3 className="text-3xl md:text-4xl font-black" style={{ color: "#b91c1c", textShadow: titleShadow }}>{t("মিশন", "Mission")}</h3>
+                                <h3 className="text-3xl md:text-4xl font-black" style={{ color: "#9A3324", textShadow: titleShadow }}>{t("মিশন", "Mission")}</h3>
                             </div>
                             <p className="text-lg text-gray-800 font-semibold leading-relaxed">
                                 {t("একটি প্ল্যাটফর্ম যেখানে শিশুরা দুর্যোগের পূর্বাভাস এবং আগাম সতর্কতা সম্পর্কে জেনে নিজের পরিবার, জীবন এবং সম্পদ রক্ষা করতে পারবে।", "To create a platform where children learn about disaster forecasts and early warnings so they can protect their families, lives, and property.")}
@@ -149,7 +149,7 @@ export default function About() {
 
                     <div>
                         <div className="text-center mb-10">
-                            <h3 className="text-4xl md:text-5xl font-black mb-4" style={{ color: "#b91c1c", textShadow: titleShadow }}>{t("মেট ক্লাব কী?", "What is Met Club?")}</h3>
+                            <h3 className="text-4xl md:text-5xl font-black mb-4" style={{ color: "#9A3324", textShadow: titleShadow }}>{t("মেট ক্লাব কী?", "What is Met Club?")}</h3>
                             <div className="w-24 h-1 bg-red-500 mx-auto mb-6"></div>
                         </div>
                         <div className="grid md:grid-cols-2 gap-8 items-center">
@@ -202,7 +202,7 @@ export default function About() {
                 <div className="absolute inset-0 bg-white/40 pointer-events-none backdrop-blur-[1px]"></div>
                 <div className="site-container relative z-10 px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
-                        <h2 className="text-4xl md:text-5xl font-black mb-4" style={{ color: "#b91c1c", textShadow: titleShadow }}>{t("আমাদের উদ্দেশ্য", "Our Objectives")}</h2>
+                        <h2 className="text-4xl md:text-5xl font-black mb-4" style={{ color: "#9A3324", textShadow: titleShadow }}>{t("আমাদের উদ্দেশ্য", "Our Objectives")}</h2>
                         <p className="text-lg md:text-xl font-semibold" style={{ color: "#1f2937", textShadow: subtitleShadow }}>
                             {t("শিশুদের জীবন রক্ষাকারী দক্ষতা প্রদান এবং দুর্যোগ প্রস্তুতিতে তাদের ক্ষমতায়ন", "Equipping children with life-saving skills and empowering them to prepare for disasters.")}
                         </p>
@@ -215,7 +215,7 @@ export default function About() {
                                 className="group rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
                                 style={{
                                     background: "rgba(255,255,255,0.22)",
-                                    border: "1.5px solid #fca5a599",
+                                    border: "1.5px solid #D1CCBD99",
                                     backdropFilter: "blur(20px) saturate(160%)",
                                     WebkitBackdropFilter: "blur(20px) saturate(160%)",
                                     boxShadow: "0 10px 30px rgba(0,0,0,0.12)",
@@ -237,7 +237,7 @@ export default function About() {
             <section id="structure" className="relative z-10 py-10 md:py-15 lg:py-20 bg-linear-to-br from-orange-50 to-red-50">
                 <div className="site-container px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
-                        <h2 className="text-4xl md:text-5xl font-black mb-4" style={{ color: "#b91c1c", textShadow: titleShadow }}>{t("সংগঠন কাঠামো", "Organizational Structure")}</h2>
+                        <h2 className="text-4xl md:text-5xl font-black mb-4" style={{ color: "#9A3324", textShadow: titleShadow }}>{t("সংগঠন কাঠামো", "Organizational Structure")}</h2>
                         <p className="text-lg md:text-xl font-semibold" style={{ color: "#1f2937", textShadow: subtitleShadow }}>{t("যুব নেতৃত্ব এবং সহযোগিতার মাধ্যমে শক্তিশালী", "Strengthened through youth leadership and collaboration")}</p>
                     </div>
 
@@ -252,7 +252,7 @@ export default function About() {
                                 </div>
                             </div>
                             <div className="bg-white rounded-2xl p-8 shadow-md border-l-4 border-red-500">
-                                <h4 className="text-xl font-bold mb-4" style={{ color: "#b91c1c" }}>{t("দায়িত্বসমূহ:", "Responsibilities:")}</h4>
+                                <h4 className="text-xl font-bold mb-4" style={{ color: "#9A3324" }}>{t("দায়িত্বসমূহ:", "Responsibilities:")}</h4>
                                 <ul className="space-y-3 text-gray-800 font-semibold">
                                     <li className="flex items-start space-x-3">
                                         <span className="text-red-600 font-bold mt-1">•</span>
@@ -295,7 +295,7 @@ export default function About() {
 
                                 {/* Chief Executives */}
                                 <div className="w-full">
-                                    <h4 className="text-2xl font-bold text-center mb-6" style={{ color: "#b91c1c", textShadow: titleShadow }}>{t("প্রধান নির্বাহী (৪ জন)", "Chief Executives (4)")}</h4>
+                                    <h4 className="text-2xl font-bold text-center mb-6" style={{ color: "#9A3324", textShadow: titleShadow }}>{t("প্রধান নির্বাহী (৪ জন)", "Chief Executives (4)")}</h4>
                                     <div className="grid md:grid-cols-2 gap-6">
                                         <div className="bg-gradient-to-br from-orange-600 to-orange-500 text-white rounded-2xl p-6 text-center shadow-lg hover:scale-105 transition-transform">
                                             <Award className="w-10 h-10 mx-auto mb-3" />
@@ -343,7 +343,7 @@ export default function About() {
             <section id="activities" className="relative z-10 py-10 md:py-15 lg:py-20 bg-cover bg-center" style={{ backgroundImage: `url(${aboutBg})` }}>
                 <div className="site-container relative z-10 px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
-                        <h2 className="text-4xl md:text-5xl font-black mb-4" style={{ color: "#b91c1c", textShadow: titleShadow }}>{t("আমাদের কার্যক্রম", "Our Activities")}</h2>
+                        <h2 className="text-4xl md:text-5xl font-black mb-4" style={{ color: "#9A3324", textShadow: titleShadow }}>{t("আমাদের কার্যক্রম", "Our Activities")}</h2>
                         <p className="text-lg md:text-xl font-semibold" style={{ color: "#ffffff", textShadow: subtitleShadow }}>{t("হাতে-কলমে শিক্ষা এবং সম্প্রদায় সম্পৃক্ততা", "Hands-on learning and community engagement")}</p>
                     </div>
 
@@ -354,7 +354,7 @@ export default function About() {
                                 className="group rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-3"
                                 style={{
                                     background: "rgba(255,255,255,0.22)",
-                                    border: "1.5px solid #fca5a599",
+                                    border: "1.5px solid #D1CCBD99",
                                     backdropFilter: "blur(20px) saturate(160%)",
                                     WebkitBackdropFilter: "blur(20px) saturate(160%)",
                                     boxShadow: "0 10px 30px rgba(0,0,0,0.12)",
@@ -379,7 +379,7 @@ export default function About() {
                         <div className="flex items-center justify-center space-x-4 mb-6">
                             <img src={logo} alt="MET CLUB LOGO" className='w-40 h-40' />
                         </div>
-                        <h2 className="text-4xl md:text-5xl font-black mb-6" style={{ color: "#b91c1c", textShadow: titleShadow }}>{t("তরুন চিন্তা, শক্তিশালী সতর্কতা", "Young Minds, Stronger Warnings")}</h2>
+                        <h2 className="text-4xl md:text-5xl font-black mb-6" style={{ color: "#9A3324", textShadow: titleShadow }}>{t("তরুন চিন্তা, শক্তিশালী সতর্কতা", "Young Minds, Stronger Warnings")}</h2>
                         <p className="text-xl md:text-2xl font-bold mb-8 text-red-800">
                             {t("আবহাওয়ার পূর্বাভাস বুঝে গড়ি আমাদের নিরাপদের পথ", "We build a safer path by understanding weather forecasts.")}
                         </p>
@@ -394,7 +394,7 @@ export default function About() {
             <section id="locations" className="relative z-10 py-10 md:py-15 lg:py-20 bg-cover bg-center" style={{ backgroundImage: `url(${chapterBg})` }}>
                 <div className="site-container relative z-10 px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
-                        <h2 className="text-4xl md:text-5xl font-black mb-4" style={{ color: "#b91c1c", textShadow: titleShadow }}>{t("কার্যক্রমের এলাকা", "Activity Areas")}</h2>
+                        <h2 className="text-4xl md:text-5xl font-black mb-4" style={{ color: "#9A3324", textShadow: titleShadow }}>{t("কার্যক্রমের এলাকা", "Activity Areas")}</h2>
                         <p className="text-lg md:text-xl font-semibold" style={{ color: "#1f2937", textShadow: subtitleShadow }}>{t("বাংলাদেশ জুড়ে সম্প্রসারণ", "Expanding across Bangladesh")}</p>
                     </div>
 
@@ -402,7 +402,7 @@ export default function About() {
                         {locations.map((loc) => (
                             <Link to={isEnglish ? `/en/location/${loc.id}` : `/location/${loc.id}`} key={loc.id} className="group relative rounded-3xl shadow-xl p-8 pt-12 text-center hover:scale-105 transition-all duration-500 block" style={{
                                 background: "rgba(255,255,255,0.22)",
-                                border: "1.5px solid #fca5a599",
+                                border: "1.5px solid #D1CCBD99",
                                 backdropFilter: "blur(20px) saturate(160%)",
                                 WebkitBackdropFilter: "blur(20px) saturate(160%)",
                                 boxShadow: "0 10px 30px rgba(0,0,0,0.12)",
@@ -415,9 +415,9 @@ export default function About() {
                                         </div>
                                     </div>
                                 </div>
-                                <h3 className="text-3xl font-black mb-3 mt-4" style={{ color: "#b91c1c", textShadow: titleShadow }}>{loc.name}</h3>
+                                <h3 className="text-3xl font-black mb-3 mt-4" style={{ color: "#9A3324", textShadow: titleShadow }}>{loc.name}</h3>
                                 <p className="text-lg text-gray-800 font-semibold mb-3">{t("বর্তমানে সক্রিয়", "Currently active")}</p>
-                                <p className="text-sm font-semibold mb-3" style={{ color: "#b91c1c" }}>{loc.org}</p>
+                                <p className="text-sm font-semibold mb-3" style={{ color: "#9A3324" }}>{loc.org}</p>
                                 <div className="flex items-center justify-center h-16 mt-4 mb-2">
                                     <img src={loc.logo} alt={loc.name} className="h-full w-auto max-w-[140px] object-contain rounded-md" />
                                 </div>
@@ -435,7 +435,7 @@ export default function About() {
             <section id="values" className="relative z-10 py-10 md:py-15 lg:py-20 bg-linear-to-br from-red-50 to-orange-50">
                 <div className="site-container px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
-                        <h2 className="text-4xl md:text-5xl font-black mb-4" style={{ color: "#b91c1c", textShadow: titleShadow }}>{t("আমাদের মূল্যবোধ", "Our Values")}</h2>
+                        <h2 className="text-4xl md:text-5xl font-black mb-4" style={{ color: "#9A3324", textShadow: titleShadow }}>{t("আমাদের মূল্যবোধ", "Our Values")}</h2>
                         <p className="text-lg md:text-xl font-semibold" style={{ color: "#1f2937", textShadow: subtitleShadow }}>{t("শিশু সুরক্ষা এবং অন্তর্ভুক্তিতে প্রতিশ্রুতিবদ্ধ", "Committed to child protection and inclusion")}</p>
                     </div>
 
@@ -446,7 +446,7 @@ export default function About() {
                                 className="group rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-3"
                                 style={{
                                     background: "rgba(255,255,255,0.22)",
-                                    border: "1.5px solid #fca5a599",
+                                    border: "1.5px solid #D1CCBD99",
                                     backdropFilter: "blur(20px) saturate(160%)",
                                     WebkitBackdropFilter: "blur(20px) saturate(160%)",
                                     boxShadow: "0 10px 30px rgba(0,0,0,0.12)",
@@ -464,7 +464,7 @@ export default function About() {
 
                     <div className="mt-16 text-center">
                         <Shield className="w-16 h-16 mx-auto mb-6 text-red-600" />
-                        <h3 className="text-3xl md:text-4xl font-black mb-6" style={{ color: "#b91c1c", textShadow: titleShadow }}>{t("শিশু সুরক্ষা নীতি", "Child Protection Policy")}</h3>
+                        <h3 className="text-3xl md:text-4xl font-black mb-6" style={{ color: "#9A3324", textShadow: titleShadow }}>{t("শিশু সুরক্ষা নীতি", "Child Protection Policy")}</h3>
                         <p className="text-lg font-semibold text-gray-800 leading-relaxed max-w-4xl mx-auto">
                             {t("মেট ক্লাব সকল শিশুর সুরক্ষা এবং কল্যাণে প্রতিশ্রুতিবদ্ধ। আমরা একটি নিরাপদ, সহায়ক এবং অন্তর্ভুক্তিমূলক পরিবেশ নিশ্চিত করি যেখানে প্রতিটি শিশু শিখতে এবং বৃদ্ধি পেতে পারে। আমাদের কঠোর সুরক্ষা নীতি এবং প্রক্রিয়া রয়েছে যা আন্তর্জাতিক মান অনুসরণ করে।", "Met Club is committed to the safety and well-being of every child. We provide a safe, supportive, and inclusive environment where all children can learn and grow, guided by safeguarding policies aligned with international standards.")}
                         </p>

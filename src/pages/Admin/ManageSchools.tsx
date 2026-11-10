@@ -108,7 +108,7 @@ export default function ManageSchools() {
           <button
             onClick={() => navigate(`/admin/create-school?location=${selectedLocation}`)}
             className="flex items-center gap-2 px-4 py-2 rounded-xl text-white font-bold"
-            style={{ background: "linear-gradient(135deg, #ef4444, #f97316)" }}
+            style={{ background: "linear-gradient(135deg, #DA291C, #FC4C02)" }}
           >
             <FiPlus /> নতুন স্কুল
           </button>

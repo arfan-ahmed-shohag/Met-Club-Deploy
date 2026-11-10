@@ -173,7 +173,7 @@ export default function ManageContent() {
             type="button"
             onClick={() => navigate("/admin/create-content")}
             className="px-4 py-2 rounded-xl font-bold text-white"
-            style={{ background: "linear-gradient(135deg, #ef4444, #f97316)" }}
+            style={{ background: "linear-gradient(135deg, #DA291C, #FC4C02)" }}
           >
             নতুন কন্টেন্ট
           </button>

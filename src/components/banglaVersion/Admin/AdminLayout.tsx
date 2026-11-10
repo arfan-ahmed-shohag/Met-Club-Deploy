@@ -82,7 +82,7 @@ export default function AdminLayout() {
                       }`
                     }
                     style={({ isActive }) => ({
-                      background: isActive ? "linear-gradient(135deg, #ef4444, #f97316)" : "transparent",
+                      background: isActive ? "linear-gradient(135deg, #DA291C, #FC4C02)" : "transparent",
                       color: isActive ? "#fff" : "rgba(127,29,29,0.9)",
                     })}
                   >
@@ -132,7 +132,7 @@ export default function AdminLayout() {
           <Link to="/"
             className="flex items-center cursor-pointer gap-2 px-4 py-2 rounded-xl font-bold text-white transition-transform hover:scale-105"
             style={{
-              background: "linear-gradient(135deg, #ef4444, #f97316)",
+              background: "linear-gradient(135deg, #DA291C, #FC4C02)",
               boxShadow: "0 4px 14px rgba(220,38,38,0.28)",
             }}
           >

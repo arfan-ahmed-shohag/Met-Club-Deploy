@@ -58,7 +58,7 @@ export function QuestionHeader({ title, qNum, total, audioUrl, text  }: Question
                      text-xs sm:text-sm
                      px-2.5 py-1 sm:px-4 sm:py-2"
                     style={{
-                        background: "#fee2e2", color: "#b91c1c",
+                        background: "#fee2e2", color: "#9A3324",
                         fontFamily: "'Hind Siliguri',sans-serif"
                     }}
                 >

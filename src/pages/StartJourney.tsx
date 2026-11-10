@@ -53,7 +53,7 @@ export default function StartJourney() {
           <h1
             className="text-3xl md:text-5xl font-black mb-2"
             style={{
-              color: "#b91c1c",
+              color: "#9A3324",
               textShadow:
                 "-1px -1px 0 rgba(255,255,255,0.96), 1px -1px 0 rgba(255,255,255,0.96), -1px 1px 0 rgba(255,255,255,0.96), 1px 1px 0 rgba(255,255,255,0.96), 0 2px 0 rgba(185,28,28,0.20), 0 8px 20px rgba(127,29,29,0.24)",
             }}
@@ -78,8 +78,8 @@ export default function StartJourney() {
             <ZoneCard
               title={isEnglish ? "Learn with Fun" : "লার্ন উইথ ফান"}
               titleColor="#991b1b"
-              borderColor="#f87171"
-              btnBg="linear-gradient(135deg, #ef4444, #dc2626)"
+              borderColor="#FC4C02"
+              btnBg="linear-gradient(135deg, #DA291C, #DA291C)"
               btnShadow="rgba(239,68,68,0.42)"
               btnLabel={isEnglish ? "Start Learning" : "পড়া শুরু করুন"}
               link={isEnglish ? "/en/learning-selection" : "/learning-selection"}
@@ -90,7 +90,7 @@ export default function StartJourney() {
                   {isEnglish ? "Learn about weather, climate, and disasters." : "আবহাওয়া, জলবায়ু এবং দুর্যোগ সম্পর্কে জানুন।"}
                 </>
               }
-              blobColor="#fca5a5"
+              blobColor="#D1CCBD"
               illustration={
                 <img
                   src={storyImg}
@@ -106,7 +106,7 @@ export default function StartJourney() {
               title={isEnglish ? "Community Rescue Mission" : "কমিউনিটি রেসকিউ মিশন"}
               titleColor="#9a3412"
               borderColor="#fb923c"
-              btnBg="linear-gradient(135deg, #fb923c, #f97316)"
+              btnBg="linear-gradient(135deg, #fb923c, #FC4C02)"
               btnShadow="rgba(249,115,22,0.42)"
               btnLabel={isEnglish ? (isChapterOneCompleted ? "Enter Simulation" : "Complete First Chapter") : (isChapterOneCompleted ? "সিমুলেশনে প্রবেশ করুন" : "প্রথম অধ্যায় সম্পন্ন করুন")}
               // disabled={!isChapterOneCompleted}
@@ -135,9 +135,9 @@ export default function StartJourney() {
           <div className="card3 h-full">
             <ZoneCard
               title={isEnglish ? "NASA Learning Resources" : "নাসা লার্নিং রিসোর্স"}
-              titleColor="#7f1d1d"
-              borderColor="#f87171"
-              btnBg="linear-gradient(135deg, #ef4444, #dc2626)"
+              titleColor="#222221"
+              borderColor="#FC4C02"
+              btnBg="linear-gradient(135deg, #DA291C, #DA291C)"
               btnShadow="rgba(220, 38, 38, 0.42)"
               btnLabel={isEnglish ? "Access Resources" : "রিসোর্সে প্রবেশ করুন"}
               link="https://www.nasa.gov/learning-resources/"
@@ -148,7 +148,7 @@ export default function StartJourney() {
                   {isEnglish ? "Learn about space, climate, and disasters." : "মহাকাশ, জলবায়ু ও দুর্যোগ সম্পর্কে জানুন।"}
                 </>
               }
-              blobColor="#fca5a5"
+              blobColor="#D1CCBD"
               illustration={
                 <img
                   src={nasaResourceImg}

@@ -34,7 +34,7 @@ export default function LearningSelection() {
           <h1
             className="text-3xl md:text-5xl font-black mb-2"
             style={{
-              color: "#b91c1c",
+              color: "#9A3324",
               textShadow:
                 "-1px -1px 0 rgba(255,255,255,0.96), 1px -1px 0 rgba(255,255,255,0.96), -1px 1px 0 rgba(255,255,255,0.96), 1px 1px 0 rgba(255,255,255,0.96), 0 2px 0 rgba(185,28,28,0.20), 0 8px 20px rgba(127,29,29,0.24)",
             }}
@@ -61,8 +61,8 @@ export default function LearningSelection() {
             <ZoneCard
               title="আগাম কার্যক্রম"
               titleColor="#991b1b"
-              borderColor="#f87171"
-              btnBg="linear-gradient(135deg, #ef4444, #dc2626)"
+              borderColor="#FC4C02"
+              btnBg="linear-gradient(135deg, #DA291C, #DA291C)"
               btnShadow="rgba(239,68,68,0.42)"
               btnLabel="পড়া শুরু করুন"
               link="/met-club-module-2"
@@ -73,7 +73,7 @@ export default function LearningSelection() {
                   দুর্যোগের পূর্বাভাস জেনে আগাম প্রস্তুতি গ্রহণের নানা কৌশল শিখুন।
                 </>
               }
-              blobColor="#fca5a5"
+              blobColor="#D1CCBD"
               illustration={
                 <img
                   src={forecastImg}
@@ -90,7 +90,7 @@ export default function LearningSelection() {
               title="গল্পের ছলে শেখা"
               titleColor="#9a3412"
               borderColor="#fb923c"
-              btnBg="linear-gradient(135deg, #fb923c, #f97316)"
+              btnBg="linear-gradient(135deg, #fb923c, #FC4C02)"
               btnShadow="rgba(249,115,22,0.42)"
               btnLabel="পড়া শুরু করুন"
               link="/learning-zone"

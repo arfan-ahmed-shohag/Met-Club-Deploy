@@ -308,7 +308,7 @@ export function MatchQuestion({ q, answer, onChange }: MatchQuestionProps) {
               const borderColor = correct === true
                 ? "#22c55e"
                 : correct === false
-                ? "#ef4444"
+                ? "#DA291C"
                 : matched ? "#4ade80" : "#e2e8f0";
 
               return (
@@ -343,7 +343,7 @@ export function MatchQuestion({ q, answer, onChange }: MatchQuestionProps) {
                         color: correct === true
                           ? "#15803d"
                           : correct === false
-                          ? "#b91c1c"
+                          ? "#9A3324"
                           : "#1e40af",
                         minHeight: "56px",
                       }}
@@ -368,7 +368,7 @@ export function MatchQuestion({ q, answer, onChange }: MatchQuestionProps) {
               const borderColor = correct === true
                 ? "#22c55e"
                 : correct === false
-                ? "#ef4444"
+                ? "#DA291C"
                 : matchedItem ? "#22c55e" : "#cbd5e1";
 
               return (
@@ -402,7 +402,7 @@ export function MatchQuestion({ q, answer, onChange }: MatchQuestionProps) {
                         color: correct === true
                           ? "#15803d"
                           : correct === false
-                          ? "#b91c1c"
+                          ? "#9A3324"
                           : matchedItem ? "#166534" : "#64748b",
                         minHeight: "56px",
                       }}

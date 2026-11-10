@@ -35,7 +35,7 @@ export default function LearningSelection() {
           <h1
             className="text-3xl md:text-5xl font-black mb-2"
             style={{
-              color: "#b91c1c",
+              color: "#9A3324",
               textShadow:
                 "-1px -1px 0 rgba(255,255,255,0.96), 1px -1px 0 rgba(255,255,255,0.96), -1px 1px 0 rgba(255,255,255,0.96), 1px 1px 0 rgba(255,255,255,0.96), 0 2px 0 rgba(185,28,28,0.20), 0 8px 20px rgba(127,29,29,0.24)",
             }}
@@ -62,8 +62,8 @@ export default function LearningSelection() {
             <ZoneCard
               title="Anticipatory Action"
               titleColor="#991b1b"
-              borderColor="#f87171"
-              btnBg="linear-gradient(135deg, #ef4444, #dc2626)"
+              borderColor="#FC4C02"
+              btnBg="linear-gradient(135deg, #DA291C, #DA291C)"
               btnShadow="rgba(239,68,68,0.42)"
               btnLabel="Start Learning"
               link="/met-club-module-2"
@@ -74,7 +74,7 @@ export default function LearningSelection() {
                   Learn strategies for early preparation and response based on weather forecasts.
                 </>
               }
-              blobColor="#fca5a5"
+              blobColor="#D1CCBD"
               illustration={
                 <img
                   src={forecastImg}
@@ -90,8 +90,8 @@ export default function LearningSelection() {
             <ZoneCard
               title="Story-Based Learning"
               titleColor="#991b1b"
-              borderColor="#f87171"
-              btnBg="linear-gradient(135deg, #ef4444, #dc2626)"
+              borderColor="#FC4C02"
+              btnBg="linear-gradient(135deg, #DA291C, #DA291C)"
               btnShadow="rgba(239,68,68,0.42)"
               btnLabel="Start Learning"
               link="/en/learning-zone"
@@ -102,7 +102,7 @@ export default function LearningSelection() {
                   Learn with fun through engaging weather stories and simple interactive assessments.
                 </>
               }
-              blobColor="#fca5a5"
+              blobColor="#D1CCBD"
               illustration={
                 <img
                   src={storyLearningImg}
@@ -119,7 +119,7 @@ export default function LearningSelection() {
         <div className="mt-10">
           <Link to="/en/start-journey">
             <button 
-              className="px-6 py-2.5 rounded-full border border-[#f87171]/50 bg-white/20 hover:bg-white/40 text-red-950 font-bold transition duration-200 backdrop-blur-md active:scale-95 shadow-md flex items-center gap-2 cursor-pointer"
+              className="px-6 py-2.5 rounded-full border border-[#FC4C02]/50 bg-white/20 hover:bg-white/40 text-red-950 font-bold transition duration-200 backdrop-blur-md active:scale-95 shadow-md flex items-center gap-2 cursor-pointer"
               style={{
                 textShadow: "0 1px 2px rgba(255,255,255,0.4)"
               }}

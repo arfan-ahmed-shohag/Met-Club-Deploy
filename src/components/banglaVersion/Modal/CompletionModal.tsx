@@ -67,7 +67,7 @@ export default function CompletionModal({ setShowModal, chapterId }: { setShowMo
                             <div
                                 className="rounded-2xl px-4 py-3 text-sm font-medium text-white text-center transition-all active:scale-[0.98]"
                                 style={{
-                                    background: "linear-gradient(135deg,#ef4444,#dc2626)",
+                                    background: "linear-gradient(135deg,#DA291C,#DA291C)",
                                     boxShadow: "0 12px 30px rgba(220,38,38,0.35)",
                                     border: "1px solid rgba(255,255,255,0.25)",
                                 }}

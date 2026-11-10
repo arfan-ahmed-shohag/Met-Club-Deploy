@@ -208,7 +208,7 @@ export default function Section() {
               : "content-enter"
               }`}
             style={{
-              border: "1px solid #fca5a5",
+              border: "1px solid #D1CCBD",
               boxShadow: "0 8px 48px rgba(239,68,68,0.22), 0 2px 16px rgba(0,0,0,0.08)",
             }}
           >
@@ -302,7 +302,7 @@ export default function Section() {
                   border-radius: 0.5rem;
                 }
                 .lesson-content a {
-                  color: #dc2626;
+                  color: #DA291C;
                   text-decoration: underline;
                   cursor: pointer;
                   font-weight: 500;
@@ -325,7 +325,7 @@ export default function Section() {
                 .lesson-content blockquote {
                   margin: 1rem 0;
                   padding: 0.75rem 1rem;
-                  border-left: 4px solid #fca5a5;
+                  border-left: 4px solid #D1CCBD;
                   color: #475569;
                   background-color: #fef5f5;
                   border-radius: 0.25rem;
@@ -407,7 +407,7 @@ export default function Section() {
                   border-radius: 0.5rem;
                 }
                 .lesson-content a {
-                  color: #dc2626;
+                  color: #DA291C;
                   text-decoration: underline;
                   cursor: pointer;
                   font-weight: 500;
@@ -430,7 +430,7 @@ export default function Section() {
                 .lesson-content blockquote {
                   margin: 1rem 0;
                   padding: 0.75rem 1rem;
-                  border-left: 4px solid #fca5a5;
+                  border-left: 4px solid #D1CCBD;
                   color: #475569;
                   background-color: #fef5f5;
                   border-radius: 0.25rem;

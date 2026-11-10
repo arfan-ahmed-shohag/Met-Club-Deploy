@@ -70,7 +70,7 @@ export default function Sidebar() {
                 }`
               }
               style={({ isActive }) => ({
-                background: isActive ? "linear-gradient(135deg, #ef4444, #f97316)" : "transparent",
+                background: isActive ? "linear-gradient(135deg, #DA291C, #FC4C02)" : "transparent",
                 color: isActive ? "#fff" : "rgba(255,255,255,0.8)",
                 boxShadow: isActive ? "0 4px 14px rgba(220,38,38,0.28)" : "none",
                 textShadow: isActive ? "0 1px 2px rgba(0,0,0,0.2)" : "0 1px 2px rgba(0,0,0,0.4)",
@@ -90,7 +90,7 @@ export default function Sidebar() {
           className="flex items-center gap-2 px-4 py-2.5 rounded-lg transition-colors font-medium hover:bg-white/30 w-full cursor-pointer"
           style={{
             color: "#fff",
-            background: "#ef4444",
+            background: "#DA291C",
             textShadow: "0 1px 2px rgba(0,0,0,0.3)",
           }}
         >

@@ -24,7 +24,7 @@ const chaptersPromise = fetchChapters();
 const CHAPTERS_PER_LARGE_ROW = 5;
 
 const redCardAccent = {
-  border: "#fca5a5",
+  border: "#D1CCBD",
   glow: "rgba(252,165,165,0.26)",
 };
 

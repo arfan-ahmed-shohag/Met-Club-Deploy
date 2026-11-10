@@ -127,7 +127,7 @@ export default function LocationDetails() {
                         <div className="site-container relative z-10 px-4 sm:px-6 lg:px-8">
                             {/* Centered Title */}
                             <div className="text-center mb-12">
-                                <h2 className="text-4xl md:text-5xl font-extrabold text-red-600 inline-block relative drop-shadow-md" style={{ color: "#b91c1c", textShadow: "-1px -1px 0 rgba(255,255,255,0.96), 1px -1px 0 rgba(255,255,255,0.96), -1px 1px 0 rgba(255,255,255,0.96), 1px 1px 0 rgba(255,255,255,0.96), 0 2px 0 rgba(185,28,28,0.20), 0 8px 20px rgba(127,29,29,0.24)" }}>
+                                <h2 className="text-4xl md:text-5xl font-extrabold text-red-600 inline-block relative drop-shadow-md" style={{ color: "#9A3324", textShadow: "-1px -1px 0 rgba(255,255,255,0.96), 1px -1px 0 rgba(255,255,255,0.96), -1px 1px 0 rgba(255,255,255,0.96), 1px 1px 0 rgba(255,255,255,0.96), 0 2px 0 rgba(185,28,28,0.20), 0 8px 20px rgba(127,29,29,0.24)" }}>
                                     {locationInfo.name} লোকেশনের কার্যক্রম
                                     <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-red-500"></div>
                                 </h2>

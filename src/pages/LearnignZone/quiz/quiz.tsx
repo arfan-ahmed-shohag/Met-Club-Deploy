@@ -180,7 +180,7 @@ export function HotspotQuestion({ q, answer, onChange }: HotspotQuestionProps) {
                                 border: isCorrectMarker
                                     ? "2.5px solid #22c55e"
                                     : isWrongMarker
-                                        ? "2.5px solid #ef4444"
+                                        ? "2.5px solid #DA291C"
                                         : "2.5px solid #3b82f6",
                                 boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
                                 cursor: isFull ? "default" : "pointer",
@@ -273,10 +273,10 @@ export function TrueFalseQuestion({ q, answer, onChange }: TrueFalseQuestionProp
                                     background: selected
                                         ? isTrue
                                             ? "linear-gradient(135deg,#4ade80,#22c55e)"
-                                            : "linear-gradient(135deg,#f87171,#ef4444)"
+                                            : "linear-gradient(135deg,#FC4C02,#DA291C)"
                                         : "#ffffff",
                                     border: selected
-                                        ? isTrue ? "3.5px solid #16a34a" : "3.5px solid #dc2626"
+                                        ? isTrue ? "3.5px solid #16a34a" : "3.5px solid #DA291C"
                                         : "2px solid #cbd5e1",
                                     color: selected ? "#ffffff" : "#334155",
                                     boxShadow: selected ? "0 8px 20px rgba(0,0,0,0.15)" : "0 2px 6px rgba(0,0,0,0.04)",
@@ -428,14 +428,14 @@ function FillBlanksQuestion({ q, answer, onChange }: FillBlanksQuestionProps) {
                                         ? allFilled
                                             ? selectedAnswers[idx] === correctParts[idx]
                                                 ? "2.5px solid #22c55e"
-                                                : "2.5px solid #ef4444"
+                                                : "2.5px solid #DA291C"
                                             : "2.5px solid #3b82f6"
                                         : "2.5px dashed #60a5fa",
                                     color: selectedAnswers[idx]
                                         ? allFilled
                                             ? selectedAnswers[idx] === correctParts[idx]
                                                 ? "#15803d"
-                                                : "#b91c1c"
+                                                : "#9A3324"
                                             : "#1d4ed8"
                                         : "#93c5fd",
                                 }}
@@ -536,7 +536,7 @@ function ImageSelectionQuestion({ q, answer, onChange }: ImageSelectionQuestionP
                                 border: showCorrect
                                     ? "3px solid #22c55e"
                                     : showWrong
-                                        ? "3px solid #ef4444"
+                                        ? "3px solid #DA291C"
                                         : selected
                                             ? "3px solid #3b82f6"
                                             : "2.5px solid #e2e8f0",
@@ -636,14 +636,14 @@ function MCQQuestion({ q, answer, onChange }: MCQQuestionProps) {
                                 border: showCorrect
                                     ? "2.5px solid #22c55e"
                                     : showWrong
-                                        ? "2.5px solid #ef4444"
+                                        ? "2.5px solid #DA291C"
                                         : selected
                                             ? "2.5px solid #3b82f6"
                                             : "2px solid #e2e8f0",
                                 color: showCorrect
                                     ? "#15803d"
                                     : showWrong
-                                        ? "#b91c1c"
+                                        ? "#9A3324"
                                         : selected
                                             ? "#1d4ed8"
                                             : "#374151",
@@ -662,7 +662,7 @@ function MCQQuestion({ q, answer, onChange }: MCQQuestionProps) {
                                     background: showCorrect
                                         ? "#22c55e"
                                         : showWrong
-                                            ? "#ef4444"
+                                            ? "#DA291C"
                                             : selected
                                                 ? "#3b82f6"
                                                 : "#e2e8f0",
@@ -924,7 +924,7 @@ function PuzzleQuestion({ q, answer, onChange }: PuzzleQuestionProps) {
                         ? isCorrect ? "#dcfce7" : "#fee2e2"
                         : "rgba(239,246,255,0.85)",
                     border: allPlaced
-                        ? isCorrect ? "2px solid #22c55e" : "2px solid #ef4444"
+                        ? isCorrect ? "2px solid #22c55e" : "2px solid #DA291C"
                         : "2px dashed #93c5fd",
                 }}
             >
@@ -945,10 +945,10 @@ function PuzzleQuestion({ q, answer, onChange }: PuzzleQuestionProps) {
                                     ? isCorrect ? "#bbf7d0" : "#fecaca"
                                     : "#dbeafe",
                                 border: allPlaced
-                                    ? isCorrect ? "1.5px solid #22c55e" : "1.5px solid #ef4444"
+                                    ? isCorrect ? "1.5px solid #22c55e" : "1.5px solid #DA291C"
                                     : "1.5px solid #93c5fd",
                                 color: allPlaced
-                                    ? isCorrect ? "#15803d" : "#b91c1c"
+                                    ? isCorrect ? "#15803d" : "#9A3324"
                                     : "#1d4ed8",
                             }}
                         >
@@ -1300,7 +1300,7 @@ export default function Quiz({ onFinish }: QuizProps) {
                                             <button onClick={() => setShowReview(true)}
                                                 className="w-full px-6 py-4 rounded-full font-bold text-red-700 text-base sm:text-lg transition-all hover:scale-105 active:scale-95"
                                                 style={{
-                                                    background: "#fee2e2", border: "2px solid #fca5a5"
+                                                    background: "#fee2e2", border: "2px solid #D1CCBD"
                                                 }}>
                                                 উত্তর মিলিয়ে দেখ
                                             </button>
@@ -1310,7 +1310,7 @@ export default function Quiz({ onFinish }: QuizProps) {
                                         <button onClick={() => { setFinished(false); setShowReview(false); setCurrent(0); setAnswers({}); }}
                                             className="w-full px-6 py-4 rounded-full font-bold text-white text-base sm:text-lg transition-all hover:scale-105 active:scale-95"
                                             style={{
-                                                background: "linear-gradient(135deg,#ef4444,#dc2626)",
+                                                background: "linear-gradient(135deg,#DA291C,#DA291C)",
                                                 boxShadow: "0 6px 0 #991b1b,0 8px 24px rgba(239,68,68,0.35)"
                                             }}>
                                             আবার খেলো

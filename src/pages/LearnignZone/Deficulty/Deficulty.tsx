@@ -101,7 +101,7 @@ export default function Deficulty() {
                 <h1
                     className="title-anim relative z-10 text-5xl md:text-6xl text-center mt-10 font-black"
                     style={{
-                        color: "#b91c1c",
+                        color: "#9A3324",
                         textShadow:
                             "-0.6px -0.6px 0 rgba(255,255,255,0.95), 0.6px -0.6px 0 rgba(255,255,255,0.95), -0.6px 0.6px 0 rgba(255,255,255,0.95), 0.6px 0.6px 0 rgba(255,255,255,0.95), 0 2px 8px rgba(127,29,29,0.18)",
                         letterSpacing: "0.04em",
@@ -117,7 +117,7 @@ export default function Deficulty() {
                 >
                     কঠিনতার স্তর নির্বাচন করুন:&nbsp;
                     <span style={{
-                        color: "#b91c1c", textShadow:
+                        color: "#9A3324", textShadow:
                             "-0.6px -0.6px 0 rgba(255,255,255,0.95), 0.6px -0.6px 0 rgba(255,255,255,0.95), -0.6px 0.6px 0 rgba(255,255,255,0.95), 0.6px 0.6px 0 rgba(255,255,255,0.95), 0 2px 8px rgba(127,29,29,0.18)",
                     }}>{topic?.title}</span>
                 </p>
@@ -126,7 +126,7 @@ export default function Deficulty() {
                 <div
                     className="topic-anim topic-float relative z-10 mt-10 flex flex-col items-center justify-between rounded-2xl bg-white/85 backdrop-blur-sm p-5"
                     style={{
-                        border: "2.5px solid #fca5a5",
+                        border: "2.5px solid #D1CCBD",
                         width: 210,
                         minHeight: 210,
                         boxShadow: "0 8px 40px rgba(248,113,113,0.25), 0 2px 12px rgba(0,0,0,0.08)",

@@ -1380,7 +1380,7 @@ function Chapter4() {
           {[
             { n: 1, icon: "🔎", t: "ঝুঁকির জ্ঞান", d: "(অধ্যায় ২)", c: "linear-gradient(135deg, #d97706, #b45309)" },
             { n: 2, icon: "📡", t: "পর্যবেক্ষণ ও পূর্বাভাস", d: "(অধ্যায় ৩)", c: "linear-gradient(135deg, #16a34a, #15803d)" },
-            { n: 3, icon: "📢", t: "বার্তা প্রচার ও যোগাযোগ", d: "(এই অধ্যায়)", c: "linear-gradient(135deg, #dc2626, #b91c1c)" },
+            { n: 3, icon: "📢", t: "বার্তা প্রচার ও যোগাযোগ", d: "(এই অধ্যায়)", c: "linear-gradient(135deg, #DA291C, #9A3324)" },
             { n: 4, icon: "🏃", t: "সাড়া দেওয়ার সক্ষমতা", d: "(অধ্যায় ১ ও ৫)", c: "linear-gradient(135deg, #2563eb, #1d4ed8)" },
           ].map((s) => (
             <div 

@@ -60,7 +60,7 @@ export default function StartInterface() {
                                     className="relative px-6 py-3 rounded-2xl text-center"
                                     style={{
                                         background:
-                                            "linear-gradient(135deg,#f59e0b,#fbbf24,#f97316)",
+                                            "linear-gradient(135deg,#f59e0b,#fbbf24,#FC4C02)",
                                         border: "1px solid rgba(255,255,255,0.4)",
                                         boxShadow:
                                             "0 12px 35px rgba(251,146,60,0.35), inset 0 1px 0 rgba(255,255,255,0.4)",

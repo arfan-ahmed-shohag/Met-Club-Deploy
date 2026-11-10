@@ -369,7 +369,7 @@ export default function CreateSchool() {
             type="submit"
             disabled={isLoading}
             className="flex items-center gap-2 px-6 py-2 rounded-xl font-bold text-white shadow-lg hover:opacity-90 disabled:opacity-50"
-            style={{ background: "linear-gradient(135deg, #ef4444, #f97316)" }}
+            style={{ background: "linear-gradient(135deg, #DA291C, #FC4C02)" }}
           >
             <FiSave /> {isLoading ? "Saving..." : "সেভ করুন"}
           </button>
