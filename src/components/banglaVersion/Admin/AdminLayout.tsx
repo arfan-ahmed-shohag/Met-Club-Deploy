@@ -3,7 +3,7 @@ import { Link, Outlet, useLocation } from "react-router";
 import Sidebar from "./Sidebar";
 import bgImage from "../../../assets/images/start-journey-page-bg.jpeg";
 import { FiHome, FiMenu, FiX } from "react-icons/fi";
-import { FiGrid, FiBook, FiFileText, FiPlusCircle, FiPlayCircle, FiBookOpen } from "react-icons/fi";
+import { FiGrid, FiBook, FiFileText, FiPlusCircle, FiPlayCircle, FiBookOpen, FiImage } from "react-icons/fi";
 import { NavLink } from "react-router";
 
 const sidebarLinks = [
@@ -13,6 +13,7 @@ const sidebarLinks = [
   { name: "কন্টেন্ট তৈরি করুন", path: "/admin/create-content", icon: FiPlusCircle },
   { name: "টিউটোরিয়াল পরিচালনা", path: "/admin/tutorials", icon: FiPlayCircle },
   { name: "ব্লগ পর্যালোচনা", path: "/admin/blogs", icon: FiBookOpen },
+  { name: "ফটো গ্যালারি", path: "/admin/gallery", icon: FiImage },
   { name: "টিউটোরিয়াল তৈরি করুন", path: "/admin/create-tutorial", icon: FiPlusCircle },
 ];
 

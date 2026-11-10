@@ -31,6 +31,7 @@ const Blogs = lazy(() => import("../pages/Blogs/Blogs"));
 const BlogDetails = lazy(() => import("../pages/Blogs/BlogDetails"));
 const WriteBlog = lazy(() => import("../pages/Blogs/WriteBlog"));
 const ManageBlogs = lazy(() => import("../pages/Admin/ManageBlogs"));
+const ManageGallery = lazy(() => import("../pages/Admin/ManageGallery"));
 const EnglishLoginPage = lazy(() => import("../pages/EnglishVersion/Home"));
 const EnglishAbout = lazy(() => import("../pages/EnglishVersion/About/About"));
 const EnglishStartJourney = lazy(() => import("../pages/EnglishVersion/StartJourney/StartJourney"));
@@ -336,6 +337,10 @@ const routes: RouteObject[] = [
       {
         path: "blogs",
         element: <SuspenseWrapper><ManageBlogs /></SuspenseWrapper>,
+      },
+      {
+        path: "gallery",
+        element: <SuspenseWrapper><ManageGallery /></SuspenseWrapper>,
       },
       {
         path: "create-tutorial",
