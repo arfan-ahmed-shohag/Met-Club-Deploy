@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import coverVideo from "../../assets/videos/Drone shot for cover.mp4";
+import childrenLearningImage from "../../assets/images/citizen_science_img-cutout.webp";
 import TopNav from "../../components/Shared/TopBar";
 import WeatherCanvas from "../../components/Shared/WeatherCanvas";
 import { useLocaleRouteSync } from "../../hooks/useLocaleRouteSync";
@@ -17,7 +18,7 @@ type Chapter = {
 const chapterDescriptions: Record<number, { bn: string; en: string }> = {
     1: { bn: "আবহাওয়া ও জলবায়ুর পার্থক্য এবং আমাদের চারপাশের পরিবর্তন চিনে নাও।", en: "Understand weather, climate, and the changes we see around us." },
     2: { bn: "পূর্বাভাস কেন বদলাতে পারে এবং অনিশ্চয়তার মাঝেও কীভাবে প্রস্তুত থাকতে হয় জানো।", en: "Learn why forecasts can change and how to prepare when outcomes are uncertain." },
-    3: { bn: "বাষ্পীভবন থেকে বৃষ্টি—পানির চক্র কীভাবে কাজ করে আবিষ্কার করো।", en: "Discover how water moves through evaporation, clouds, and rain." },
+    3: { bn: "বাষ্পীভবন থেকে বৃষ্টিপানির চক্র কীভাবে কাজ করে আবিষ্কার করো।", en: "Discover how water moves through evaporation, clouds, and rain." },
     4: { bn: "নদী, পানির প্রবাহ আর তোমার এলাকার সঙ্গে তাদের সম্পর্ক বুঝে নাও।", en: "Explore rivers, water flow, and how they shape your local area." },
     5: { bn: "বন্যার কারণ, আগাম সংকেত এবং নিরাপদ থাকার উপায় শিখে নাও।", en: "Learn what causes floods, how to spot warnings, and how to stay safe." },
     6: { bn: "স্কুল দুর্যোগ ব্যবস্থাপনা কমিটি কীভাবে সবাইকে প্রস্তুত রাখে জানো।", en: "See how a school disaster management committee helps everyone prepare." },
@@ -74,11 +75,11 @@ function ChapterOverview({ isEnglish }: { isEnglish: boolean }) {
             <div className="site-container px-4 sm:px-6 lg:px-8">
                 <div className="mb-5 text-center sm:mb-6">
                     <p className="mb-2 text-sm font-bold uppercase tracking-[.16em] text-red-600">{isEnglish ? "MET CLUB LEARNING" : "মেট ক্লাবের শেখার জগৎ"}</p>
-                    <h2 id="chapter-overview-title" className="text-2xl font-black text-red-950 sm:text-3xl lg:text-4xl">
+                    <h2 id="chapter-overview-title" className="text-[36px] font-black text-red-950">
                         {isEnglish ? "Learn about weather. Be ready." : "আবহাওয়া জানো, নিরাপদে থাকো"}
                     </h2>
-                    <p className="mx-auto mt-2 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
-                        {isEnglish ? "From weather basics to disaster readiness, explore lessons that help build safer communities." : "আবহাওয়ার পাঠ থেকে দুর্যোগ প্রস্তুতি—শেখার প্রতিটি ধাপে এগিয়ে চলো নিরাপদ কমিউনিটির পথে।"}
+                    <p className="mx-auto mt-2 max-w-2xl text-base font-normal leading-relaxed text-slate-600 sm:text-lg">
+                        {isEnglish ? "From weather basics to disaster readiness, explore lessons that help build safer communities." : "আবহাওয়ার পাঠ থেকে দুর্যোগ প্রস্তুতি - শেখার প্রতিটি ধাপে এগিয়ে চলো নিরাপদ কমিউনিটির পথে।"}
                     </p>
                 </div>
                 <div className="relative">
@@ -161,7 +162,7 @@ export default function HomePage() {
                     <div className="max-w-2xl text-white">
                         <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/35 bg-white/10 px-4 py-2 text-sm font-bold shadow-lg backdrop-blur-md"><Sparkles className="h-4 w-4 text-amber-300" />{t("শিশুদের জন্য আবহাওয়া ও দুর্যোগ সচেতনতা", "Weather and disaster learning for every child")}</div>
                         <h1 className="mb-5 text-4xl font-black leading-[1.12] tracking-tight sm:text-5xl lg:text-6xl" style={{ textShadow: "0 4px 24px rgba(0,0,0,.32)" }}>{t("আবহাওয়া শিখি,", "Learn about weather,")}<br /><span className="text-red-200">{t("নিরাপদ সমাজ গড়ি", "build safer communities")}</span></h1>
-                        <p className="max-w-xl text-lg leading-relaxed text-white/90 sm:text-xl">{t("খেলার ছলে আবহাওয়া পর্যবেক্ষণ, হাতে-কলমে শেখা আর দুর্যোগ প্রস্তুতির মাধ্যমে শিশুরা নিজেদের কমিউনিটিকে নিরাপদ রাখতে শিখবে।", "MET Club helps children explore weather, practice observation, and build disaster readiness so they can help keep their communities safe.")}</p>
+                        <p className="max-w-xl text-base font-normal leading-relaxed text-white/90 sm:text-lg">{t("খেলার ছলে আবহাওয়া পর্যবেক্ষণ, হাতে-কলমে শেখা আর দুর্যোগ প্রস্তুতির মাধ্যমে শিশুরা নিজেদের কমিউনিটিকে নিরাপদ রাখতে শিখবে।", "MET Club helps children explore weather, practice observation, and build disaster readiness so they can help keep their communities safe.")}</p>
                         <div className="mt-8 flex flex-wrap gap-3"><Link to={isEnglish ? "/en/start-journey" : "/start-journey"} className="inline-flex items-center justify-center rounded-xl bg-red-600 px-6 py-3.5 font-bold text-white shadow-xl shadow-red-950/25 transition hover:-translate-y-0.5 hover:bg-red-500">{t("শেখা শুরু করি", "Start learning")}</Link><Link to={isEnglish ? "/en/about" : "/about"} className="inline-flex items-center justify-center rounded-xl border border-white/50 bg-white/10 px-6 py-3.5 font-bold text-white backdrop-blur transition hover:bg-white/20">{t("মেট ক্লাব সম্পর্কে", "About MET Club")}</Link></div>
                         <div className="mt-10 flex flex-wrap gap-x-7 gap-y-3 text-sm font-semibold text-white/90">{[
                             t("আবহাওয়া পর্যবেক্ষণ", "Weather observation"),
@@ -181,8 +182,38 @@ export default function HomePage() {
                 </div>
             </main>
             <ChapterOverview isEnglish={isEnglish} />
+            <section className="relative overflow-hidden bg-white py-16 sm:py-24" aria-labelledby="about-met-club-title">
+                <div className="site-container relative grid items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">
+                    <div className="relative mx-auto flex min-h-[300px] w-full max-w-xl items-center justify-center sm:min-h-[390px]">
+                        <div className="absolute h-64 w-64 rounded-full bg-gradient-to-br from-red-100 to-orange-100 sm:h-80 sm:w-80" />
+                        <div className="absolute h-72 w-72 rounded-full border border-red-200/70 sm:h-[22rem] sm:w-[22rem]" />
+                        <img src={childrenLearningImage} alt={isEnglish ? "Children learning through weather observation" : "আবহাওয়া পর্যবেক্ষণের মাধ্যমে শিশুদের শেখা"} className="relative z-10 w-full max-w-[440px] animate-float object-contain drop-shadow-[0_20px_24px_rgba(127,29,29,0.12)]" />
+                        <span className="absolute right-[8%] top-[12%] grid h-14 w-14 animate-float-delayed place-items-center rounded-2xl bg-white text-2xl shadow-lg" aria-hidden="true">{String.fromCodePoint(0x1f326,0xfe0f)}</span>
+                        <span className="absolute bottom-[14%] left-[5%] grid h-12 w-12 animate-float place-items-center rounded-2xl bg-white text-xl shadow-lg" aria-hidden="true">{String.fromCodePoint(0x1f50d)}</span>
+                    </div>
+                    <div className="max-w-xl text-center lg:text-left">
+                        <p className="mb-3 text-sm font-bold uppercase tracking-[.16em] text-red-600">{isEnglish ? "ABOUT MET CLUB" : "মেট ক্লাব কী"}</p>
+                        <h2 id="about-met-club-title" className="title-anim text-[36px] font-black leading-tight text-red-950">
+                            {isEnglish ? "Curiosity today. Safer communities tomorrow." : "কৌতূহলী শিশুরাই গড়বে নিরাপদ আগামী"}
+                        </h2>
+                        <p className="sub-anim mt-5 text-base font-normal leading-relaxed text-slate-700 sm:text-lg">
+                            {isEnglish
+                                ? "At MET Club, children explore changing weather, understand early warnings, and practice what to do during disasters. Through hands-on activities, stories, and quizzes, they turn curiosity into confidence. They take what they learn back to their families and friends, helping their whole community become more aware and prepared."
+                                : "মেট ক্লাবে শিশুরা খেলার ছলে আবহাওয়ার পরিবর্তন পর্যবেক্ষণ করে, আগাম সতর্কতার অর্থ বোঝে এবং দুর্যোগের সময় কীভাবে নিরাপদ থাকতে হয় তা অনুশীলন করে। হাতে-কলমে কাজ, গল্প ও কুইজের মাধ্যমে তারা শেখাকে আত্মবিশ্বাসে বদলে নেয়। শেখা বিষয়গুলো পরিবার ও বন্ধুদের সঙ্গে ভাগ করে নিয়ে তারা নিজেদের কমিউনিটিকে আরও সচেতন ও প্রস্তুত করতে ভূমিকা রাখে।"}
+                        </p>
+                        <div className="mt-6 flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm font-bold text-red-800 lg:justify-start">
+                            {[isEnglish ? "Weather learning" : "আবহাওয়া শিক্ষা", isEnglish ? "Early warnings" : "আগাম সতর্কতা", isEnglish ? "Community safety" : "কমিউনিটির নিরাপত্তা"].map((item, index) => <span key={item} className="inline-flex items-center gap-2"><span aria-hidden="true" className="hero-feature-dot h-2 w-2 rounded-full bg-red-500 shadow-[0_0_10px_rgba(239,68,68,.45)]" style={{ animationDelay: `${index * 220}ms` }} />{item}</span>)}
+                        </div>
+                        <Link to={isEnglish ? "/en/about" : "/about"} className="mt-8 inline-flex items-center gap-2 rounded-xl bg-red-700 px-6 py-3 font-bold text-white shadow-lg shadow-red-900/15 transition hover:-translate-y-0.5 hover:bg-red-800">
+                            {isEnglish ? "Learn more" : "আরও জানুন"}<span aria-hidden="true">{String.fromCodePoint(0x2192)}</span>
+                        </Link>
+                    </div>
+                </div>
+            </section>
             <footer className="relative z-20 bg-red-950 py-4 text-center text-sm text-white"><a href="http://cdsr.com.bd" target="_blank" rel="noopener noreferrer">{t("পরিকল্পনা ও বাস্তবায়ন: Centre for Data Science Research (CDSR)", "Developed by Centre for Data Science Research (CDSR)")}</a></footer>
         </div>
     );
 }
+
+
 
