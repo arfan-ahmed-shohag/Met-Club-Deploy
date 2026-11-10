@@ -19,7 +19,7 @@ const titleShadow = "-1px -1px 0 rgba(255,255,255,0.96), 1px -1px 0 rgba(255,255
 const subtitleShadow = "0 1px 6px rgba(255,255,255,0.28)";
 
 export default function About() {
-    useLocaleRouteSync("/", "/en");
+    useLocaleRouteSync("/about", "/en/about");
     const isEnglish = getStoredLocale() === "en";
     const t = (bangla: string, english: string) => isEnglish ? english : bangla;
 
@@ -55,7 +55,7 @@ export default function About() {
     ];
 
     return (
-        <div className="relative min-h-screen flex flex-col overflow-x-hidden -mt-18.5 bg-gray-50">
+        <div className="relative min-h-screen flex flex-col overflow-x-hidden bg-gray-50">
             <TopNav title={t("আমাদের সম্পর্কে", "About Us")} brandName={t("মেট ক্লাব", "Met Club")} />
 
             {/* Hero Section */}

@@ -13,6 +13,7 @@ const Deficulty = lazy(() => import("../pages/LearnignZone/Deficulty/Deficulty")
 const StartInterface = lazy(() => import("../pages/LearnignZone/quiz/StartInterface"));
 const Quiz = lazy(() => import("../pages/LearnignZone/quiz/quiz"));
 const Registration = lazy(() => import("../pages/Registration/Registration"));
+const HomePage = lazy(() => import("../pages/Home/Home"));
 const About = lazy(() => import("../pages/About/About"));
 const Profile = lazy(() => import("../pages/Profile/Profile"));
 const AdminLayout = lazy(() => import("../components/banglaVersion/Admin/AdminLayout"));
@@ -82,7 +83,7 @@ const routes: RouteObject[] = [
 
   {
     path: "/",
-    element: <SuspenseWrapper><About /></SuspenseWrapper>,
+    element: <SuspenseWrapper><HomePage /></SuspenseWrapper>,
     loader: () => {
       if (getStoredLocale() === "en") {
         return redirect("/en");
@@ -93,7 +94,7 @@ const routes: RouteObject[] = [
   },
   {
     path: "/en",
-    element: <SuspenseWrapper><EnglishAbout /></SuspenseWrapper>,
+    element: <SuspenseWrapper><HomePage /></SuspenseWrapper>,
     loader: () => {
       if (getStoredLocale() === "bn") {
         return redirect("/");
@@ -226,11 +227,13 @@ const routes: RouteObject[] = [
   },
   {
     path: "/about",
-    loader: () => redirect(getStoredLocale() === "en" ? "/en" : "/"),
+    element: <SuspenseWrapper><About /></SuspenseWrapper>,
+    loader: ({ request }) => redirectToStoredLocale(request.url, "/about", "/en/about"),
   },
   {
     path: "/en/about",
-    loader: () => redirect(getStoredLocale() === "en" ? "/en" : "/"),
+    element: <SuspenseWrapper><EnglishAbout /></SuspenseWrapper>,
+    loader: ({ request }) => redirectToStoredLocale(request.url, "/about", "/en/about"),
   },
   {
     path: "/location/:id",

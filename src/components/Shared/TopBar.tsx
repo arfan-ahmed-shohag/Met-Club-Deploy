@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import metClubLogo from "../../assets/images/logo_original.png";
 import { FiPlay } from "react-icons/fi";
@@ -36,7 +36,7 @@ const menuItems = [
     {
         label: "মেট ক্লাব সম্পর্কে জানুন",
         englishLabel: "About MET Club",
-        href: "/",
+        href: "/about",
         icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
                 <circle cx="12" cy="12" r="10" />
@@ -95,7 +95,7 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
         <div className="space-y-1">
             {user && (
                 <div className="mb-2 flex items-center gap-3 px-3 py-2">
-                    <span className="relative grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-full bg-red-600 text-sm font-bold text-white" style={{ textShadow: "none" }}>
+                    <span className="relative grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-full bg-red-600 text-sm font-bold text-white" style={{}}>
                         {avatar}
                         {user.profileImg && <img src={profileImageUrl(user.profileImg)} alt="" className="absolute inset-0 h-full w-full object-cover" onError={(event) => { event.currentTarget.style.display = "none"; }} />}
                     </span>
@@ -115,7 +115,7 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                             </Link>
                         );
                     })}
-                    {!user && isLoading && <p role="status" className="px-3 py-2 text-sm">{locale === "en" ? "Loading your profile…" : "প্রোফাইল লোড হচ্ছে…"}</p>}
+                    {!user && isLoading && <div role="status" aria-label={locale === "en" ? "Loading your profile" : "Loading profile"} className="flex items-center gap-3 px-3 py-2"><span aria-hidden="true" className="profile-loading-shimmer h-9 w-9 rounded-full" /><span aria-hidden="true" className="flex-1 space-y-2"><span className="profile-loading-shimmer block h-3 w-28 rounded-full" /><span className="profile-loading-shimmer block h-2.5 w-16 rounded-full" /></span></div>}
                     {!user && error && <button type="button" onClick={() => void reloadUser()} className={mobileAccountLinkClass}>{locale === "en" ? "Retry profile" : "আবার চেষ্টা করুন"}</button>}
                     <button type="button" onClick={() => { closeMenu(); void handleLogout(); }} className={mobileAccountLinkClass}>
                         <LogOut size={17} aria-hidden="true" />{locale === "en" ? "Logout" : "লগআউট"}
@@ -132,43 +132,8 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
     return (
         <div className="h-18.5">
             <div
-                className="fixed top-0 left-0 right-0 z-50 w-full flex items-center justify-between py-3"
-                style={{
-                    background: "rgba(255,255,255,0.12)",
-                    backdropFilter: "blur(28px) saturate(180%)",
-                    WebkitBackdropFilter: "blur(28px) saturate(180%)",
-
-                    borderBottom: "1px solid rgba(255,255,255,0.25)",
-
-                    boxShadow:
-                        "0 10px 40px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.35)",
-                    overflow: "visible",
-                }}
+                className="fixed top-0 left-0 right-0 z-50 w-full flex items-center justify-between bg-white py-3" style={{ borderBottom: "1px solid #e5e7eb", overflow: "visible" }}
             >
-                {/* 🌟 Glass highlight layer (Apple shine) */}
-                <div
-                    style={{
-                        position: "absolute",
-                        inset: 0,
-                        background:
-                            "linear-gradient(120deg, rgba(255,255,255,0.35), rgba(255,255,255,0.05), rgba(255,255,255,0))",
-                        pointerEvents: "none",
-                    }}
-                />
-
-                {/* optional subtle noise */}
-                <div
-                    style={{
-                        position: "absolute",
-                        inset: 0,
-                        backgroundImage:
-                            "url('https://www.transparenttextures.com/patterns/noise.png')",
-                        opacity: 0.04,
-                        pointerEvents: "none",
-                        mixBlendMode: "overlay",
-                    }}
-                />
-
                 <div className="site-container relative z-10 flex items-center justify-between gap-2 xl:gap-4">
                     {/* LEFT LOGO */}
                     <Link to={getLocalizedPath("/", locale)} className="relative z-10 shrink-0">
@@ -182,8 +147,6 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                                 style={{
                                     color: "rgba(127,29,29,0.9)",
                                     letterSpacing: "-0.5px",
-                                    textShadow:
-                                        "-0.6px -0.6px 0 rgba(255,255,255,0.95), 0.6px -0.6px 0 rgba(255,255,255,0.95), -0.6px 0.6px 0 rgba(255,255,255,0.95), 0.6px 0.6px 0 rgba(255,255,255,0.95), 0 2px 8px rgba(127,29,29,0.18)",
                                 }}
                             >
                                 {brandName}
@@ -206,7 +169,7 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                             <div
                                 role="group"
                                 aria-label={locale === "en" ? "Select language" : "ভাষা নির্বাচন করুন"}
-                                className="inline-flex items-center rounded bg-white shadow-sm backdrop-blur-sm overflow-hidden"
+                                className="inline-flex items-center overflow-hidden rounded-lg border border-red-100 bg-red-50/70 shadow-sm"
                             >
                                 <button
                                     type="button"
@@ -237,7 +200,7 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                         )}
                         {isAuthenticated && !user && (
                             isLoading ? (
-                                <span role="status" aria-label={locale === "en" ? "Loading your profile" : "প্রোফাইল লোড হচ্ছে"} className="h-8 w-8 animate-spin rounded-full border-2 border-red-200 border-t-red-600" />
+                                <div role="status" aria-label={locale === "en" ? "Loading your profile" : "Loading profile"} className="flex w-48 items-center gap-2 rounded-lg border border-slate-100 bg-white px-2 py-1.5"><span aria-hidden="true" className="profile-loading-shimmer h-8 w-8 shrink-0 rounded-full" /><span aria-hidden="true" className="flex-1 space-y-1.5"><span className="profile-loading-shimmer block h-3 w-24 rounded-full" /><span className="profile-loading-shimmer block h-2.5 w-14 rounded-full" /></span></div>
                             ) : error ? (
                                 <button type="button" onClick={() => void reloadUser()} className="rounded-xl bg-white/70 px-3 py-2 text-sm text-red-700">
                                     {locale === "en" ? "Retry profile" : "আবার চেষ্টা করুন"}
@@ -279,7 +242,7 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                             </span>
                             <span
                                 className="hidden max-w-40 truncate font-semibold sm:block"
-                                style={{ color: "#7f1d1d", fontSize: "0.9rem", textShadow: "0 1px 4px rgba(255,255,255,0.28)" }}
+                                style={{ color: "#7f1d1d", fontSize: "0.9rem",}}
                             >
                                 {user.fullName}
                             </span>
@@ -330,7 +293,7 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                                         {user.profileImg && <img key={user.profileImg} src={profileImageUrl(user.profileImg)} alt="" className="absolute inset-0 h-full w-full object-cover" onError={(event) => { event.currentTarget.style.display = "none"; }} />}
                                     </span>
                                     <div className="min-w-0">
-                                        <div style={{ color: "#7f1d1d", fontWeight: 700, fontSize: "0.92rem", textShadow: "0 1px 3px rgba(255,255,255,0.25)" }}>
+                                        <div style={{ color: "#7f1d1d", fontWeight: 700, fontSize: "0.92rem",}}>
                                             {user.fullName}
                                         </div>
                                         <div style={{ color: "#b91c1c", fontSize: "0.78rem", fontWeight: 600 }}>{roleLabel}</div>
@@ -362,7 +325,6 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                                         background: "transparent",
                                         border: "none",
                                         cursor: "pointer",
-                                        textShadow: "0 1px 3px rgba(255,255,255,0.2)",
                                     }}
                                     onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(239,68,68,0.10)")}
                                     onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
@@ -385,7 +347,6 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                                                 textDecoration: "none",
                                                 fontSize: "0.9rem",
                                                 fontWeight: 600,
-                                                textShadow: "0 1px 3px rgba(255,255,255,0.2)",
                                             }}
                                             onClick={() => setDropdownOpen(false)}
                                             onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(239,68,68,0.10)")}
@@ -435,3 +396,6 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
         </div>
     );
 }
+
+
+

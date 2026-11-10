@@ -54,7 +54,7 @@ export default function BlogDetails() {
         : "মেট ক্লাবের শিক্ষার্থীদের অভিজ্ঞতা ও ভাবনার লেখা। তাঁদের গল্প পড়ুন, একে অন্যের কাছ থেকে শিখুন, আর আমাদের কমিউনিটির কাজগুলো জানুন।";
 
     return (
-        <div className="min-h-screen overflow-x-hidden bg-slate-100 text-slate-900 -mt-18.5">
+        <div className="min-h-screen overflow-x-hidden bg-slate-100 text-slate-900">
             <TopNav title={isEnglish ? "Community Blog" : "কমিউনিটি ব্লগ"} brandName={isEnglish ? "Met Club" : "মেট ক্লাব"} />
             <main className="w-full bg-white">
                 {isLoading ? (

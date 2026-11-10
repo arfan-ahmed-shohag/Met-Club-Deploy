@@ -229,7 +229,7 @@ export default function HeaderNavigation({ locale, pathname, onNavigate, renderM
         >
             <nav aria-label={isEnglish ? "Main navigation" : "প্রধান নেভিগেশন"} className="hidden xl:block">
                 <ul className="flex items-center gap-1">
-                    <li><Link to={getLocalizedPath("/", locale)} onClick={closeNavigation} aria-current={currentPage.section === "about" ? "page" : undefined} data-active={currentPage.section === "about"} className={`${linkClass} whitespace-nowrap`}>{isEnglish ? "About MET Club" : "মেট ক্লাব সম্পর্কে"}</Link></li>
+                    <li><Link to={getLocalizedPath("/about", locale)} onClick={closeNavigation} aria-current={currentPage.section === "about" ? "page" : undefined} data-active={currentPage.section === "about"} className={`${linkClass} whitespace-nowrap`}>{isEnglish ? "About MET Club" : "মেট ক্লাব সম্পর্কে"}</Link></li>
                     {desktopDropdown(menus[0])}
                     <li><a href="#" onClick={closeNavigation} aria-current={currentPage.section === "anticipatory" ? "true" : undefined} data-active={currentPage.section === "anticipatory"} className={`${linkClass} whitespace-nowrap`}>{isEnglish ? "Child Friendly Anticipatory Action" : "শিশুবান্ধব আগাম কার্যক্রম"}</a></li>
                     <li><a href="http://game.meteorologyclub.com/" onClick={closeNavigation} className={linkClass}>{isEnglish ? "Games" : "গেমস"}</a></li>
@@ -244,7 +244,7 @@ export default function HeaderNavigation({ locale, pathname, onNavigate, renderM
                 aria-expanded={mobileOpen}
                 aria-controls={`${id}-mobile-navigation`}
                 onClick={() => { setMobileOpen((open) => !open); setActiveMenu(null); onNavigate(); }}
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded border border-white/50 bg-white/35 transition-colors hover:bg-white/60 focus-visible:outline-2 focus-visible:outline-red-600 xl:hidden"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded border border-red-100 bg-white text-red-900 transition-colors hover:bg-red-50 focus-visible:outline-2 focus-visible:outline-red-600 xl:hidden"
             >
                 {mobileOpen ? <X size={21} aria-hidden="true" /> : <Menu size={21} aria-hidden="true" />}
             </button>
@@ -252,7 +252,7 @@ export default function HeaderNavigation({ locale, pathname, onNavigate, renderM
             {mobileOpen && (
                 <nav id={`${id}-mobile-navigation`} aria-label={isEnglish ? "Mobile navigation" : "মোবাইল নেভিগেশন"} className={`${panelClass} absolute inset-x-5 top-[calc(100%+12px)] z-50 max-h-[calc(100dvh-6rem)] overflow-y-auto xl:hidden`}>
                     <ul className="space-y-1">
-                        <li><Link to={getLocalizedPath("/", locale)} onClick={closeNavigation} aria-current={currentPage.section === "about" ? "page" : undefined} data-active={currentPage.section === "about"} className={linkClass}>{isEnglish ? "About MET Club" : "মেট ক্লাব সম্পর্কে"}</Link></li>
+                        <li><Link to={getLocalizedPath("/about", locale)} onClick={closeNavigation} aria-current={currentPage.section === "about" ? "page" : undefined} data-active={currentPage.section === "about"} className={linkClass}>{isEnglish ? "About MET Club" : "মেট ক্লাব সম্পর্কে"}</Link></li>
                         {mobileDropdown(menus[0])}
                         <li><a href="#" onClick={closeNavigation} aria-current={currentPage.section === "anticipatory" ? "true" : undefined} data-active={currentPage.section === "anticipatory"} className={linkClass}>{isEnglish ? "Child Friendly Anticipatory Action" : "শিশুবান্ধব আগাম কার্যক্রম"}</a></li>
                         <li><a href="http://game.meteorologyclub.com/" onClick={closeNavigation} className={linkClass}>{isEnglish ? "Games" : "গেমস"}</a></li>
