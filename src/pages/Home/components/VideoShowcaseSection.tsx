@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Play, X } from "lucide-react";
+import { Play, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { JSX } from "react";
 import axiosPublic from "../../../hooks/axiosPublic";
