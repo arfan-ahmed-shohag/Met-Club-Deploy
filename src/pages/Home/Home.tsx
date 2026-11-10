@@ -4,6 +4,11 @@ import type { JSX } from "react";
 import { Link } from "react-router";
 import coverVideo from "../../assets/videos/Drone shot for cover.mp4";
 import childrenLearningImage from "../../assets/images/citizen_science_img-cutout.webp";
+import reviewLearningImage from "../../assets/images/learning-zone-cutout-cutout.webp";
+import reviewCommunityImage from "../../assets/images/citizen_science_img-cutout.webp";
+import reviewReadinessImage from "../../assets/images/practice-zone-new-cutout.webp";
+import logo from "../../assets/images/logo_original.png";
+import Partners from "../../components/Shared/Partners";
 import TopNav from "../../components/Shared/TopBar";
 import WeatherCanvas from "../../components/Shared/WeatherCanvas";
 import { useLocaleRouteSync } from "../../hooks/useLocaleRouteSync";
@@ -186,6 +191,74 @@ function VideoShowcase({ isEnglish }: { isEnglish: boolean }): JSX.Element {
     );
 }
 
+function ReviewShowcase({ isEnglish }: { isEnglish: boolean }): JSX.Element {
+    const [slidePosition, setSlidePosition] = useState(0);
+    const [slideTransitionEnabled, setSlideTransitionEnabled] = useState(true);
+    const reviews = isEnglish
+        ? [
+            { parts: [{ text: "With MET Club, I learned to understand weather signals and ", tone: "plain" }, { text: "get ready before a disaster.", tone: "red" }, { text: " I can now share ", tone: "plain" }, { text: "safer choices with my family.", tone: "green" }], name: "MET Club learner", detail: "Student · Demo review", image: reviewLearningImage },
+            { parts: [{ text: "The hands-on lessons helped me feel more confident. Now I can ", tone: "plain" }, { text: "notice changing weather", tone: "red" }, { text: " and help my community ", tone: "plain" }, { text: "stay prepared.", tone: "green" }], name: "Community participant", detail: "Learner · Demo review", image: reviewCommunityImage },
+            { parts: [{ text: "We learned together how a ", tone: "plain" }, { text: "prepared community", tone: "green" }, { text: " can understand risks and respond to ", tone: "plain" }, { text: "extreme weather.", tone: "red" }], name: "School participant", detail: "Student · Demo review", image: reviewReadinessImage },
+        ]
+        : [
+            { parts: [{ text: "মেট ক্লাবের সঙ্গে শিখে এখন আবহাওয়ার সংকেত বুঝতে পারি এবং ", tone: "plain" }, { text: "দুর্যোগের আগেই প্রস্তুতি নিতে পারি।", tone: "red" }, { text: " পরিবারের সবার সঙ্গে ", tone: "plain" }, { text: "নিরাপদ থাকার উপায়ও ভাগ করি।", tone: "green" }], name: "মেট ক্লাবের শিক্ষার্থী", detail: "শিক্ষার্থী", image: reviewLearningImage },
+            { parts: [{ text: "হাতে-কলমে শেখার পর এখন ", tone: "plain" }, { text: "আবহাওয়ার পরিবর্তন খেয়াল করি", tone: "red" }, { text: " এবং কমিউনিটিকে ", tone: "plain" }, { text: "প্রস্তুত থাকতে সাহায্য করি।", tone: "green" }], name: "কমিউনিটির অংশগ্রহণকারী", detail: "শিক্ষার্থী", image: reviewCommunityImage },
+            { parts: [{ text: "একসাথে শিখে বুঝেছি, ", tone: "plain" }, { text: "প্রস্তুত কমিউনিটি", tone: "green" }, { text: " আবহাওয়ার ঝুঁকি বুঝে ", tone: "plain" }, { text: "নিরাপদে সাড়া দিতে পারে।", tone: "red" }], name: "স্কুলের অংশগ্রহণকারী", detail: "শিক্ষার্থী", image: reviewReadinessImage },
+        ];
+
+    useEffect(() => {
+        const intervalId = window.setInterval(() => {
+            if (!document.hidden) setSlidePosition((current) => current + 1);
+        }, 6000);
+        return () => window.clearInterval(intervalId);
+    }, [reviews.length]);
+
+    const activeReview = slidePosition % reviews.length;
+    const slides = [...reviews, reviews[0]];
+
+    return (
+        <section className="overflow-hidden bg-white py-[60px] lg:py-[80px]" aria-label={isEnglish ? "Learner reviews" : "শিক্ষার্থীদের অভিজ্ঞতা"}>
+            <div className="mx-auto w-full max-w-[1150px] px-4 sm:px-6">
+                <div className="overflow-hidden rounded-[32px] sm:rounded-[48px]">
+                    <div
+                        className={`flex ${slideTransitionEnabled ? "transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)]" : ""}`}
+                        style={{ transform: `translateX(-${slidePosition * 100}%)` }}
+                        onTransitionEnd={(event) => {
+                            if (event.target !== event.currentTarget || event.propertyName !== "transform" || slidePosition < reviews.length) return;
+                            setSlideTransitionEnabled(false);
+                            setSlidePosition(0);
+                            window.requestAnimationFrame(() => {
+                                window.requestAnimationFrame(() => setSlideTransitionEnabled(true));
+                            });
+                        }}
+                    >
+                        {slides.map((review, reviewIndex) => (
+                            <article key={`${review.name}-${reviewIndex}`} className="relative isolate min-h-[350px] min-w-full overflow-hidden border border-red-900/10 bg-red-950 shadow-[inset_0_1px_0_rgba(255,255,255,.1)] sm:min-h-[380px]">
+                                <div className="pointer-events-none absolute -bottom-24 -left-12 h-64 w-80 rounded-full bg-red-700/35 blur-[80px]" />
+                                <div className="pointer-events-none absolute inset-y-0 right-0 z-0 hidden w-[58%] opacity-55 sm:block" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11'%3E%3Crect x='1' y='1' width='3' height='3' fill='%23ffffff' fill-opacity='.3'/%3E%3C/svg%3E\")", backgroundSize: "11px 11px", maskImage: "linear-gradient(135deg, transparent 12%, rgba(0,0,0,.08) 28%, rgba(0,0,0,.58) 48%, #000 66%)", WebkitMaskImage: "linear-gradient(135deg, transparent 12%, rgba(0,0,0,.08) 28%, rgba(0,0,0,.58) 48%, #000 66%)" }} />
+                                <div className="absolute inset-y-0 right-0 w-full sm:w-[48%]">
+                                    <img src={review.image} alt="" loading="lazy" className="relative z-[1] h-full w-full object-contain opacity-100" style={{ objectPosition: "right bottom" }} />
+                                </div>
+                                <div className="relative z-10 flex min-h-[350px] w-full flex-col justify-center p-7 sm:min-h-[380px] sm:w-[68%] sm:p-10 lg:p-12">
+                                    <span aria-hidden="true" className="mb-1 h-14 text-7xl font-black leading-[.8] text-red-400/70">“</span>
+                                    <blockquote className="text-xl font-bold leading-relaxed text-white sm:text-2xl lg:text-[27px]">{review.parts.map((part, index) => <span key={index} className={part.tone === "red" ? "text-red-400" : part.tone === "green" ? "text-emerald-400" : ""}>{part.text}</span>)}</blockquote>
+                                    <div className="mt-8">
+                                        <p className="font-bold text-white">{review.name}</p>
+                                        <p className="mt-1 text-sm text-white/55">{review.detail}</p>
+                                    </div>
+                                </div>
+                            </article>
+                        ))}
+                    </div>
+                </div>
+                <div className="mt-7 flex items-center justify-center gap-3" aria-label={isEnglish ? "Choose review" : "রিভিউ বেছে নিন"}>
+                    {reviews.map((item, index) => <button key={item.name} type="button" onClick={() => { setSlideTransitionEnabled(true); setSlidePosition(index); }} aria-label={isEnglish ? `Go to review ${index + 1}` : `রিভিউ ${index + 1} দেখুন`} aria-current={index === activeReview} className={`h-2 rounded-full transition-all duration-300 ${index === activeReview ? "w-10 bg-red-700" : "w-2 bg-slate-300 hover:bg-red-300"}`} />)}
+                </div>
+            </div>
+        </section>
+    );
+}
+
 function ChapterOverview({ isEnglish }: { isEnglish: boolean }) {
     const [chapters, setChapters] = useState<Chapter[]>([]);
     const sliderRef = useRef<HTMLDivElement>(null);
@@ -245,7 +318,7 @@ function ChapterOverview({ isEnglish }: { isEnglish: boolean }) {
                     <button type="button" onClick={() => slide(1)} aria-label={isEnglish ? "Next chapters" : "পরের অধ্যায়"} className="absolute -right-5 top-1/2 z-10 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-red-100 bg-white text-red-700 shadow-md transition hover:bg-red-50"><ChevronRight size={20} /></button>
                     <div
                     ref={sliderRef}
-                    className="chapter-slider flex cursor-grab gap-4 overflow-x-auto pb-5 active:cursor-grabbing sm:gap-5"
+                    className="chapter-slider flex cursor-grab gap-4 overflow-x-auto px-1 pt-5 pb-10 active:cursor-grabbing sm:gap-5"
                     onMouseEnter={() => { pauseAutoSlideRef.current = true; }}
                     onMouseLeave={() => { pauseAutoSlideRef.current = false; }}
                     onPointerDown={(event) => {
@@ -437,6 +510,22 @@ export default function HomePage() {
             </section>
             <VideoShowcase isEnglish={isEnglish} />
             <PhotoGallery isEnglish={isEnglish} />
+            <ReviewShowcase isEnglish={isEnglish} />
+            <footer className="relative z-10 border-t border-red-900 bg-red-950 py-10 text-white md:py-15 lg:py-20">
+                <div className="site-container px-4 sm:px-6 lg:px-8">
+                    <div className="flex flex-col items-center justify-center space-x-4 lg:flex-row">
+                        <img src={logo} alt="MET CLUB LOGO" className="h-32 w-32" />
+                        <div>
+                            <h3 className="text-2xl font-black text-red-500" style={{ textShadow: "0 2px 4px rgba(0,0,0,0.5)" }}>{t("মেট ক্লাব", "Met Club")}</h3>
+                            <p className="mt-1 text-sm font-semibold text-gray-300">{t("আবহাওয়া চক্র", "Weather Cycle")}</p>
+                            <p className="my-4 font-semibold italic text-red-200">{t('"তরুণ মন, শক্তিশালী সতর্কতা"', '"Young Minds, Stronger Warnings"')}</p>
+                        </div>
+                    </div>
+                    <div className="mt-8">
+                        <Partners bg="bg-white" />
+                    </div>
+                </div>
+            </footer>
             <footer className="relative z-20 bg-red-950 py-4 text-center text-sm text-white"><a href="http://cdsr.com.bd" target="_blank" rel="noopener noreferrer">{t("পরিকল্পনা ও বাস্তবায়ন: Centre for Data Science Research (CDSR)", "Developed by Centre for Data Science Research (CDSR)")}</a></footer>
         </div>
     );
