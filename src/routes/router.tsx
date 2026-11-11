@@ -33,8 +33,10 @@ const WriteBlog = lazy(() => import("../pages/Blogs/WriteBlog"));
 const ManageBlogs = lazy(() => import("../pages/Admin/ManageBlogs"));
 const ManageGallery = lazy(() => import("../pages/Admin/ManageGallery"));
 const ManageHomeVideos = lazy(() => import("../pages/Admin/ManageHomeVideos"));
+const ManageStories = lazy(() => import("../pages/Admin/ManageStories"));
 const VideoLibraryPage = lazy(() => import("../pages/Media/MediaLibraryPage").then((module) => ({ default: module.VideoLibraryPage })));
 const PhotoGalleryPage = lazy(() => import("../pages/Media/MediaLibraryPage").then((module) => ({ default: module.PhotoGalleryPage })));
+const StoriesPage = lazy(() => import("../pages/Media/StoriesPage"));
 const EnglishLoginPage = lazy(() => import("../pages/EnglishVersion/Home"));
 const EnglishAbout = lazy(() => import("../pages/EnglishVersion/About/About"));
 const EnglishStartJourney = lazy(() => import("../pages/EnglishVersion/StartJourney/StartJourney"));
@@ -126,6 +128,16 @@ const routes: RouteObject[] = [
     path: "/en/gallery",
     element: <SuspenseWrapper><PhotoGalleryPage /></SuspenseWrapper>,
     loader: ({ request }) => redirectToStoredLocale(request.url, "/gallery", "/en/gallery"),
+  },
+  {
+    path: "/stories",
+    element: <SuspenseWrapper><StoriesPage /></SuspenseWrapper>,
+    loader: ({ request }) => redirectToStoredLocale(request.url, "/stories", "/en/stories"),
+  },
+  {
+    path: "/en/stories",
+    element: <SuspenseWrapper><StoriesPage /></SuspenseWrapper>,
+    loader: ({ request }) => redirectToStoredLocale(request.url, "/stories", "/en/stories"),
   },
   {
     path: "/login",
@@ -368,6 +380,10 @@ const routes: RouteObject[] = [
       {
         path: "videos",
         element: <SuspenseWrapper><ManageHomeVideos /></SuspenseWrapper>,
+      },
+      {
+        path: "stories",
+        element: <SuspenseWrapper><ManageStories /></SuspenseWrapper>,
       },
       {
         path: "create-tutorial",

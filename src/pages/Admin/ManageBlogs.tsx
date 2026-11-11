@@ -9,7 +9,9 @@ import { resolveMediaUrl } from "../../utils/media";
 type BlogPost = {
     id: string;
     title: string;
+    titleEn?: string;
     content: string;
+    contentEn?: string;
     featuredImage: string | null;
     status: "pending" | "published";
     createdAt: string;
@@ -143,6 +145,7 @@ export default function ManageBlogs() {
                         <h3 className="mt-2 pr-10 text-2xl font-black text-slate-900 sm:text-3xl">{selectedPost.title}</h3>
                         <p className="mt-3 text-sm text-slate-500">{selectedPost.author.fullName} · {selectedPost.author.email} · {new Date(selectedPost.createdAt).toLocaleString("en-GB")}</p>
                         <div className="blog-rich-content mt-7 text-base leading-8 text-slate-700" dangerouslySetInnerHTML={{ __html: sanitizeBlogHtml(selectedPost.content) }} />
+                        {selectedPost.titleEn && <section className="mt-8 border-t border-slate-200 pt-6"><p className="text-xs font-bold uppercase tracking-wider text-red-700">English version</p><h3 className="mt-2 text-xl font-bold text-slate-900">{selectedPost.titleEn}</h3><div className="blog-rich-content mt-4 text-base leading-8 text-slate-700" dangerouslySetInnerHTML={{ __html: sanitizeBlogHtml(selectedPost.contentEn || "") }} /></section>}
                         {selectedPost.status === "pending" && (
                             <div className="mt-8 flex justify-end border-t border-slate-200 pt-5">
                                 <button type="button" onClick={() => void publishPost(selectedPost)} disabled={publishingId === selectedPost.id} className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 font-bold text-white shadow transition hover:bg-emerald-700 disabled:cursor-wait disabled:opacity-60">

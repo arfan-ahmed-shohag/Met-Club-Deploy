@@ -25,7 +25,7 @@ const resources = [
     { bn: "ভিডিও", en: "Videos", path: "/videos" },
     { bn: "প্রেস রিলিজ", en: "Press Release", path: null },
     { bn: "ব্লগ", en: "Blogs", path: "/blogs" },
-    { bn: "গল্প", en: "Stories", path: null },
+    { bn: "গল্প", en: "Stories", path: "/stories" },
     { bn: "ফটো গ্যালারি", en: "Photo Gallery", path: "/gallery" },
 ];
 

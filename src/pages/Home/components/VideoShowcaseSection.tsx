@@ -5,7 +5,7 @@ import axiosPublic from "../../../hooks/axiosPublic";
 import { resolveMediaUrl } from "../../../utils/media";
 
 const PAGE_SIZE = 10;
-type HomeVideo = { id: string; name: string; title: string; thumbnailImage: string; videoLink: string };
+type HomeVideo = { id: string; name: string; nameEn?: string; title: string; titleEn?: string; thumbnailImage: string; videoLink: string };
 
 const getYoutubeId = (videoLink: string) => {
     try {
@@ -21,7 +21,8 @@ export default function VideoShowcase({ isEnglish }: { isEnglish: boolean }): JS
     const [videos, setVideos] = useState<HomeVideo[]>([]);
     const [page, setPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
-    const [isLoading, setIsLoading] = useState(true);
+    const [loadedPage, setLoadedPage] = useState(0);
+    const isLoading = loadedPage !== page;
     const [loadError, setLoadError] = useState(false);
     const [selectedVideo, setSelectedVideo] = useState<HomeVideo | null>(null);
     const [isVideoModalClosing, setIsVideoModalClosing] = useState(false);
@@ -31,19 +32,18 @@ export default function VideoShowcase({ isEnglish }: { isEnglish: boolean }): JS
 
     useEffect(() => {
         let cancelled = false;
-        setIsLoading(true);
-        setLoadError(false);
         void axios.get("/videos", { params: { page, limit: PAGE_SIZE } })
             .then(({ data }) => {
                 if (cancelled) return;
                 setVideos(Array.isArray(data?.data) ? data.data.slice(0, PAGE_SIZE) : []);
                 setPageCount(Math.ceil((Number(data?.meta?.total) || 0) / PAGE_SIZE));
+                setLoadError(false);
             })
             .catch((error) => {
                 console.error("Failed to load homepage videos:", error);
                 if (!cancelled) { setVideos([]); setLoadError(true); }
             })
-            .finally(() => { if (!cancelled) setIsLoading(false); });
+            .finally(() => { if (!cancelled) setLoadedPage(page); });
         return () => { cancelled = true; };
     }, [axios, page]);
 
@@ -105,21 +105,23 @@ export default function VideoShowcase({ isEnglish }: { isEnglish: boolean }): JS
                     >
                         {videos.map((video) => {
                             const image = resolveMediaUrl(video.thumbnailImage);
+                            const videoName = isEnglish ? (video.nameEn || video.name) : video.name;
+                            const videoTitle = isEnglish ? (video.titleEn || video.title) : video.title;
                             return <button key={video.id} type="button" onClick={() => setSelectedVideo(video)} className="group flex h-[457px] w-[290px] shrink-0 snap-start flex-col rounded-[28px] border border-white/10 bg-[linear-gradient(322deg,#222221_2%,#40302d_97%)] p-6 text-left shadow-[inset_4px_8px_16px_rgba(255,255,255,.2),inset_2px_4px_16px_rgba(255,255,255,.16)] transition duration-300 md:h-[492px] md:w-[375px] md:rounded-[38px]">
                                 <div className="relative mb-3 min-h-0 flex-1 overflow-hidden rounded-[20px] bg-slate-900 md:mb-4 md:rounded-[30px]">
-                                    <img src={image} alt={video.title} loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                                    <img src={image} alt={videoTitle} loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
                                     <div className="absolute inset-0 bg-slate-950/25 transition group-hover:bg-slate-950/10"/>
                                     <span className="absolute left-1/2 top-1/2 grid h-[60px] w-[60px] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white/45 p-[7px] shadow-[0_4px_18px_rgba(0,0,0,.3)] transition group-hover:scale-110"><span className="grid h-full w-full place-items-center rounded-full bg-white text-red-600"><Play size={19} fill="currentColor" className="ml-0.5"/></span></span>
                                 </div>
-                                <div className="flex items-center gap-3 text-white"><img src={image} alt="" className="h-12 w-12 shrink-0 rounded-full border border-white/25 object-cover md:h-[52px] md:w-[52px]"/><div className="min-w-0"><h3 className="truncate text-sm font-semibold leading-5 md:text-base md:leading-6">{video.name}</h3><p className="mt-0.5 line-clamp-2 text-xs leading-4 text-white/60 md:text-sm md:leading-5">{video.title}</p></div></div>
+                                <div className="flex items-center gap-3 text-white"><img src={image} alt="" className="h-12 w-12 shrink-0 rounded-full border border-white/25 object-cover md:h-[52px] md:w-[52px]"/><div className="min-w-0"><h3 className="truncate text-sm font-semibold leading-5 md:text-base md:leading-6">{videoName}</h3><p className="mt-0.5 line-clamp-2 text-xs leading-4 text-white/60 md:text-sm md:leading-5">{videoTitle}</p></div></div>
                             </button>;
                         })}
                     </div>
                 </div> : <p className="mx-5 rounded-2xl border border-white/15 bg-white/5 px-5 py-8 text-center text-red-100/80" role={loadError ? "alert" : "status"}>{loadError ? (isEnglish ? "Videos could not be loaded." : "ভিডিও লোড করা যায়নি।") : (isEnglish ? "Videos will appear here soon." : "শিগগিরই এখানে ভিডিও দেখা যাবে।")}</p>}
-            {selectedVideo && <div className={`fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/85 p-4 backdrop-blur-sm ${isVideoModalClosing ? "animate-[videoModalFadeOut_.22s_ease-in_both]" : "animate-[videoModalFadeIn_.28s_ease-out_both]"}`} onClick={closeVideoModal} role="dialog" aria-modal="true" aria-label={selectedVideo.title}>
+            {selectedVideo && <div className={`fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/85 p-4 backdrop-blur-sm ${isVideoModalClosing ? "animate-[videoModalFadeOut_.22s_ease-in_both]" : "animate-[videoModalFadeIn_.28s_ease-out_both]"}`} onClick={closeVideoModal} role="dialog" aria-modal="true" aria-label={isEnglish ? (selectedVideo.titleEn || selectedVideo.title) : selectedVideo.title}>
                 <div className={`relative w-full max-w-5xl overflow-hidden rounded-2xl bg-black shadow-2xl ${isVideoModalClosing ? "animate-[videoModalScaleOut_.22s_ease-in_both]" : "animate-[videoModalScaleIn_.38s_cubic-bezier(.16,1,.3,1)_both]"}`} onClick={(event) => event.stopPropagation()}>
                     <button type="button" onClick={closeVideoModal} aria-label={isEnglish ? "Close video" : "ভিডিও বন্ধ করুন"} className="absolute right-3 top-3 z-10 grid h-10 w-10 place-items-center rounded-full bg-white/90 text-red-800 shadow"><X size={22}/></button>
-                    <iframe className="aspect-video w-full" src={`https://www.youtube-nocookie.com/embed/${getYoutubeId(selectedVideo.videoLink)}?autoplay=1&rel=0`} title={selectedVideo.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />
+                    <iframe className="aspect-video w-full" src={`https://www.youtube-nocookie.com/embed/${getYoutubeId(selectedVideo.videoLink)}?autoplay=1&rel=0`} title={isEnglish ? (selectedVideo.titleEn || selectedVideo.title) : selectedVideo.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />
                 </div>
             </div>}
         </section>

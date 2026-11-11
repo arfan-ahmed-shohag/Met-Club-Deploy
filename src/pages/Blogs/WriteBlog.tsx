@@ -21,15 +21,20 @@ const quillFormats = ["bold", "italic", "underline", "list", "bullet", "link", "
 export default function WriteBlog() {
     const axios = useAxiosProtected();
     const navigate = useNavigate();
-    const editorRef = useRef<ReactQuill | null>(null);
+    const editorBnRef = useRef<ReactQuill | null>(null);
+    const editorEnRef = useRef<ReactQuill | null>(null);
     const inlineImageInputRef = useRef<HTMLInputElement | null>(null);
     const inlineImageRangeRef = useRef<{ index: number; length: number } | null>(null);
+    const inlineImageLanguageRef = useRef<"bn" | "en">("bn");
     const { user, isLoading, error, reloadUser } = useAuth();
     const isEnglish = getStoredLocale() === "en";
-    const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
+    const [titleBn, setTitleBn] = useState("");
+    const [titleEn, setTitleEn] = useState("");
+    const [contentBn, setContentBn] = useState("");
+    const [contentEn, setContentEn] = useState("");
     const [featuredImage, setFeaturedImage] = useState<string | null>(null);
-    const [contentLength, setContentLength] = useState(0);
+    const [contentLengthBn, setContentLengthBn] = useState(0);
+    const [contentLengthEn, setContentLengthEn] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isUploadingImage, setIsUploadingImage] = useState(false);
     const [formError, setFormError] = useState("");
@@ -72,9 +77,10 @@ export default function WriteBlog() {
         }
     }, [axios, isEnglish]);
 
-    const uploadInlineImage = useCallback(() => {
-        const editor = editorRef.current?.getEditor();
+    const uploadInlineImage = useCallback((language: "bn" | "en") => () => {
+        const editor = (language === "bn" ? editorBnRef : editorEnRef).current?.getEditor();
         if (!editor || !inlineImageInputRef.current) return;
+        inlineImageLanguageRef.current = language;
         inlineImageRangeRef.current = editor.getSelection(true) || { index: editor.getLength() - 1, length: 0 };
         inlineImageInputRef.current.click();
     }, []);
@@ -86,7 +92,7 @@ export default function WriteBlog() {
         if (!image) return;
 
         const imagePath = await uploadBlogImage(image);
-        const editor = editorRef.current?.getEditor();
+        const editor = (inlineImageLanguageRef.current === "bn" ? editorBnRef : editorEnRef).current?.getEditor();
         if (!imagePath || !editor) return;
 
         const selection = inlineImageRangeRef.current || editor.getSelection(true) || { index: editor.getLength() - 1, length: 0 };
@@ -99,23 +105,31 @@ export default function WriteBlog() {
         editor.focus();
     };
 
-    const quillModules = useMemo(() => ({
+    const quillModulesBn = useMemo(() => ({
         toolbar: {
             container: [["bold", "italic", "underline"], [{ list: "ordered" }, { list: "bullet" }], ["link", "image"], ["clean"]],
-            handlers: { image: uploadInlineImage },
+            handlers: { image: uploadInlineImage("bn") },
+        },
+    }), [uploadInlineImage]);
+    const quillModulesEn = useMemo(() => ({
+        toolbar: {
+            container: [["bold", "italic", "underline"], [{ list: "ordered" }, { list: "bullet" }], ["link", "image"], ["clean"]],
+            handlers: { image: uploadInlineImage("en") },
         },
     }), [uploadInlineImage]);
 
     const submitBlog = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const normalizedTitle = title.trim();
-        const normalizedContent = normalizeBlogImagePaths(content.trim());
+        const normalizedTitle = titleBn.trim();
+        const normalizedTitleEn = titleEn.trim();
+        const normalizedContent = normalizeBlogImagePaths(contentBn.trim());
+        const normalizedContentEn = normalizeBlogImagePaths(contentEn.trim());
 
-        if (normalizedTitle.length < 4 || normalizedTitle.length > TITLE_MAX) {
+        if (normalizedTitle.length < 4 || normalizedTitle.length > TITLE_MAX || normalizedTitleEn.length < 4 || normalizedTitleEn.length > TITLE_MAX) {
             setFormError(isEnglish ? "Title must contain 4–160 characters." : "শিরোনাম ৪ থেকে ১৬০ অক্ষরের মধ্যে লিখুন।");
             return;
         }
-        if (contentLength < 30 || contentLength > CONTENT_MAX) {
+        if (contentLengthBn < 30 || contentLengthBn > CONTENT_MAX || contentLengthEn < 30 || contentLengthEn > CONTENT_MAX) {
             setFormError(isEnglish ? "Blog text must contain 30–30,000 characters." : "ব্লগের লেখা ৩০ থেকে ৩০,০০০ অক্ষরের মধ্যে লিখুন।");
             return;
         }
@@ -123,7 +137,7 @@ export default function WriteBlog() {
         setIsSubmitting(true);
         setFormError("");
         try {
-            await axios.post("/blogs", { title: normalizedTitle, content: normalizedContent, featuredImage });
+            await axios.post("/blogs", { title: normalizedTitle, titleEn: normalizedTitleEn, content: normalizedContent, contentEn: normalizedContentEn, featuredImage });
             toast.success(isEnglish ? "Blog submitted for admin review." : "ব্লগটি admin-এর পর্যালোচনার জন্য জমা হয়েছে।");
             navigate(isEnglish ? "/en/blogs" : "/blogs");
         } catch (submitError) {
@@ -189,18 +203,10 @@ export default function WriteBlog() {
                     ) : (
                         <form onSubmit={(event) => void submitBlog(event)} className="space-y-5">
                             <div className="rounded-xl border border-white/60 bg-white/30 p-5">
-                                <label htmlFor="blog-title" className="mb-2 block text-sm font-semibold text-slate-700">{isEnglish ? "Blog title" : "ব্লগের শিরোনাম"}</label>
-                                <input
-                                    id="blog-title"
-                                    required
-                                    minLength={4}
-                                    maxLength={TITLE_MAX}
-                                    value={title}
-                                    onChange={(event) => setTitle(event.target.value)}
-                                    className="w-full min-w-0 rounded-xl border border-white/70 bg-white/65 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-500 focus:border-red-300 focus:ring-2 focus:ring-red-300"
-                                    placeholder={isEnglish ? "Enter a clear title" : "ব্লগের শিরোনাম লিখুন"}
-                                />
-                                <p className="mt-1 text-right text-xs text-slate-500">{title.length}/{TITLE_MAX}</p>
+                                <div className="grid gap-4 md:grid-cols-2">
+                                    <label className="block text-sm font-semibold text-slate-700">Blog title (বাংলা)<input required minLength={4} maxLength={TITLE_MAX} value={titleBn} onChange={(event) => setTitleBn(event.target.value)} className="mt-2 w-full min-w-0 rounded-xl border border-white/70 bg-white/65 px-4 py-3 font-normal text-slate-900 outline-none focus:border-red-300 focus:ring-2 focus:ring-red-300" placeholder="ব্লগের শিরোনাম লিখুন"/><span className="mt-1 block text-right text-xs font-normal text-slate-500">{titleBn.length}/{TITLE_MAX}</span></label>
+                                    <label className="block text-sm font-semibold text-slate-700">Blog title (English)<input required minLength={4} maxLength={TITLE_MAX} value={titleEn} onChange={(event) => setTitleEn(event.target.value)} className="mt-2 w-full min-w-0 rounded-xl border border-white/70 bg-white/65 px-4 py-3 font-normal text-slate-900 outline-none focus:border-red-300 focus:ring-2 focus:ring-red-300" placeholder="Enter the blog title"/><span className="mt-1 block text-right text-xs font-normal text-slate-500">{titleEn.length}/{TITLE_MAX}</span></label>
+                                </div>
                             </div>
 
                             <div className="space-y-4 rounded-xl border border-white/60 bg-white/30 p-5">
@@ -244,35 +250,20 @@ export default function WriteBlog() {
                                     </div>
 
                                     <div className="min-w-0 md:col-span-2">
-                                        <label htmlFor="blog-content" className="mb-2 block text-sm font-semibold text-slate-700">{isEnglish ? "Your blog" : "আপনার লেখা"}</label>
-                                        <div className="blog-quill h-72 min-w-0 overflow-hidden rounded-xl border border-white/70 bg-white/65 text-slate-900 focus-within:ring-2 focus-within:ring-red-300 md:h-80">
-                                            <ReactQuill
-                                                ref={editorRef}
-                                                theme="snow"
-                                                value={content}
-                                                className="editor-shell h-full overflow-hidden rounded-xl bg-white"
-                                                readOnly={isSubmitting || isUploadingImage}
-                                                modules={quillModules}
-                                                formats={quillFormats}
-                                                placeholder={isEnglish ? "Write your story. You can also add images in the text." : "আপনার ব্লগ লিখুন। লেখার মাঝেও ছবি যোগ করতে পারবেন।"}
-                                                onChange={(html, _delta, _source, editor) => {
-                                                    setContent(html);
-                                                    setContentLength(editor.getText().trim().length);
-                                                }}
-                                            />
-                                            <input
-                                                ref={inlineImageInputRef}
-                                                type="file"
-                                                accept="image/png,image/jpeg,image/webp,image/gif"
-                                                onChange={(event) => void handleInlineImageChange(event)}
-                                                className="sr-only"
-                                                aria-label={isEnglish ? "Add an image to the blog text" : "ব্লগের লেখায় ছবি যোগ করুন"}
-                                            />
+                                        <div className="grid gap-5 xl:grid-cols-2">
+                                            <div className="min-w-0">
+                                                <label className="mb-2 block text-sm font-semibold text-slate-700">Your blog (বাংলা)</label>
+                                                <div className="blog-quill h-72 min-w-0 overflow-hidden rounded-xl border border-white/70 bg-white/65 text-slate-900 focus-within:ring-2 focus-within:ring-red-300 md:h-80"><ReactQuill ref={editorBnRef} theme="snow" value={contentBn} className="editor-shell h-full overflow-hidden rounded-xl bg-white" readOnly={isSubmitting || isUploadingImage} modules={quillModulesBn} formats={quillFormats} placeholder="আপনার ব্লগ বাংলায় লিখুন" onChange={(html, _delta, _source, editor) => { setContentBn(html); setContentLengthBn(editor.getText().trim().length); }}/></div>
+                                                <p className="mt-2 text-right text-xs text-slate-500">{contentLengthBn}/{CONTENT_MAX}</p>
+                                            </div>
+                                            <div className="min-w-0">
+                                                <label className="mb-2 block text-sm font-semibold text-slate-700">Your blog (English)</label>
+                                                <div className="blog-quill h-72 min-w-0 overflow-hidden rounded-xl border border-white/70 bg-white/65 text-slate-900 focus-within:ring-2 focus-within:ring-red-300 md:h-80"><ReactQuill ref={editorEnRef} theme="snow" value={contentEn} className="editor-shell h-full overflow-hidden rounded-xl bg-white" readOnly={isSubmitting || isUploadingImage} modules={quillModulesEn} formats={quillFormats} placeholder="Write your blog in English" onChange={(html, _delta, _source, editor) => { setContentEn(html); setContentLengthEn(editor.getText().trim().length); }}/></div>
+                                                <p className="mt-2 text-right text-xs text-slate-500">{contentLengthEn}/{CONTENT_MAX}</p>
+                                            </div>
                                         </div>
-                                        <p className="mt-2 flex flex-wrap justify-between gap-2 text-xs text-slate-500">
-                                            <span>{isUploadingImage ? (isEnglish ? "Uploading image…" : "ছবি আপলোড হচ্ছে…") : (isEnglish ? "Use the image button to add pictures inside your blog." : "লেখার মধ্যে ছবি যোগ করতে editor-এর image button ব্যবহার করুন।")}</span>
-                                            <span>{contentLength}/{CONTENT_MAX}</span>
-                                        </p>
+                                        <input ref={inlineImageInputRef} type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={(event) => void handleInlineImageChange(event)} className="sr-only" aria-label="Upload inline image"/>
+                                        <p className="mt-2 text-xs text-slate-500">Use the image button in either editor to add images to that language version.</p>
                                     </div>
                                 </div>
                             </div>

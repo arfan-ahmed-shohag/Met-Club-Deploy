@@ -13,7 +13,9 @@ import { resolveMediaUrl } from "../../utils/media";
 type BlogPost = {
     id: string;
     title: string;
+    titleEn?: string;
     content: string;
+    contentEn?: string;
     featuredImage: string | null;
     status: "pending" | "published";
     createdAt: string;
@@ -84,7 +86,21 @@ export default function Blogs() {
 
                 <section aria-label={isEnglish ? "Published stories" : "প্রকাশিত লেখা"}>
                     {isLoading ? (
-                        <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center text-slate-500">{isEnglish ? "Loading stories…" : "লেখাগুলো লোড হচ্ছে…"}</div>
+                        <div className="grid items-start gap-5 sm:grid-cols-2 xl:grid-cols-3" aria-busy="true" role="status">
+                            <span className="sr-only">{isEnglish ? "Loading stories" : "লেখাগুলো লোড হচ্ছে"}</span>
+                            {Array.from({ length: PAGE_SIZE }, (_, index) => (
+                                <div key={index} aria-hidden="true" className="flex min-h-[380px] animate-pulse flex-col rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_8px_24px_rgba(15,23,42,0.07)]">
+                                    <div className="aspect-[16/9] w-full rounded-xl bg-slate-200" />
+                                    <div className="flex flex-1 flex-col px-1 pt-4">
+                                        <div className="h-6 w-4/5 rounded-md bg-slate-200" />
+                                        <div className="mt-3 h-4 w-2/3 rounded bg-slate-100" />
+                                        <div className="mt-4 h-4 w-full rounded bg-slate-100" />
+                                        <div className="mt-2 h-4 w-5/6 rounded bg-slate-100" />
+                                        <div className="mt-auto h-5 w-24 rounded bg-red-100" />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     ) : loadError ? (
                         <div className="rounded-2xl border border-red-100 bg-white p-10 text-center text-red-700">{isEnglish ? "Stories could not be loaded. Please refresh." : "লেখাগুলো আনা যায়নি। আবার চেষ্টা করুন।"}</div>
                     ) : posts.length === 0 ? (
@@ -95,13 +111,15 @@ export default function Blogs() {
                     ) : (
                         <div className="grid items-start gap-5 sm:grid-cols-2 xl:grid-cols-3">
                             {visiblePosts.map((post) => {
-                                const coverImage = post.featuredImage ? resolveMediaUrl(post.featuredImage) : blogHtmlFirstImage(post.content);
-                                const excerpt = blogHtmlToText(post.content);
+                                const postTitle = isEnglish ? (post.titleEn || post.title) : post.title;
+                                const postContent = isEnglish ? (post.contentEn || post.content) : post.content;
+                                const coverImage = post.featuredImage ? resolveMediaUrl(post.featuredImage) : blogHtmlFirstImage(postContent);
+                                const excerpt = blogHtmlToText(postContent);
                                 return (
                                     <article key={post.id} className="flex w-full flex-col rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_8px_24px_rgba(15,23,42,0.07)] transition duration-200 hover:-translate-y-1 hover:shadow-[0_16px_36px_rgba(15,23,42,0.12)]">
                                         <div className="relative aspect-[16/9] overflow-hidden rounded-xl bg-gradient-to-br from-red-800 via-red-600 to-orange-400">
                                             {coverImage ? (
-                                                <img src={coverImage} alt={post.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-300 hover:scale-[1.03]" />
+                                                <img src={coverImage} alt={postTitle} loading="lazy" className="h-full w-full object-cover transition-transform duration-300 hover:scale-[1.03]" />
                                             ) : (
                                                 <div className="flex h-full items-center justify-center bg-[radial-gradient(circle_at_top_right,rgba(251,146,60,0.85),transparent_55%)]">
                                                     <span className="rounded-full border border-white/40 bg-white/15 px-4 py-2 text-sm font-bold tracking-[0.15em] text-white">MET CLUB</span>
@@ -110,7 +128,7 @@ export default function Blogs() {
                                             <span className="absolute left-3 top-3 rounded-full bg-red-700/90 px-3 py-1 text-xs font-bold text-white shadow">{isEnglish ? "Student story" : "শিক্ষার্থীর লেখা"}</span>
                                         </div>
                                         <div className="flex flex-1 flex-col px-1 pb-1 pt-4">
-                                            <h2 className="line-clamp-2 text-xl font-bold leading-snug text-slate-900">{post.title}</h2>
+                                            <h2 className="line-clamp-2 text-xl font-bold leading-snug text-slate-900">{postTitle}</h2>
                                             <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-slate-500">
                                                 <span className="font-medium text-slate-600">{post.author.fullName}</span>
                                                 <span aria-hidden="true">·</span>
@@ -154,7 +172,7 @@ export default function Blogs() {
                             <ul className="mt-3 divide-y divide-slate-100">
                                 {myPosts.map((post) => (
                                     <li key={post.id} className="flex flex-col gap-2 py-3 sm:flex-row sm:items-center sm:justify-between">
-                                        <span className="font-semibold text-slate-800">{post.title}</span>
+                                        <span className="font-semibold text-slate-800">{isEnglish ? (post.titleEn || post.title) : post.title}</span>
                                         <span className={`w-fit rounded-full px-3 py-1 text-xs font-bold ${post.status === "published" ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"}`}>
                                             {post.status === "published" ? (isEnglish ? "Published" : "প্রকাশিত") : (isEnglish ? "Pending review" : "অনুমোদনের অপেক্ষায়")}
                                         </span>

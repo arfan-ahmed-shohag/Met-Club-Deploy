@@ -11,7 +11,9 @@ import { profileImageUrl } from "../../lib/profile";
 type BlogPost = {
     id: string;
     title: string;
+    titleEn?: string;
     content: string;
+    contentEn?: string;
     featuredImage: string | null;
     createdAt: string;
     publishedAt: string | null;
@@ -77,9 +79,11 @@ export default function BlogDetails() {
                         </div>
                     </div>
                 ) : (() => {
-                    const inlineCover = post.featuredImage ? null : blogHtmlFirstImage(post.content);
+                    const postTitle = isEnglish ? (post.titleEn || post.title) : post.title;
+                    const postContent = isEnglish ? (post.contentEn || post.content) : post.content;
+                    const inlineCover = post.featuredImage ? null : blogHtmlFirstImage(postContent);
                     const coverImage = post.featuredImage ? resolveMediaUrl(post.featuredImage) : inlineCover;
-                    const articleContent = inlineCover ? blogHtmlWithoutFirstImage(post.content) : post.content;
+                    const articleContent = inlineCover ? blogHtmlWithoutFirstImage(postContent) : postContent;
 
                     return (
                         <div className="w-full">
@@ -100,14 +104,14 @@ export default function BlogDetails() {
                                 </section>
 
                                 {coverImage && (
-                                    <img src={coverImage} alt={post.title} className="h-120 rounded-xl bg-slate-100 w-full object-cover" />
+                                    <img src={coverImage} alt={postTitle} className="h-120 rounded-xl bg-slate-100 w-full object-cover" />
                                 )}
                                 <div className="mt-7 grid min-w-0 grid-cols-1 gap-8 lg:grid-cols-12">
                                     <article className="min-w-0 w-full max-w-300 lg:col-span-8">
                                         <div>
                                             <div className="mb-5">
                                                 <p className="text-xs font-bold uppercase tracking-[0.16em] text-red-700">{isEnglish ? "Student story" : "শিক্ষার্থীর লেখা"}</p>
-                                                <h2 className="mt-2 wrap-break-word text-2xl font-black leading-tight text-slate-900 sm:text-3xl">{post.title}</h2>
+                                                <h2 className="mt-2 wrap-break-word text-2xl font-black leading-tight text-slate-900 sm:text-3xl">{postTitle}</h2>
                                                 <p className="mt-3 text-sm text-slate-500">
                                                     {post.author.fullName} <span aria-hidden="true">·</span> <time dateTime={post.publishedAt || post.createdAt}>{getDate(post)}</time>
                                                 </p>
@@ -142,14 +146,15 @@ export default function BlogDetails() {
                                                     {relatedPosts.map((related) => {
                                                         const image = related.featuredImage
                                                             ? resolveMediaUrl(related.featuredImage)
-                                                            : blogHtmlFirstImage(related.content);
+                                                            : blogHtmlFirstImage(isEnglish ? (related.contentEn || related.content) : related.content);
+                                                        const relatedTitle = isEnglish ? (related.titleEn || related.title) : related.title;
                                                         return (
                                                             <Link key={related.id} to={`${isEnglish ? "/en/blogs" : "/blogs"}/${related.id}`} className="group grid min-w-0 grid-cols-[4.5rem_minmax(0,1fr)] gap-3 rounded-xl p-2 transition hover:bg-red-50">
                                                                 <div className="aspect-square overflow-hidden rounded-lg bg-gradient-to-br from-red-800 to-orange-400">
                                                                     {image && <img src={image} alt="" loading="lazy" className="h-full w-full object-cover" />}
                                                                 </div>
                                                                 <div className="min-w-0 self-center">
-                                                                    <h3 className="line-clamp-2 break-words font-bold leading-snug text-slate-800 group-hover:text-red-800">{related.title}</h3>
+                                                                    <h3 className="line-clamp-2 break-words font-bold leading-snug text-slate-800 group-hover:text-red-800">{relatedTitle}</h3>
                                                                     <span className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-red-700">{isEnglish ? "Read story" : "লেখাটি পড়ুন"}<ArrowRight size={15} /></span>
                                                                 </div>
                                                             </Link>
