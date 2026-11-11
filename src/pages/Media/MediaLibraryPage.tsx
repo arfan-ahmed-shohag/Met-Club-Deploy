@@ -13,7 +13,7 @@ const VIDEO_PAGE_SIZE = 12;
 const PHOTO_PAGE_SIZE = 9;
 
 type GalleryPhoto = { id: string; imageUrl: string; alt: string };
-type HomeVideo = { id: string; name: string; title: string; thumbnailImage: string; videoLink: string };
+type HomeVideo = { id: string; name: string; nameEn?: string; title: string; titleEn?: string; thumbnailImage: string; videoLink: string; videoLinkEn?: string };
 type PaginatedResponse<T> = { data?: T[]; meta?: { total?: number } };
 
 function useMediaPage<T>(endpoint: "/gallery" | "/videos", pageSize: number) {
@@ -104,14 +104,14 @@ function VideoLibrary({ isEnglish }: { isEnglish: boolean }) {
                     <div className="absolute inset-0 bg-slate-950/20 transition group-hover:bg-slate-950/10"/>
                     <span className="absolute left-1/2 top-1/2 grid h-[60px] w-[60px] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white/45 p-[7px] shadow-[0_4px_18px_rgba(0,0,0,.3)] transition group-hover:scale-110"><span className="grid h-full w-full place-items-center rounded-full bg-white text-red-700"><Play size={19} fill="currentColor" className="ml-0.5"/></span></span>
                 </div>
-                <span className="flex items-center gap-3 text-left text-slate-900"><img src={resolveMediaUrl(video.thumbnailImage)} alt="" className="h-12 w-12 shrink-0 rounded-full border border-slate-200 object-cover md:h-[52px] md:w-[52px]"/><span className="min-w-0"><span className="block truncate text-sm font-semibold leading-5 md:text-base md:leading-6">{video.name}</span><span className="mt-0.5 line-clamp-2 block text-xs leading-4 text-slate-600 md:text-sm md:leading-5">{video.title}</span></span></span>
+                <span className="flex items-center gap-3 text-left text-slate-900"><img src={resolveMediaUrl(video.thumbnailImage)} alt="" className="h-12 w-12 shrink-0 rounded-full border border-slate-200 object-cover md:h-[52px] md:w-[52px]"/><span className="min-w-0"><span className="block truncate text-sm font-semibold leading-5 md:text-base md:leading-6">{isEnglish ? (video.nameEn || video.name) : video.name}</span><span className="mt-0.5 line-clamp-2 block text-xs leading-4 text-slate-600 md:text-sm md:leading-5">{isEnglish ? (video.titleEn || video.title) : video.title}</span></span></span>
             </button>)}
         </div>}
         {!isLoading && hasMore && <LoadMore isEnglish={isEnglish} isLoadingMore={isLoadingMore} error={error} onClick={() => void loadMore()}/>}
         {selected && <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/85 p-4 backdrop-blur-sm" onMouseDown={(event) => { if (event.target === event.currentTarget) setSelected(null); }} role="dialog" aria-modal="true" aria-label={selected.title}>
             <div className="relative w-full max-w-5xl overflow-hidden rounded-2xl bg-black shadow-2xl">
                 <button type="button" onClick={() => setSelected(null)} aria-label={isEnglish ? "Close video" : "ভিডিও বন্ধ করুন"} className="absolute right-3 top-3 z-10 grid h-10 w-10 cursor-pointer place-items-center rounded-full bg-white/90 text-red-800 shadow"><X size={22}/></button>
-                <iframe className="aspect-video w-full" src={`https://www.youtube-nocookie.com/embed/${youtubeId(selected.videoLink)}?autoplay=1&rel=0`} title={selected.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen/>
+                <iframe className="aspect-video w-full" src={`https://www.youtube-nocookie.com/embed/${youtubeId(isEnglish && selected.videoLinkEn ? selected.videoLinkEn : selected.videoLink)}?autoplay=1&rel=0`} title={isEnglish ? (selected.titleEn || selected.title) : selected.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen/>
             </div>
         </div>}
     </>;

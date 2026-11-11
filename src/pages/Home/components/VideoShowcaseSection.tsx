@@ -5,7 +5,7 @@ import axiosPublic from "../../../hooks/axiosPublic";
 import { resolveMediaUrl } from "../../../utils/media";
 
 const PAGE_SIZE = 10;
-type HomeVideo = { id: string; name: string; nameEn?: string; title: string; titleEn?: string; thumbnailImage: string; videoLink: string };
+type HomeVideo = { id: string; name: string; nameEn?: string; title: string; titleEn?: string; thumbnailImage: string; videoLink: string; videoLinkEn?: string };
 
 const getYoutubeId = (videoLink: string) => {
     try {
@@ -121,7 +121,7 @@ export default function VideoShowcase({ isEnglish }: { isEnglish: boolean }): JS
             {selectedVideo && <div className={`fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/85 p-4 backdrop-blur-sm ${isVideoModalClosing ? "animate-[videoModalFadeOut_.22s_ease-in_both]" : "animate-[videoModalFadeIn_.28s_ease-out_both]"}`} onClick={closeVideoModal} role="dialog" aria-modal="true" aria-label={isEnglish ? (selectedVideo.titleEn || selectedVideo.title) : selectedVideo.title}>
                 <div className={`relative w-full max-w-5xl overflow-hidden rounded-2xl bg-black shadow-2xl ${isVideoModalClosing ? "animate-[videoModalScaleOut_.22s_ease-in_both]" : "animate-[videoModalScaleIn_.38s_cubic-bezier(.16,1,.3,1)_both]"}`} onClick={(event) => event.stopPropagation()}>
                     <button type="button" onClick={closeVideoModal} aria-label={isEnglish ? "Close video" : "ভিডিও বন্ধ করুন"} className="absolute right-3 top-3 z-10 grid h-10 w-10 place-items-center rounded-full bg-white/90 text-red-800 shadow"><X size={22}/></button>
-                    <iframe className="aspect-video w-full" src={`https://www.youtube-nocookie.com/embed/${getYoutubeId(selectedVideo.videoLink)}?autoplay=1&rel=0`} title={isEnglish ? (selectedVideo.titleEn || selectedVideo.title) : selectedVideo.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />
+                    <iframe className="aspect-video w-full" src={`https://www.youtube-nocookie.com/embed/${getYoutubeId(isEnglish && selectedVideo.videoLinkEn ? selectedVideo.videoLinkEn : selectedVideo.videoLink)}?autoplay=1&rel=0`} title={isEnglish ? (selectedVideo.titleEn || selectedVideo.title) : selectedVideo.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />
                 </div>
             </div>}
         </section>

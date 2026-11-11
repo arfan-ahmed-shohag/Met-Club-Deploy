@@ -34,9 +34,15 @@ const ManageBlogs = lazy(() => import("../pages/Admin/ManageBlogs"));
 const ManageGallery = lazy(() => import("../pages/Admin/ManageGallery"));
 const ManageHomeVideos = lazy(() => import("../pages/Admin/ManageHomeVideos"));
 const ManageStories = lazy(() => import("../pages/Admin/ManageStories"));
+const ManageComics = lazy(() => import("../pages/Admin/ManagePublications").then((module) => ({ default: module.ManageComics })));
+const ManageFlyers = lazy(() => import("../pages/Admin/ManagePublications").then((module) => ({ default: module.ManageFlyers })));
+const ManagePressReleases = lazy(() => import("../pages/Admin/ManagePublications").then((module) => ({ default: module.ManagePressReleases })));
 const VideoLibraryPage = lazy(() => import("../pages/Media/MediaLibraryPage").then((module) => ({ default: module.VideoLibraryPage })));
 const PhotoGalleryPage = lazy(() => import("../pages/Media/MediaLibraryPage").then((module) => ({ default: module.PhotoGalleryPage })));
 const StoriesPage = lazy(() => import("../pages/Media/StoriesPage"));
+const ComicsPage = lazy(() => import("../pages/Publications/PublicationsPage").then((module) => ({ default: module.ComicsPage })));
+const FlyersPage = lazy(() => import("../pages/Publications/PublicationsPage").then((module) => ({ default: module.FlyersPage })));
+const PressReleasePage = lazy(() => import("../pages/Publications/PublicationsPage").then((module) => ({ default: module.PressReleasePage })));
 const EnglishLoginPage = lazy(() => import("../pages/EnglishVersion/Home"));
 const EnglishAbout = lazy(() => import("../pages/EnglishVersion/About/About"));
 const EnglishStartJourney = lazy(() => import("../pages/EnglishVersion/StartJourney/StartJourney"));
@@ -139,6 +145,12 @@ const routes: RouteObject[] = [
     element: <SuspenseWrapper><StoriesPage /></SuspenseWrapper>,
     loader: ({ request }) => redirectToStoredLocale(request.url, "/stories", "/en/stories"),
   },
+  { path: "/comics", element: <SuspenseWrapper><ComicsPage /></SuspenseWrapper>, loader: ({ request }) => redirectToStoredLocale(request.url, "/comics", "/en/comics") },
+  { path: "/en/comics", element: <SuspenseWrapper><ComicsPage /></SuspenseWrapper>, loader: ({ request }) => redirectToStoredLocale(request.url, "/comics", "/en/comics") },
+  { path: "/flyers", element: <SuspenseWrapper><FlyersPage /></SuspenseWrapper>, loader: ({ request }) => redirectToStoredLocale(request.url, "/flyers", "/en/flyers") },
+  { path: "/en/flyers", element: <SuspenseWrapper><FlyersPage /></SuspenseWrapper>, loader: ({ request }) => redirectToStoredLocale(request.url, "/flyers", "/en/flyers") },
+  { path: "/press-releases", element: <SuspenseWrapper><PressReleasePage /></SuspenseWrapper>, loader: ({ request }) => redirectToStoredLocale(request.url, "/press-releases", "/en/press-releases") },
+  { path: "/en/press-releases", element: <SuspenseWrapper><PressReleasePage /></SuspenseWrapper>, loader: ({ request }) => redirectToStoredLocale(request.url, "/press-releases", "/en/press-releases") },
   {
     path: "/login",
     element: <LoginPage />,
@@ -385,6 +397,9 @@ const routes: RouteObject[] = [
         path: "stories",
         element: <SuspenseWrapper><ManageStories /></SuspenseWrapper>,
       },
+      { path: "comics", element: <SuspenseWrapper><ManageComics /></SuspenseWrapper> },
+      { path: "flyers", element: <SuspenseWrapper><ManageFlyers /></SuspenseWrapper> },
+      { path: "press-releases", element: <SuspenseWrapper><ManagePressReleases /></SuspenseWrapper> },
       {
         path: "create-tutorial",
         element: <SuspenseWrapper><CreateTutorial /></SuspenseWrapper>,

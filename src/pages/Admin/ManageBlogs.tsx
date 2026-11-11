@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { isAxiosError } from "axios";
 import toast from "react-hot-toast";
-import { Eye, Send } from "lucide-react";
+import { Eye, Send, Undo2 } from "lucide-react";
 import useAxiosProtected from "../../hooks/axiosProtected";
 import { sanitizeBlogHtml } from "../../utils/blogContent";
 import { resolveMediaUrl } from "../../utils/media";
@@ -61,6 +61,22 @@ export default function ManageBlogs() {
         } catch (error) {
             const message = isAxiosError(error) ? error.response?.data?.errorMessage : undefined;
             toast.error(message || "Blog could not be published.");
+        } finally {
+            setPublishingId(null);
+        }
+    };
+
+    const unpublishPost = async (post: BlogPost) => {
+        setPublishingId(post.id);
+        try {
+            const { data } = await axios.patch(`/blogs/${post.id}/unpublish`);
+            const unpublished = (data?.data || { ...post, status: "pending", publishedAt: null }) as BlogPost;
+            setPosts((current) => current.map((item) => item.id === post.id ? unpublished : item));
+            setSelectedPost(null);
+            toast.success("Blog unpublished and moved to pending review.");
+        } catch (error) {
+            const message = isAxiosError(error) ? error.response?.data?.errorMessage : undefined;
+            toast.error(message || "Blog could not be unpublished.");
         } finally {
             setPublishingId(null);
         }
@@ -141,6 +157,7 @@ export default function ManageBlogs() {
                     <section role="dialog" aria-modal="true" aria-label={selectedPost.title} className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl sm:p-9">
                         <button type="button" onClick={() => setSelectedPost(null)} aria-label="Close review" className="absolute right-4 top-4 rounded-full px-3 py-1 text-2xl text-slate-500 hover:bg-slate-100">×</button>
                         <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-700">{selectedPost.status}</p>
+                        {selectedPost.status === "published" && <button type="button" onClick={() => void unpublishPost(selectedPost)} disabled={publishingId === selectedPost.id} className="mt-4 inline-flex items-center gap-2 rounded-xl bg-amber-600 px-5 py-3 font-bold text-white shadow transition hover:bg-amber-700 disabled:cursor-wait disabled:opacity-60"><Undo2 size={17}/>{publishingId === selectedPost.id ? "Unpublishing…" : "Unpublish blog"}</button>}
                         {selectedPost.featuredImage && <img src={resolveMediaUrl(selectedPost.featuredImage)} alt={selectedPost.title} className="blog-featured-image mt-6 max-h-[26rem] rounded-xl" />}
                         <h3 className="mt-2 pr-10 text-2xl font-black text-slate-900 sm:text-3xl">{selectedPost.title}</h3>
                         <p className="mt-3 text-sm text-slate-500">{selectedPost.author.fullName} · {selectedPost.author.email} · {new Date(selectedPost.createdAt).toLocaleString("en-GB")}</p>
