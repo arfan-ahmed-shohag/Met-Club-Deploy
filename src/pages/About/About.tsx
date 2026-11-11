@@ -77,7 +77,7 @@ export default function About() {
                         className="text-3xl md:text-5xl font-bold mb-6 animate-slide-up delay-100"
                         style={{ color: "#9A3324", textShadow: titleShadow }}
                     >
-                        {t("আবহাওয়া চক্র", "Weather Cycle")}
+                        {t("আবহাওয়া ক্লাব", "Weather Club")}
                     </div>
 
                     <p
@@ -155,7 +155,7 @@ export default function About() {
                         <div className="grid md:grid-cols-2 gap-8 items-center">
                             <div className="text-center md:text-left">
                                 <p className="text-xl font-semibold text-gray-800 leading-relaxed mb-6">
-                                    {t('"মেট ক্লাব – আবহাওয়া চক্র" একটি শিশু-কিশোর চালিত প্ল্যাটফর্ম যা শিশু এবং তরুণদের দ্বারা পরিচালিত হয়।', '"Met Club – Weather Cycle" is a youth-led platform run by children and young people.')}
+                                    {t('মেট ক্লাব একটি শিশুনেতৃত্বাধীন আবহাওয়া ও জলবায়ু ক্লাব, যা শিশু-কিশোরদের আবহাওয়া পর্যবেক্ষণ, পূর্বাভাস এবং আগাম সতর্কতা ব্যবস্থা সম্পর্কে জ্ঞান ও দক্ষতা অর্জনে সক্ষম করে।', 'MET Club is a child-led weather and climate club that equips children and youth with knowledge and skills in weather observation, forecasting, and early warning systems.')}
                                 </p>
                                 <div className="space-y-4">
                                     <div className="flex items-center space-x-3 bg-red-50 rounded-xl p-4 border border-red-200">
@@ -478,7 +478,7 @@ export default function About() {
                         <img src={logo} alt="MET CLUB LOGO" className='w-32 h-32' />
                         <div>
                             <h3 className="text-2xl font-black text-red-500" style={{ textShadow: "0 2px 4px rgba(0,0,0,0.5)" }}>{t("মেট ক্লাব", "Met Club")}</h3>
-                            <p className="text-sm text-gray-300 font-semibold mt-1">{t("আবহাওয়া চক্র", "Weather Cycle")}</p>
+                            <p className="text-sm text-gray-300 font-semibold mt-1">{t("আবহাওয়া ক্লাব", "Weather Club")}</p>
                             <p className="text-red-200 my-4 font-semibold italic">
                                 {t('"তরুণ মন, শক্তিশালী সতর্কতা"', '"Young Minds, Stronger Warnings"')}
                             </p>

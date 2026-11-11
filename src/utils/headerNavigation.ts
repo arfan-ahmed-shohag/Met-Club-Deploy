@@ -13,7 +13,7 @@ export function getHeaderNavigationState(pathname: string) {
 
     if (path === "/about") section = "about";
     else if (/^\/(?:start-journey|learning-selection|learning-zone|lesson|start-quiz|select-difficulty|quiz)(?:\/|$)/.test(path)) section = "chapters";
-    else if (/^\/met-club-module(?:-2)?$/.test(path)) section = "anticipatory";
+    else if (/^\/(?:met-club-module(?:-2)?|anticipatory-action)$/.test(path)) section = "anticipatory";
     else if (/^\/(?:blogs|tutorials)(?:\/|$)/.test(path)) section = "resources";
 
     return { path, section, chapterId: chapterMatch ? Number(chapterMatch[1]) : null };

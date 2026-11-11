@@ -14,6 +14,7 @@ const StartInterface = lazy(() => import("../pages/LearnignZone/quiz/StartInterf
 const Quiz = lazy(() => import("../pages/LearnignZone/quiz/quiz"));
 const Registration = lazy(() => import("../pages/Registration/Registration"));
 const HomePage = lazy(() => import("../pages/Home/Home"));
+const AnticipatoryActionCoursePage = lazy(() => import("../pages/Courses/AnticipatoryActionCoursePage"));
 const About = lazy(() => import("../pages/About/About"));
 const Profile = lazy(() => import("../pages/Profile/Profile"));
 const AdminLayout = lazy(() => import("../components/banglaVersion/Admin/AdminLayout"));
@@ -144,6 +145,16 @@ const routes: RouteObject[] = [
     path: "/en/stories",
     element: <SuspenseWrapper><StoriesPage /></SuspenseWrapper>,
     loader: ({ request }) => redirectToStoredLocale(request.url, "/stories", "/en/stories"),
+  },
+  {
+    path: "/anticipatory-action",
+    element: <SuspenseWrapper><ProtectedRoute><AnticipatoryActionCoursePage /></ProtectedRoute></SuspenseWrapper>,
+    loader: ({ request }) => redirectToStoredLocale(request.url, "/anticipatory-action", "/en/anticipatory-action"),
+  },
+  {
+    path: "/en/anticipatory-action",
+    element: <SuspenseWrapper><ProtectedRoute><AnticipatoryActionCoursePage /></ProtectedRoute></SuspenseWrapper>,
+    loader: ({ request }) => redirectToStoredLocale(request.url, "/anticipatory-action", "/en/anticipatory-action"),
   },
   { path: "/comics", element: <SuspenseWrapper><ComicsPage /></SuspenseWrapper>, loader: ({ request }) => redirectToStoredLocale(request.url, "/comics", "/en/comics") },
   { path: "/en/comics", element: <SuspenseWrapper><ComicsPage /></SuspenseWrapper>, loader: ({ request }) => redirectToStoredLocale(request.url, "/comics", "/en/comics") },

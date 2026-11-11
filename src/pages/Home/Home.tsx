@@ -2,6 +2,7 @@ import type { JSX } from "react";
 import TopNav from "../../components/Shared/TopBar";
 import AboutFooter from "./components/AboutFooter";
 import AboutSection from "./components/AboutSection";
+import AnticipatoryActionBriefSection from "./components/AnticipatoryActionBriefSection";
 import ChapterOverviewSection from "./components/ChapterOverviewSection";
 import CreditsFooter from "./components/CreditsFooter";
 import HeroSection from "./components/HeroSection";
@@ -21,6 +22,7 @@ export default function HomePage(): JSX.Element {
             <TopNav title={isEnglish ? "Home" : "হোম"} brandName={isEnglish ? "Met Club" : "মেট ক্লাব"} />
             <HeroSection isEnglish={isEnglish} />
             <AboutSection isEnglish={isEnglish} />
+            <AnticipatoryActionBriefSection isEnglish={isEnglish} />
             <ChapterOverviewSection isEnglish={isEnglish} />
             <StatsSection isEnglish={isEnglish} />
             <VideoShowcaseSection isEnglish={isEnglish} />

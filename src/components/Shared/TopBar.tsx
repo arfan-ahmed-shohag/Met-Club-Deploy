@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import metClubLogo from "../../assets/images/logo_original.png";
 import { FiPlay } from "react-icons/fi";
@@ -13,6 +13,7 @@ interface TopNavProps {
     title?: string;
     tone?: "default" | "red";
     brandName: string;
+    rightContent?: ReactNode;
 }
 
 const menuItems = [
@@ -57,7 +58,7 @@ const menuItems = [
     // },
 ];
 
-export default function TopNav({ title, tone = "default", brandName }: TopNavProps) {
+export default function TopNav({ title, tone = "default", brandName, rightContent }: TopNavProps) {
     void tone;
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -107,7 +108,7 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
             )}
             {isAuthenticated ? (
                 <>
-                    {user && menuItems.filter((item) => item.href !== "/").map((item) => {
+                    {user && menuItems.filter((item) => item.href === "/profile").map((item) => {
                         const target = getLocalizedPath(item.href, locale);
                         return (
                             <Link key={item.href} to={target} onClick={closeMenu} aria-current={location.pathname === target ? "page" : undefined} data-active={location.pathname === target} className={mobileAccountLinkClass}>
@@ -165,6 +166,7 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
 
                     {/* RIGHT USER */}
                     <div className="relative z-30 order-2 ml-auto flex shrink-0 items-center gap-2 sm:gap-3 xl:ml-0 xl:gap-4" ref={dropdownRef}>
+                        {rightContent}
                         {canSwitchLanguage && (
                             <div
                                 role="group"
@@ -300,44 +302,8 @@ export default function TopNav({ title, tone = "default", brandName }: TopNavPro
                                         <p className="truncate text-xs text-red-900/75" title={user.email}>{user.email}</p>
                                     </div>
                                 </div>
-                                <Link
-                                    to={getLocalizedPath("/blogs", locale)}
-                                    onClick={() => setDropdownOpen(false)}
-                                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-red-900 transition-colors hover:bg-red-100/60"
-                                >
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
-                                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" />
-                                    </svg>
-                                    {locale === "en" ? "Blogs" : "ব্লগ"}
-                                </Link>
-
-                                <button
-                                    onClick={() => {
-                                        setDropdownOpen(false);
-                                        navigate(getLocalizedPath("/learning-zone", locale));
-                                    }}
-                                    className="w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors duration-150"
-                                    style={{
-                                        color: "#222221",
-                                        fontSize: "0.9rem",
-                                        fontWeight: 600,
-                                        background: "transparent",
-                                        border: "none",
-                                        cursor: "pointer",
-                                    }}
-                                    onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(239,68,68,0.10)")}
-                                    onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-                                >
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
-                                        <path d="M15 18l-6-6 6-6" />
-                                        <path d="M9 12h11" />
-                                    </svg>
-                                    {locale === "en" ? "Back to chapters" : "চ্যাপ্টার তালিকায় ফিরে যান"}
-                                </button>
-
                                 <div className="py-1.5">
-                                    {menuItems.map((item) => (
+                                    {menuItems.filter((item) => item.href === "/profile").map((item) => (
                                         <Link
                                             key={item.label}
                                             to={getLocalizedPath(item.href, locale)}

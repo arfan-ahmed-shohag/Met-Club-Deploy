@@ -231,7 +231,7 @@ export default function HeaderNavigation({ locale, pathname, onNavigate, renderM
                 <ul className="flex items-center gap-1">
                     <li><Link to={getLocalizedPath("/about", locale)} onClick={closeNavigation} aria-current={currentPage.section === "about" ? "page" : undefined} data-active={currentPage.section === "about"} className={`${linkClass} whitespace-nowrap`}>{isEnglish ? "About MET Club" : "মেট ক্লাব সম্পর্কে"}</Link></li>
                     {desktopDropdown(menus[0])}
-                    <li><a href="#" onClick={closeNavigation} aria-current={currentPage.section === "anticipatory" ? "true" : undefined} data-active={currentPage.section === "anticipatory"} className={`${linkClass} whitespace-nowrap`}>{isEnglish ? "Child Friendly Anticipatory Action" : "শিশুবান্ধব আগাম কার্যক্রম"}</a></li>
+                    <li><Link to={getLocalizedPath("/anticipatory-action", locale)} onClick={closeNavigation} aria-current={currentPage.section === "anticipatory" && currentPage.path === "/anticipatory-action" ? "page" : undefined} data-active={currentPage.section === "anticipatory" && currentPage.path === "/anticipatory-action"} className={`${linkClass} whitespace-nowrap`}>{isEnglish ? "Child Friendly Anticipatory Action" : "শিশুবান্ধব আগাম কার্যক্রম"}</Link></li>
                     <li><a href="http://game.meteorologyclub.com/" onClick={closeNavigation} className={linkClass}>{isEnglish ? "Games" : "গেমস"}</a></li>
                     {desktopDropdown(menus[1])}
                 </ul>
@@ -254,7 +254,7 @@ export default function HeaderNavigation({ locale, pathname, onNavigate, renderM
                     <ul className="space-y-1">
                         <li><Link to={getLocalizedPath("/about", locale)} onClick={closeNavigation} aria-current={currentPage.section === "about" ? "page" : undefined} data-active={currentPage.section === "about"} className={linkClass}>{isEnglish ? "About MET Club" : "মেট ক্লাব সম্পর্কে"}</Link></li>
                         {mobileDropdown(menus[0])}
-                        <li><a href="#" onClick={closeNavigation} aria-current={currentPage.section === "anticipatory" ? "true" : undefined} data-active={currentPage.section === "anticipatory"} className={linkClass}>{isEnglish ? "Child Friendly Anticipatory Action" : "শিশুবান্ধব আগাম কার্যক্রম"}</a></li>
+                        <li><Link to={getLocalizedPath("/anticipatory-action", locale)} onClick={closeNavigation} aria-current={currentPage.section === "anticipatory" && currentPage.path === "/anticipatory-action" ? "page" : undefined} data-active={currentPage.section === "anticipatory" && currentPage.path === "/anticipatory-action"} className={linkClass}>{isEnglish ? "Child Friendly Anticipatory Action" : "শিশুবান্ধব আগাম কার্যক্রম"}</Link></li>
                         <li><a href="http://game.meteorologyclub.com/" onClick={closeNavigation} className={linkClass}>{isEnglish ? "Games" : "গেমস"}</a></li>
                         {mobileDropdown(menus[1])}
                     </ul>

@@ -1,16 +1,15 @@
 import { Link } from "react-router";
-import childrenLearningImage from "../../../assets/images/citizen_science_img-cutout.webp";
+import childrenLearningImage from "../../../assets/images/home-about.jpeg";
+import weatherCloudSunSticker from "../../../assets/images/weather-cloud-sun-sticker.png";
 
 export default function AboutSection({ isEnglish }: { isEnglish: boolean }) {
  return (
-<section className="relative overflow-hidden bg-white py-[60px] lg:py-[80px]" aria-labelledby="about-met-club-title">
+<section className="relative overflow-hidden bg-linear-to-b from-white to-red-50/70 py-[60px] lg:py-[80px]" aria-labelledby="about-met-club-title">
                 <div className="site-container relative grid items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">
                     <div className="relative mx-auto flex min-h-[300px] w-full max-w-[760px] items-center justify-center sm:min-h-[390px] lg:max-w-[660px]">
-                        <div className="absolute h-64 w-64 rounded-full bg-gradient-to-br from-red-100 to-orange-100 sm:h-80 sm:w-80" />
-                        <div className="absolute h-72 w-72 rounded-full border border-red-200/70 sm:h-[22rem] sm:w-[22rem]" />
-                        <img src={childrenLearningImage} alt={isEnglish ? "Children learning through weather observation" : "আবহাওয়া পর্যবেক্ষণের মাধ্যমে শিশুদের শেখা"} className="relative z-10 w-full max-w-[720px] animate-float object-contain drop-shadow-[0_20px_24px_rgba(127,29,29,0.12)] lg:max-w-[520px]" />
-                        <span className="absolute right-[8%] top-[12%] grid h-14 w-14 animate-float-delayed place-items-center rounded-2xl bg-white text-2xl shadow-lg" aria-hidden="true">{String.fromCodePoint(0x1f326,0xfe0f)}</span>
-                        <span className="absolute bottom-[14%] left-[5%] grid h-12 w-12 animate-float place-items-center rounded-2xl bg-white text-xl shadow-lg" aria-hidden="true">{String.fromCodePoint(0x1f50d)}</span>
+                        <img src={childrenLearningImage} alt={isEnglish ? "Children learning through weather observation" : "আবহাওয়া পর্যবেক্ষণের মাধ্যমে শিশুদের শেখা"} className="relative z-10 w-full object-contain drop-shadow-[0_20px_24px_rgba(127,29,29,0.12)] rounded-xl" />
+                        <img src={weatherCloudSunSticker} alt="" aria-hidden="true" className="absolute right-[2%] top-[3%] z-20 w-28 animate-float-delayed object-contain sm:right-[5%] sm:top-[5%] sm:w-40" />
+                        <img src={weatherCloudSunSticker} alt="" aria-hidden="true" className="absolute bottom-[5%] left-[1%] z-20 w-20 animate-float object-contain sm:bottom-[8%] sm:left-[4%] sm:w-28" />
                     </div>
                     <div className="max-w-xl text-center lg:text-left mx-auto lg:mx-0">
                         <p className="mb-3 text-sm font-bold uppercase tracking-[.16em] text-red-600">{isEnglish ? "ABOUT MET CLUB" : "মেট ক্লাব কী"}</p>

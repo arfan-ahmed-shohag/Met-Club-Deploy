@@ -38,6 +38,7 @@ export function getLocalizedPath(pathname: string, locale: AppLocale) {
         { bn: "/videos", en: "/en/videos" },
         { bn: "/gallery", en: "/en/gallery" },
         { bn: "/stories", en: "/en/stories" },
+        { bn: "/anticipatory-action", en: "/en/anticipatory-action" },
         { bn: "/comics", en: "/en/comics" },
         { bn: "/flyers", en: "/en/flyers" },
         { bn: "/press-releases", en: "/en/press-releases" },

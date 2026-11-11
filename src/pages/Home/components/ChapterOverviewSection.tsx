@@ -32,21 +32,28 @@ export default function ChapterOverview({ isEnglish }: { isEnglish: boolean }) {
 
             const gap = Number.parseFloat(window.getComputedStyle(slider).columnGap) || 0;
             const step = firstCard.getBoundingClientRect().width + gap;
-            const atEnd = slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - step / 2;
+            const maxScrollLeft = Math.max(0, slider.scrollWidth - slider.clientWidth);
+            const atEnd = maxScrollLeft - slider.scrollLeft <= 2;
 
             if (atEnd) slider.scrollTo({ left: 0, behavior: "smooth" });
-            else slider.scrollBy({ left: step, behavior: "smooth" });
+            else slider.scrollTo({ left: Math.min(slider.scrollLeft + step, maxScrollLeft), behavior: "smooth" });
         }, 4000);
 
         return () => window.clearInterval(intervalId);
     }, []);
 
     const slide = (direction: -1 | 1) => {
-        sliderRef.current?.scrollBy({ left: direction * 340, behavior: "smooth" });
+        const slider = sliderRef.current;
+        const firstCard = slider?.firstElementChild as HTMLElement | null;
+        if (!slider || !firstCard) return;
+        const gap = Number.parseFloat(window.getComputedStyle(slider).columnGap) || 0;
+        const step = firstCard.getBoundingClientRect().width + gap;
+        const maxScrollLeft = Math.max(0, slider.scrollWidth - slider.clientWidth);
+        slider.scrollTo({ left: Math.max(0, Math.min(slider.scrollLeft + direction * step, maxScrollLeft)), behavior: "smooth" });
     };
 
     return (
-        <section className="bg-linear-to-b from-white to-red-50/70 py-[60px] lg:py-[80px]" aria-labelledby="chapter-overview-title">
+        <section id="chapter-overview" className="scroll-mt-20 bg-linear-to-b from-white to-red-50/70 py-[60px] lg:py-[80px]" aria-labelledby="chapter-overview-title">
             <div className="site-container px-4 sm:px-6 lg:px-8">
                 <div className="mb-5 text-center sm:mb-6">
                     <p className="mb-2 text-sm font-bold uppercase tracking-[.16em] text-red-600">{isEnglish ? "MET CLUB LEARNING" : "মেট ক্লাবের শেখার জগৎ"}</p>

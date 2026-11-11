@@ -28,7 +28,10 @@ export default function Login() {
             setSessionToken(res.data.data.accessToken);
             toast.success(res.data.message || "লগইন সফল! এখন যাত্রা শুরু করুন।", {id: "error"});
             const requestedPage = (location.state as { from?: { pathname?: string; search?: string; hash?: string } } | null)?.from;
-            if (requestedPage?.pathname === "/blogs/write" || requestedPage?.pathname === "/en/blogs/write") {
+            if (
+                requestedPage?.pathname === "/blogs/write" || requestedPage?.pathname === "/en/blogs/write" ||
+                requestedPage?.pathname === "/anticipatory-action" || requestedPage?.pathname === "/en/anticipatory-action"
+            ) {
                 navigate(`${requestedPage.pathname}${requestedPage.search || ""}${requestedPage.hash || ""}`, { replace: true });
                 return;
             }
