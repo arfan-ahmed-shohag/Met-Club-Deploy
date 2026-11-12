@@ -52,13 +52,15 @@ export default function CreateSchool() {
             descBn: school.descBn,
             descEn: school.descEn,
           });
-          setMembers(school.members.map((m: any) => ({
-            nameBn: m.nameBn,
-            nameEn: m.nameEn,
-            classBn: m.classBn,
-            classEn: m.classEn,
-            image: m.image
-          })));
+          setMembers(
+            school.members.map((m: any) => ({
+              nameBn: m.nameBn,
+              nameEn: m.nameEn,
+              classBn: m.classBn,
+              classEn: m.classEn,
+              image: m.image,
+            })),
+          );
         } catch (err) {
           toast.error("Failed to load school data");
         } finally {
@@ -69,15 +71,26 @@ export default function CreateSchool() {
     }
   }, [id, axiosInstance]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleAddMember = () => {
-    setMembers((prev) => [...prev, { nameBn: "", nameEn: "", classBn: "সদস্য", classEn: "Member" }]);
+    setMembers((prev) => [
+      ...prev,
+      { nameBn: "", nameEn: "", classBn: "সদস্য", classEn: "Member" },
+    ]);
   };
 
-  const handleMemberChange = (index: number, field: keyof ClubMember, value: string) => {
+  const handleMemberChange = (
+    index: number,
+    field: keyof ClubMember,
+    value: string,
+  ) => {
     setMembers((prev) => {
       const newMembers = [...prev];
       newMembers[index] = { ...newMembers[index], [field]: value };
@@ -89,7 +102,10 @@ export default function CreateSchool() {
     setMembers((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleMemberFileChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMemberFileChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setMembers((prev) => {
@@ -113,9 +129,9 @@ export default function CreateSchool() {
         nameEn: m.nameEn,
         classBn: m.classBn,
         classEn: m.classEn,
-        image: m.image
+        image: m.image,
       };
-      
+
       if (m.imageFile) {
         images.push(m.imageFile);
         processed.imageIndex = images.length - 1;
@@ -127,7 +143,7 @@ export default function CreateSchool() {
 
     const payloadData = { ...formData, members: processedMembers };
     formDataToSend.append("data", JSON.stringify(payloadData));
-    
+
     images.forEach((img) => {
       formDataToSend.append("images", img);
     });
@@ -135,12 +151,12 @@ export default function CreateSchool() {
     try {
       if (id) {
         await axiosInstance.patch(`/schools/${id}`, formDataToSend, {
-          headers: { "Content-Type": "multipart/form-data" }
+          headers: { "Content-Type": "multipart/form-data" },
         });
         toast.success("School updated successfully");
       } else {
         await axiosInstance.post(`/schools`, formDataToSend, {
-          headers: { "Content-Type": "multipart/form-data" }
+          headers: { "Content-Type": "multipart/form-data" },
         });
         toast.success("School created successfully");
       }
@@ -177,11 +193,15 @@ export default function CreateSchool() {
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* School Details */}
         <div className="bg-white/60 p-6 rounded-2xl border border-white/50">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">স্কুলের তথ্য (School Details)</h3>
+          <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">
+            স্কুলের তথ্য (School Details)
+          </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">লোকেশন</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                লোকেশন
+              </label>
               <select
                 name="locationKey"
                 value={formData.locationKey}
@@ -195,7 +215,9 @@ export default function CreateSchool() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">ইউটিউব ভিডিও লিংক (ঐচ্ছিক)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                ইউটিউব ভিডিও লিংক (ঐচ্ছিক)
+              </label>
               <input
                 type="text"
                 name="videoLink"
@@ -207,7 +229,9 @@ export default function CreateSchool() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">স্কুলের নাম (বাংলা)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                স্কুলের নাম (বাংলা)
+              </label>
               <input
                 required
                 type="text"
@@ -219,7 +243,9 @@ export default function CreateSchool() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">স্কুলের নাম (English)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                স্কুলের নাম (English)
+              </label>
               <input
                 required
                 type="text"
@@ -232,7 +258,9 @@ export default function CreateSchool() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">ঠিকানা (বাংলা)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                ঠিকানা (বাংলা)
+              </label>
               <input
                 type="text"
                 name="addressBn"
@@ -242,7 +270,9 @@ export default function CreateSchool() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">ঠিকানা (English)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                ঠিকানা (English)
+              </label>
               <input
                 type="text"
                 name="addressEn"
@@ -253,7 +283,9 @@ export default function CreateSchool() {
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">বিবরণ (বাংলা)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                বিবরণ (বাংলা)
+              </label>
               <textarea
                 name="descBn"
                 value={formData.descBn}
@@ -263,7 +295,9 @@ export default function CreateSchool() {
               />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">বিবরণ (English)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                বিবরণ (English)
+              </label>
               <textarea
                 name="descEn"
                 value={formData.descEn}
@@ -278,7 +312,9 @@ export default function CreateSchool() {
         {/* Members */}
         <div className="bg-white/60 p-6 rounded-2xl border border-white/50">
           <div className="flex justify-between items-center mb-4 border-b pb-2">
-            <h3 className="text-lg font-semibold text-gray-800">মেম্বার লিস্ট (Members)</h3>
+            <h3 className="text-lg font-semibold text-gray-800">
+              মেম্বার লিস্ট (Members)
+            </h3>
             <button
               type="button"
               onClick={handleAddMember}
@@ -290,27 +326,38 @@ export default function CreateSchool() {
 
           <div className="space-y-4">
             {members.length === 0 && (
-              <p className="text-gray-500 text-center py-4 text-sm">এখনো কোনো মেম্বার যোগ করা হয়নি</p>
+              <p className="text-gray-500 text-center py-4 text-sm">
+                এখনো কোনো মেম্বার যোগ করা হয়নি
+              </p>
             )}
             {members.map((member, index) => (
-              <div key={index} className="grid grid-cols-1 md:grid-cols-12 gap-3 items-start bg-white p-4 rounded-xl border border-gray-100 shadow-sm relative group">
+              <div
+                key={index}
+                className="grid grid-cols-1 md:grid-cols-12 gap-3 items-start bg-white p-4 rounded-xl border border-gray-100 shadow-sm relative group"
+              >
                 <div className="md:col-span-3">
                   <label className="text-xs text-gray-500">নাম (বাংলা) *</label>
                   <input
                     required
                     type="text"
                     value={member.nameBn}
-                    onChange={(e) => handleMemberChange(index, "nameBn", e.target.value)}
+                    onChange={(e) =>
+                      handleMemberChange(index, "nameBn", e.target.value)
+                    }
                     className="w-full px-3 py-1.5 text-sm rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-red-200"
                   />
                 </div>
                 <div className="md:col-span-3">
-                  <label className="text-xs text-gray-500">নাম (English) *</label>
+                  <label className="text-xs text-gray-500">
+                    নাম (English) *
+                  </label>
                   <input
                     required
                     type="text"
                     value={member.nameEn}
-                    onChange={(e) => handleMemberChange(index, "nameEn", e.target.value)}
+                    onChange={(e) =>
+                      handleMemberChange(index, "nameEn", e.target.value)
+                    }
                     className="w-full px-3 py-1.5 text-sm rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-red-200"
                   />
                 </div>
@@ -319,16 +366,22 @@ export default function CreateSchool() {
                   <input
                     type="text"
                     value={member.classBn}
-                    onChange={(e) => handleMemberChange(index, "classBn", e.target.value)}
+                    onChange={(e) =>
+                      handleMemberChange(index, "classBn", e.target.value)
+                    }
                     className="w-full px-3 py-1.5 text-sm rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-red-200"
                   />
                 </div>
                 <div className="md:col-span-2">
-                  <label className="text-xs text-gray-500">পদবি (English)</label>
+                  <label className="text-xs text-gray-500">
+                    পদবি (English)
+                  </label>
                   <input
                     type="text"
                     value={member.classEn}
-                    onChange={(e) => handleMemberChange(index, "classEn", e.target.value)}
+                    onChange={(e) =>
+                      handleMemberChange(index, "classEn", e.target.value)
+                    }
                     className="w-full px-3 py-1.5 text-sm rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-red-200"
                   />
                 </div>
@@ -340,8 +393,16 @@ export default function CreateSchool() {
                     onChange={(e) => handleMemberFileChange(index, e)}
                     className="w-full px-3 py-1.5 text-sm rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-red-200"
                   />
-                  {member.imageFile && <p className="text-xs text-green-600 mt-1">নির্বাচিত: {member.imageFile.name}</p>}
-                  {!member.imageFile && member.image && <p className="text-xs text-blue-600 mt-1">আগের ছবি সংরক্ষিত আছে</p>}
+                  {member.imageFile && (
+                    <p className="text-xs text-green-600 mt-1">
+                      নির্বাচিত: {member.imageFile.name}
+                    </p>
+                  )}
+                  {!member.imageFile && member.image && (
+                    <p className="text-xs text-blue-600 mt-1">
+                      আগের ছবি সংরক্ষিত আছে
+                    </p>
+                  )}
                 </div>
                 <div className="md:col-span-2 flex items-end justify-end pb-1">
                   <button

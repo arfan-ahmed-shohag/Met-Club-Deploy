@@ -8,32 +8,37 @@ import partner7 from "../../assets/partners/bangladesh-govt-logo-png_seeklogo-19
 import partner8 from "../../assets/partners/logo_bmd.png";
 
 export default function Partners({ bg }: { bg: string }) {
-    const partnerLogos = [
-        { src: partner1, alt: "Save The Children Logo" },
-        { src: partner2, alt: "RIMES Logo" },
-        { src: partner7, alt: "Bangladesh Government Logo" },
-        { src: partner8, alt: "BMD Logo" },
-        { src: partner3, alt: "JAGONARI Logo" },
-        { src: partner4, alt: "SKS Logo" },
-        { src: partner5, alt: "YPSA Logo" },
-        { src: partner6, alt: "German Humanitarian Assistance Logo" },
-    ];
+  const partnerLogos = [
+    { src: partner1, alt: "Save The Children Logo" },
+    { src: partner2, alt: "RIMES Logo" },
+    { src: partner7, alt: "Bangladesh Government Logo" },
+    { src: partner8, alt: "BMD Logo" },
+    { src: partner3, alt: "JAGONARI Logo" },
+    { src: partner4, alt: "SKS Logo" },
+    { src: partner5, alt: "YPSA Logo" },
+    { src: partner6, alt: "German Humanitarian Assistance Logo" },
+  ];
 
-    return (
-        <section className={`w-full rounded-2xl border border-white/30 p-3 md:mt-6 md:p-4 lg:mt-0 ${bg}`}>
-            <div className="grid w-full grid-cols-4 items-center gap-x-3 gap-y-4 sm:gap-x-5 lg:grid-cols-8 lg:gap-4">
-                {partnerLogos.map((logo) => (
-                    <div key={logo.alt} className="flex h-10 min-w-0 items-center justify-center sm:h-12">
-                        <img
-                            className="max-h-full w-full object-contain"
-                            src={logo.src}
-                            alt={logo.alt}
-                            loading="lazy"
-                            decoding="async"
-                        />
-                    </div>
-                ))}
-            </div>
-        </section>
-    )
+  return (
+    <section
+      className={`w-full rounded-2xl border border-white/30 p-3 md:mt-6 md:p-4 lg:mt-0 ${bg}`}
+    >
+      <div className="grid w-full grid-cols-4 items-center gap-x-3 gap-y-4 sm:gap-x-5 lg:grid-cols-8 lg:gap-4">
+        {partnerLogos.map((logo) => (
+          <div
+            key={logo.alt}
+            className="flex h-10 min-w-0 items-center justify-center sm:h-12"
+          >
+            <img
+              className="max-h-full w-full object-contain"
+              src={logo.src}
+              alt={logo.alt}
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        ))}
+      </div>
+    </section>
+  );
 }

@@ -6,8 +6,8 @@ export const LoadingSpinner = () => (
   </div>
 );
 
-export const SuspenseWrapper = ({ children }: { children: React.ReactNode }) => (
-  <Suspense fallback={<LoadingSpinner />}>
-    {children}
-  </Suspense>
-);
+export const SuspenseWrapper = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => <Suspense fallback={<LoadingSpinner />}>{children}</Suspense>;

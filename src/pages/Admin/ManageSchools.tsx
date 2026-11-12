@@ -44,7 +44,7 @@ export default function ManageSchools() {
     setIsLoading(true);
     try {
       const res = await axiosInstance.get(`/schools?location=${locKey}`);
-      console.log(res.data)
+      console.log(res.data);
       setSchools(res.data.data || []);
     } catch (err) {
       console.error(err);
@@ -106,7 +106,9 @@ export default function ManageSchools() {
             ))}
           </select>
           <button
-            onClick={() => navigate(`/admin/create-school?location=${selectedLocation}`)}
+            onClick={() =>
+              navigate(`/admin/create-school?location=${selectedLocation}`)
+            }
             className="flex items-center gap-2 px-4 py-2 rounded-xl text-white font-bold"
             style={{ background: "linear-gradient(135deg, #DA291C, #FC4C02)" }}
           >
@@ -127,21 +129,30 @@ export default function ManageSchools() {
           <tbody>
             {isLoading ? (
               <tr>
-                <td colSpan={3} className="p-4 text-center">Loading...</td>
+                <td colSpan={3} className="p-4 text-center">
+                  Loading...
+                </td>
               </tr>
             ) : schools.length === 0 ? (
               <tr>
-                <td colSpan={3} className="p-4 text-center">কোনো স্কুল পাওয়া যায়নি</td>
+                <td colSpan={3} className="p-4 text-center">
+                  কোনো স্কুল পাওয়া যায়নি
+                </td>
               </tr>
             ) : (
               schools.map((school) => (
-                <tr key={school.id} className="border-b border-gray-300/20 hover:bg-white/20">
+                <tr
+                  key={school.id}
+                  className="border-b border-gray-300/20 hover:bg-white/20"
+                >
                   <td className="p-3">{school.nameBn}</td>
                   <td className="p-3">{school.members.length}</td>
                   <td className="p-3">
                     <div className="flex justify-end gap-2">
                       <button
-                        onClick={() => navigate(`/admin/create-school?id=${school.id}`)}
+                        onClick={() =>
+                          navigate(`/admin/create-school?id=${school.id}`)
+                        }
                         className="p-2 rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-200"
                         title="সম্পাদনা"
                       >

@@ -28,7 +28,9 @@ export default function ManageTutorials() {
   const [tutorials, setTutorials] = useState<Tutorial[]>([]);
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedTutorial, setSelectedTutorial] = useState<Tutorial | null>(null);
+  const [selectedTutorial, setSelectedTutorial] = useState<Tutorial | null>(
+    null,
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -74,46 +76,52 @@ export default function ManageTutorials() {
     const swalWithTailwindButtons = Swal.mixin({
       customClass: {
         actions: "gap-3",
-        confirmButton: "bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400",
-        cancelButton: "bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+        confirmButton:
+          "bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400",
+        cancelButton:
+          "bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400",
       },
-      buttonsStyling: false
+      buttonsStyling: false,
     });
 
-    swalWithTailwindButtons.fire({
-      title: "এই tutorial মুছে ফেলতে চান?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
-      cancelButtonText: "No, cancel!",
-      reverseButtons: true
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          await axios.delete(`/tutorials/${tutorialId}`);
-          setTutorials((prev) => prev.filter((item) => item.id !== tutorialId));
-          if (selectedTutorial?.id === tutorialId) {
-            setSelectedTutorial(null);
+    swalWithTailwindButtons
+      .fire({
+        title: "এই tutorial মুছে ফেলতে চান?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true,
+      })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            await axios.delete(`/tutorials/${tutorialId}`);
+            setTutorials((prev) =>
+              prev.filter((item) => item.id !== tutorialId),
+            );
+            if (selectedTutorial?.id === tutorialId) {
+              setSelectedTutorial(null);
+            }
+
+            swalWithTailwindButtons.fire({
+              title: "Deleted!",
+              text: "Tutorial deleted successfully.",
+              icon: "success",
+            });
+          } catch (error) {
+            console.error("Failed to delete tutorial:", error);
+            toast.error("Tutorial মুছে ফেলা যায়নি");
           }
-
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
           swalWithTailwindButtons.fire({
-            title: "Deleted!",
-            text: "Tutorial deleted successfully.",
-            icon: "success"
+            title: "Cancelled",
+            text: "Your tutorial is safe :)",
+            icon: "error",
           });
-        } catch (error) {
-          console.error("Failed to delete tutorial:", error);
-          toast.error("Tutorial মুছে ফেলা যায়নি");
         }
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        swalWithTailwindButtons.fire({
-          title: "Cancelled",
-          text: "Your tutorial is safe :)",
-          icon: "error"
-        });
-      }
-    });
+      });
   };
 
   const goToEdit = (tutorialId: number) => {
@@ -170,7 +178,9 @@ export default function ManageTutorials() {
               <th className="p-3 font-semibold text-gray-700">শিরোনাম</th>
               <th className="p-3 font-semibold text-gray-700">লিংক</th>
               <th className="p-3 font-semibold text-gray-700">আপডেট</th>
-              <th className="p-3 font-semibold text-gray-700 text-right">অ্যাকশন</th>
+              <th className="p-3 font-semibold text-gray-700 text-right">
+                অ্যাকশন
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -188,13 +198,22 @@ export default function ManageTutorials() {
               </tr>
             ) : (
               filteredTutorials.map((tutorial) => (
-                <tr key={tutorial.id} className="border-b border-gray-300/20 hover:bg-white/20 transition-colors align-top">
-                  <td className="p-3 font-medium text-gray-900">{String(tutorial.tutorialNumber).padStart(2, "0")}</td>
+                <tr
+                  key={tutorial.id}
+                  className="border-b border-gray-300/20 hover:bg-white/20 transition-colors align-top"
+                >
+                  <td className="p-3 font-medium text-gray-900">
+                    {String(tutorial.tutorialNumber).padStart(2, "0")}
+                  </td>
                   <td className="p-3 text-gray-700">{tutorial.name}</td>
                   <td className="p-3 text-gray-700">{tutorial.title}</td>
-                  <td className="p-3 text-gray-700 max-w-72 truncate">{tutorial.videoLink}</td>
+                  <td className="p-3 text-gray-700 max-w-72 truncate">
+                    {tutorial.videoLink}
+                  </td>
                   <td className="p-3 text-gray-700">
-                    {tutorial.updatedAt ? new Date(tutorial.updatedAt).toLocaleDateString("bn-BD") : "-"}
+                    {tutorial.updatedAt
+                      ? new Date(tutorial.updatedAt).toLocaleDateString("bn-BD")
+                      : "-"}
                   </td>
                   <td className="p-3">
                     <div className="flex justify-end gap-2">
@@ -233,8 +252,12 @@ export default function ManageTutorials() {
           <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl">
             <div className="flex items-start justify-between gap-4 mb-5">
               <div>
-                <h3 className="text-2xl font-bold text-red-700">টিউটোরিয়াল প্রিভিউ</h3>
-                <p className="text-sm text-gray-600">{selectedTutorial.name} / {selectedTutorial.title}</p>
+                <h3 className="text-2xl font-bold text-red-700">
+                  টিউটোরিয়াল প্রিভিউ
+                </h3>
+                <p className="text-sm text-gray-600">
+                  {selectedTutorial.name} / {selectedTutorial.title}
+                </p>
               </div>
               <button
                 type="button"
@@ -255,16 +278,24 @@ export default function ManageTutorials() {
               </div>
               <div className="space-y-4">
                 <div className="rounded-2xl bg-gray-50 p-4 border border-gray-200">
-                  <p className="text-sm font-semibold text-gray-500">Tutorial Number</p>
-                  <p className="text-2xl font-black text-gray-900">{selectedTutorial.tutorialNumber}</p>
+                  <p className="text-sm font-semibold text-gray-500">
+                    Tutorial Number
+                  </p>
+                  <p className="text-2xl font-black text-gray-900">
+                    {selectedTutorial.tutorialNumber}
+                  </p>
                 </div>
                 <div className="rounded-2xl bg-gray-50 p-4 border border-gray-200">
                   <p className="text-sm font-semibold text-gray-500">নাম</p>
-                  <p className="text-lg font-semibold text-gray-900">{selectedTutorial.name}</p>
+                  <p className="text-lg font-semibold text-gray-900">
+                    {selectedTutorial.name}
+                  </p>
                 </div>
                 <div className="rounded-2xl bg-gray-50 p-4 border border-gray-200">
                   <p className="text-sm font-semibold text-gray-500">শিরোনাম</p>
-                  <p className="text-lg font-semibold text-gray-900">{selectedTutorial.title}</p>
+                  <p className="text-lg font-semibold text-gray-900">
+                    {selectedTutorial.title}
+                  </p>
                 </div>
                 <a
                   href={selectedTutorial.videoLink}

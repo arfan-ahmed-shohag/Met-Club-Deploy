@@ -3,20 +3,29 @@ import { Link, Outlet, useLocation } from "react-router";
 import Sidebar from "./Sidebar";
 import bgImage from "../../../assets/images/start-journey-page-bg.jpeg";
 import { FiHome, FiMenu, FiX } from "react-icons/fi";
-import { FiGrid, FiBook, FiFileText, FiPlusCircle, FiPlayCircle, FiBookOpen, FiImage, FiVideo, FiMessageSquare } from "react-icons/fi";
+import {
+  FiGrid,
+  FiPlusCircle,
+  FiPlayCircle,
+  FiBookOpen,
+  FiImage,
+  FiVideo,
+  FiMessageSquare,
+} from "react-icons/fi";
 import { NavLink } from "react-router";
 
 const sidebarLinks = [
   { name: "ওভারভিউ", path: "/admin/overview", icon: FiGrid },
-  { name: "অধ্যায় পরিচালনা", path: "/admin/chapters", icon: FiBook },
-  { name: "কন্টেন্ট পরিচালনা", path: "/admin/content", icon: FiFileText },
-  { name: "কন্টেন্ট তৈরি করুন", path: "/admin/create-content", icon: FiPlusCircle },
   { name: "টিউটোরিয়াল পরিচালনা", path: "/admin/tutorials", icon: FiPlayCircle },
   { name: "ব্লগ পর্যালোচনা", path: "/admin/blogs", icon: FiBookOpen },
   { name: "ফটো গ্যালারি", path: "/admin/gallery", icon: FiImage },
   { name: "হোম ভিডিও", path: "/admin/videos", icon: FiVideo },
   { name: "গল্প পরিচালনা", path: "/admin/stories", icon: FiMessageSquare },
-  { name: "টিউটোরিয়াল তৈরি করুন", path: "/admin/create-tutorial", icon: FiPlusCircle },
+  {
+    name: "টিউটোরিয়াল তৈরি করুন",
+    path: "/admin/create-tutorial",
+    icon: FiPlusCircle,
+  },
 ];
 
 export default function AdminLayout() {
@@ -24,7 +33,9 @@ export default function AdminLayout() {
   const location = useLocation();
 
   // Determine current page title from URL
-  const currentLink = sidebarLinks.find(link => location.pathname.includes(link.path));
+  const currentLink = sidebarLinks.find((link) =>
+    location.pathname.includes(link.path),
+  );
   const pageTitle = currentLink ? currentLink.name : "Admin Dashboard";
 
   // Close mobile menu on navigate
@@ -46,7 +57,8 @@ export default function AdminLayout() {
       <div
         className="absolute inset-0 pointer-events-none z-0"
         style={{
-          background: "linear-gradient(180deg, rgba(20,6,6,0.3) 0%, rgba(20,6,6,0.2) 55%, rgba(20,6,6,0.25) 100%)",
+          background:
+            "linear-gradient(180deg, rgba(20,6,6,0.3) 0%, rgba(20,6,6,0.2) 55%, rgba(20,6,6,0.25) 100%)",
         }}
       />
       <Sidebar />
@@ -54,7 +66,7 @@ export default function AdminLayout() {
       {/* Mobile Sidebar overlay */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-40 lg:hidden flex">
-          <div 
+          <div
             className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             onClick={() => setMobileMenuOpen(false)}
           ></div>
@@ -66,9 +78,15 @@ export default function AdminLayout() {
               WebkitBackdropFilter: "blur(28px) saturate(180%)",
             }}
           >
-            <div className="flex items-center justify-between px-4 border-b" style={{ height: 68, borderBottomColor: "rgba(0,0,0,0.1)" }}>
+            <div
+              className="flex items-center justify-between px-4 border-b"
+              style={{ height: 68, borderBottomColor: "rgba(0,0,0,0.1)" }}
+            >
               <span className="font-black text-lg text-red-900">Admin</span>
-              <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-red-900">
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2 text-red-900"
+              >
                 <FiX className="w-6 h-6" />
               </button>
             </div>
@@ -85,7 +103,9 @@ export default function AdminLayout() {
                       }`
                     }
                     style={({ isActive }) => ({
-                      background: isActive ? "linear-gradient(135deg, #DA291C, #FC4C02)" : "transparent",
+                      background: isActive
+                        ? "linear-gradient(135deg, #DA291C, #FC4C02)"
+                        : "transparent",
                       color: isActive ? "#fff" : "rgba(127,29,29,0.9)",
                     })}
                   >
@@ -121,18 +141,22 @@ export default function AdminLayout() {
             >
               <FiMenu className="w-5 h-5" />
             </button>
-            <h1 
-              className="text-xl font-bold drop-shadow-md" 
+            <h1
+              className="text-xl font-bold drop-shadow-md"
               style={{
                 color: "rgba(239,68,68,0.95)",
-                textShadow: "-0.6px -0.6px 0 rgba(255,255,255,0.95), 0.6px -0.6px 0 rgba(255,255,255,0.95), -0.6px 0.6px 0 rgba(255,255,255,0.95), 0.6px 0.6px 0 rgba(255,255,255,0.95), 0 2px 8px rgba(239,68,68,0.18)",
+                textShadow:
+                  "-0.6px -0.6px 0 rgba(255,255,255,0.95), 0.6px -0.6px 0 rgba(255,255,255,0.95), -0.6px 0.6px 0 rgba(255,255,255,0.95), 0.6px 0.6px 0 rgba(255,255,255,0.95), 0 2px 8px rgba(239,68,68,0.18)",
                 letterSpacing: "-0.5px",
               }}
-            >{pageTitle}</h1>
+            >
+              {pageTitle}
+            </h1>
           </div>
 
           {/* Universal Add Button */}
-          <Link to="/"
+          <Link
+            to="/"
             className="flex items-center cursor-pointer gap-2 px-4 py-2 rounded-xl font-bold text-white transition-transform hover:scale-105"
             style={{
               background: "linear-gradient(135deg, #DA291C, #FC4C02)",

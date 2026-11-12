@@ -14,14 +14,15 @@ export default function LearningSelection() {
       style={{
         backgroundImage: `url(${bgImage})`,
         backgroundSize: "cover",
-        backgroundPosition: "center"
+        backgroundPosition: "center",
       }}
     >
       {/* Background Overlay */}
       <div
         className="absolute inset-0 pointer-events-none z-0"
         style={{
-          background: "linear-gradient(180deg, rgba(20,6,6,0.22) 0%, rgba(20,6,6,0.14) 55%, rgba(20,6,6,0.18) 100%)",
+          background:
+            "linear-gradient(180deg, rgba(20,6,6,0.22) 0%, rgba(20,6,6,0.14) 55%, rgba(20,6,6,0.18) 100%)",
         }}
       />
 
@@ -55,7 +56,6 @@ export default function LearningSelection() {
 
         {/* Selection Cards Grid */}
         <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-stretch">
-
           {/* Card 1: Anticipatory Action */}
           <div className="card1 h-full">
             <ZoneCard

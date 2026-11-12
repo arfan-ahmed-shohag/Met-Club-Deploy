@@ -1,4 +1,12 @@
-import { createContext, useContext, useEffect, useRef, useState, useCallback, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  type ReactNode,
+} from "react";
 
 interface AudioContextValue {
   currentSrc: string | null;
@@ -14,43 +22,58 @@ interface AudioContextValue {
 const AudioCtx = createContext<AudioContextValue | null>(null);
 
 export function AudioProvider({ children }: { children: ReactNode }) {
-  const audioRef    = useRef<HTMLAudioElement | null>(null);
-  const [currentSrc,  setCurrentSrc]  = useState<string | null>(null);
-  const [isPlaying,   setIsPlaying]   = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [currentSrc, setCurrentSrc] = useState<string | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
 
-  useEffect(() => { return () => { audioRef.current?.pause(); }; }, []);
+  useEffect(() => {
+    return () => {
+      audioRef.current?.pause();
+    };
+  }, []);
 
   const loadAndPlay = useCallback((src: string) => {
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.ontimeupdate = null;
-      audioRef.current.onended      = null;
-      audioRef.current.onpause      = null;
-      audioRef.current.onplay       = null;
+      audioRef.current.onended = null;
+      audioRef.current.onpause = null;
+      audioRef.current.onplay = null;
     }
     const audio = new Audio(src);
     audioRef.current = audio;
     audio.ontimeupdate = () => setCurrentTime(audio.currentTime);
-    audio.onended  = () => { setIsPlaying(false); setCurrentTime(0); };
-    audio.onpause  = () => setIsPlaying(false);
-    audio.onplay   = () => setIsPlaying(true);
+    audio.onended = () => {
+      setIsPlaying(false);
+      setCurrentTime(0);
+    };
+    audio.onpause = () => setIsPlaying(false);
+    audio.onplay = () => setIsPlaying(true);
     setCurrentSrc(src);
     setCurrentTime(0);
     void audio.play();
   }, []);
 
-  const play = useCallback((src: string) => {
-    if (currentSrc === src && audioRef.current) void audioRef.current.play();
-    else loadAndPlay(src);
-  }, [currentSrc, loadAndPlay]);
+  const play = useCallback(
+    (src: string) => {
+      if (currentSrc === src && audioRef.current) void audioRef.current.play();
+      else loadAndPlay(src);
+    },
+    [currentSrc, loadAndPlay],
+  );
 
-  const pause = useCallback(() => { audioRef.current?.pause(); }, []);
+  const pause = useCallback(() => {
+    audioRef.current?.pause();
+  }, []);
 
-  const toggle = useCallback((src: string) => {
-    if (currentSrc === src && isPlaying) pause();
-    else play(src);
-  }, [currentSrc, isPlaying, play, pause]);
+  const toggle = useCallback(
+    (src: string) => {
+      if (currentSrc === src && isPlaying) pause();
+      else play(src);
+    },
+    [currentSrc, isPlaying, play, pause],
+  );
 
   // ✅ stop reads directly from audioRef — never stale
   const stop = useCallback(() => {
@@ -63,15 +86,26 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     setCurrentTime(0);
   }, []); // audioRef is a ref so no dep needed
 
-  const isThisSrcPlaying = useCallback((src: string) => {
-    return currentSrc === src && isPlaying;
-  }, [currentSrc, isPlaying]);
+  const isThisSrcPlaying = useCallback(
+    (src: string) => {
+      return currentSrc === src && isPlaying;
+    },
+    [currentSrc, isPlaying],
+  );
 
   return (
-    <AudioCtx.Provider value={{
-      currentSrc, isPlaying, currentTime,
-      play, pause, toggle, stop, isThisSrcPlaying,
-    }}>
+    <AudioCtx.Provider
+      value={{
+        currentSrc,
+        isPlaying,
+        currentTime,
+        play,
+        pause,
+        toggle,
+        stop,
+        isThisSrcPlaying,
+      }}
+    >
       {children}
     </AudioCtx.Provider>
   );
@@ -102,7 +136,9 @@ export function useAudioSync(key: string | number | null | undefined) {
 
   // Ref always points to the freshest stop()
   const stopRef = useRef(stop);
-  useEffect(() => { stopRef.current = stop; }, [stop]);
+  useEffect(() => {
+    stopRef.current = stop;
+  }, [stop]);
 
   useEffect(() => {
     return () => {

@@ -36,7 +36,9 @@ export default function CreateTutorial() {
 
     const loadTutorial = async () => {
       try {
-        const response = await axiosInstance.get(`/tutorials/${tutorialIdFromQuery}`);
+        const response = await axiosInstance.get(
+          `/tutorials/${tutorialIdFromQuery}`,
+        );
         const data = response.data?.data;
         if (!data || cancelled) return;
 
@@ -60,7 +62,10 @@ export default function CreateTutorial() {
     };
   }, [axiosInstance, tutorialIdFromQuery]);
 
-  const handleChange = (field: keyof TutorialForm, value: string | File | null) => {
+  const handleChange = (
+    field: keyof TutorialForm,
+    value: string | File | null,
+  ) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -68,7 +73,10 @@ export default function CreateTutorial() {
     if (!form.thumbnailImage) return null;
     if (typeof form.thumbnailImage === "string") {
       if (form.thumbnailImage.startsWith("http")) return form.thumbnailImage;
-      return ("https://api.meteorologyclub.com" + form.thumbnailImage).replace("/api/v1", "");
+      return ("https://api.meteorologyclub.com" + form.thumbnailImage).replace(
+        "/api/v1",
+        "",
+      );
     }
     return URL.createObjectURL(form.thumbnailImage);
   };
@@ -130,10 +138,15 @@ export default function CreateTutorial() {
     >
       <div className="flex items-center justify-between gap-4 mb-6 flex-wrap">
         <div>
-          <h2 className="text-2xl font-bold text-red-600" style={{ letterSpacing: "-0.5px" }}>
+          <h2
+            className="text-2xl font-bold text-red-600"
+            style={{ letterSpacing: "-0.5px" }}
+          >
             {form.id ? "টিউটোরিয়াল আপডেট করুন" : "নতুন টিউটোরিয়াল তৈরি করুন"}
           </h2>
-          <p className="text-sm text-gray-600 mt-1">নাম, নম্বর, title, thumbnail image আর YouTube video link দিন।</p>
+          <p className="text-sm text-gray-600 mt-1">
+            নাম, নম্বর, title, thumbnail image আর YouTube video link দিন।
+          </p>
         </div>
         <button
           type="button"
@@ -148,7 +161,9 @@ export default function CreateTutorial() {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 p-5 rounded-xl bg-white/30 border border-white/50">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Tutorial Number</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              Tutorial Number
+            </label>
             <input
               type="number"
               min="1"
@@ -160,7 +175,9 @@ export default function CreateTutorial() {
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">নাম</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              নাম
+            </label>
             <input
               type="text"
               value={form.name}
@@ -174,7 +191,9 @@ export default function CreateTutorial() {
 
         <div className="grid grid-cols-1 gap-5 p-5 rounded-xl bg-white/30 border border-white/50">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Title</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              Title
+            </label>
             <input
               type="text"
               value={form.title}
@@ -186,7 +205,9 @@ export default function CreateTutorial() {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">YouTube Video Link</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              YouTube Video Link
+            </label>
             <input
               type="url"
               value={form.videoLink}
@@ -199,7 +220,9 @@ export default function CreateTutorial() {
         </div>
 
         <div className="p-5 rounded-xl bg-white/30 border border-white/50">
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Thumbnail Image</label>
+          <label className="block text-sm font-semibold text-gray-700 mb-1">
+            Thumbnail Image
+          </label>
           <div className="grid grid-cols-1 md:grid-cols-[1fr_280px] gap-5 items-start">
             <div className="relative w-full h-64 bg-white/50 border-2 border-dashed border-gray-300 rounded-xl overflow-hidden hover:border-red-400 transition-colors flex items-center justify-center group cursor-pointer">
               <input
@@ -212,17 +235,25 @@ export default function CreateTutorial() {
                 }}
               />
               {previewImage() ? (
-                <img src={previewImage() || ""} alt="Preview" className="w-full h-full object-cover" />
+                <img
+                  src={previewImage() || ""}
+                  alt="Preview"
+                  className="w-full h-full object-cover"
+                />
               ) : (
                 <div className="text-center p-4 text-gray-500 group-hover:text-red-500 transition-colors">
                   <FiImage className="w-8 h-8 mx-auto mb-2" />
-                  <span className="text-sm font-medium">ছবি আপলোড করতে ক্লিক করুন</span>
+                  <span className="text-sm font-medium">
+                    ছবি আপলোড করতে ক্লিক করুন
+                  </span>
                 </div>
               )}
             </div>
 
             <div className="rounded-xl bg-white/50 border border-white/60 p-4">
-              <p className="text-sm font-semibold text-gray-700 mb-2">নির্দেশনা</p>
+              <p className="text-sm font-semibold text-gray-700 mb-2">
+                নির্দেশনা
+              </p>
               <ul className="space-y-2 text-sm text-gray-600 list-disc pl-5">
                 <li>thumbnail অবশ্যই দিন।</li>
                 <li>YouTube link copy করে paste করুন।</li>

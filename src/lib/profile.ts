@@ -12,14 +12,18 @@ export function profileImageUrl(value: string | null) {
 
 async function updateProfile(path: string, payload: unknown) {
   const version = getSessionVersion();
-  const { data } = await protectedApi.patch<{ success: boolean; data: CurrentUser }>(path, payload);
+  const { data } = await protectedApi.patch<{
+    success: boolean;
+    data: CurrentUser;
+  }>(path, payload);
   if (!data.success || !data.data?.id) throw new Error("Profile update failed");
   if (version !== getSessionVersion()) throw new Error("Session changed");
   applyCurrentUserUpdate(data.data, version);
   return data.data;
 }
 
-export const saveProfile = (values: Record<string, string | number>) => updateProfile("/user/me", values);
+export const saveProfile = (values: Record<string, string | number>) =>
+  updateProfile("/user/me", values);
 export function saveProfilePhoto(file: File) {
   const form = new FormData();
   form.append("photo", file);

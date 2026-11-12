@@ -13,11 +13,10 @@ export default function BottomNav({
   total,
   onPrev,
   onNext,
-  answered = true,     // section mode default: always enabled
+  answered = true, // section mode default: always enabled
   variant = "section",
   isPending = false,
 }: BottomNavProps) {
-
   const isLast = current === total - 1;
   const isSectionTone = variant === "section";
   // Use section's button colors for quiz as well per UX request
@@ -41,21 +40,43 @@ export default function BottomNav({
 
   /* ── Button styles ────────────────────────────────────────── */
   const prevStyle: React.CSSProperties = {
-    background: current === 0
-      ? (useSectionToneForButtons ? "rgba(254,226,226,0.7)" : "rgba(209,250,229,0.5)")
-      : (useSectionToneForButtons ? "linear-gradient(135deg,#fee2e2,#fecaca)" : "linear-gradient(135deg,#d1fae5,#a7f3d0)"),
-    border: useSectionToneForButtons ? "2.5px solid #D1CCBD" : "2.5px solid #6ee7b7",
+    background:
+      current === 0
+        ? useSectionToneForButtons
+          ? "rgba(254,226,226,0.7)"
+          : "rgba(209,250,229,0.5)"
+        : useSectionToneForButtons
+          ? "linear-gradient(135deg,#fee2e2,#fecaca)"
+          : "linear-gradient(135deg,#d1fae5,#a7f3d0)",
+    border: useSectionToneForButtons
+      ? "2.5px solid #D1CCBD"
+      : "2.5px solid #6ee7b7",
     color: useSectionToneForButtons ? "#991b1b" : "#065f46",
-    boxShadow: current > 0 ? (useSectionToneForButtons ? "0 4px 16px rgba(239,68,68,0.23)" : "0 4px 16px rgba(110,231,183,0.30)") : "none",
+    boxShadow:
+      current > 0
+        ? useSectionToneForButtons
+          ? "0 4px 16px rgba(239,68,68,0.23)"
+          : "0 4px 16px rgba(110,231,183,0.30)"
+        : "none",
   };
 
   const nextStyle: React.CSSProperties = {
     background: answered
-      ? (useSectionToneForButtons ? "linear-gradient(135deg,#DA291C,#DA291C)" : "linear-gradient(135deg,#0ea5e9,#0284c7)")
-      : (useSectionToneForButtons ? "linear-gradient(135deg,#fee2e2,#fecaca)" : "linear-gradient(135deg,#e0f2fe,#bae6fd)"),
-    border: useSectionToneForButtons ? "2.5px solid #FC4C02" : "2.5px solid #38bdf8",
-    color: answered ? "#fff" : (useSectionToneForButtons ? "#D1CCBD" : "#7dd3fc"),
-    boxShadow: answered ? (useSectionToneForButtons ? "0 4px 16px rgba(239,68,68,0.33)" : "0 4px 16px rgba(14,165,233,0.35)") : "none",
+      ? useSectionToneForButtons
+        ? "linear-gradient(135deg,#DA291C,#DA291C)"
+        : "linear-gradient(135deg,#0ea5e9,#0284c7)"
+      : useSectionToneForButtons
+        ? "linear-gradient(135deg,#fee2e2,#fecaca)"
+        : "linear-gradient(135deg,#e0f2fe,#bae6fd)",
+    border: useSectionToneForButtons
+      ? "2.5px solid #FC4C02"
+      : "2.5px solid #38bdf8",
+    color: answered ? "#fff" : useSectionToneForButtons ? "#D1CCBD" : "#7dd3fc",
+    boxShadow: answered
+      ? useSectionToneForButtons
+        ? "0 4px 16px rgba(239,68,68,0.33)"
+        : "0 4px 16px rgba(14,165,233,0.35)"
+      : "none",
   };
 
   /* ── Shared button classes ────────────────────────────────── */
@@ -116,10 +137,7 @@ export default function BottomNav({
             ...prevStyle,
             backdropFilter: "blur(14px)",
             WebkitBackdropFilter: "blur(14px)",
-            boxShadow:
-              current > 0
-                ? "0 6px 18px rgba(0,0,0,0.12)"
-                : "none",
+            boxShadow: current > 0 ? "0 6px 18px rgba(0,0,0,0.12)" : "none",
           }}
         >
           <span className="sm:hidden">{labels.prevShort}</span>
@@ -135,7 +153,9 @@ export default function BottomNav({
             {current + 1} / {total}
           </span>
 
-          <div className={`gap-1 sm:gap-1.5 ${total > 8 ? "hidden md:flex" : "flex"}`}>
+          <div
+            className={`gap-1 sm:gap-1.5 ${total > 8 ? "hidden md:flex" : "flex"}`}
+          >
             {Array.from({ length: total }).map((_, i) => (
               <div
                 key={i}
@@ -179,9 +199,7 @@ export default function BottomNav({
             backdropFilter: "blur(14px)",
             WebkitBackdropFilter: "blur(14px)",
 
-            boxShadow: answered
-              ? "0 8px 24px rgba(0,0,0,0.18)"
-              : "none",
+            boxShadow: answered ? "0 8px 24px rgba(0,0,0,0.18)" : "none",
           }}
         >
           {isPending ? (

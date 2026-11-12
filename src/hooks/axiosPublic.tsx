@@ -1,7 +1,7 @@
 import { publicApi } from "../lib/api";
 
 const axiosPublic = () => {
-    return publicApi
-}
+  return publicApi;
+};
 
 export default axiosPublic;

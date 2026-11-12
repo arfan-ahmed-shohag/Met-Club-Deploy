@@ -16,7 +16,7 @@ export interface ChapterTopic {
 }
 
 const fetchChapters = async () => {
-  const response = await fetch('/chapter.en.json');
+  const response = await fetch("/chapter.en.json");
   return response.json() as Promise<ChapterTopic[]>;
 };
 
@@ -28,12 +28,14 @@ const redCardAccent = {
   glow: "rgba(252,165,165,0.26)",
 };
 
-
 function TopicCard({ topic, index }: { topic: ChapterTopic; index: number }) {
   const [hovered, setHovered] = useState(false);
   const locale = getStoredLocale();
   return (
-    <Link to={getLocalizedPath(`/lesson/${topic.id}`, locale)} className="block w-45">
+    <Link
+      to={getLocalizedPath(`/lesson/${topic.id}`, locale)}
+      className="block w-45"
+    >
       <div
         className="relative flex flex-col items-center justify-between rounded-2xl w-45 min-h-45 md:min-h-47.5 bg-[linear-gradient(145deg,rgba(255,255,255,0.86),rgba(255,245,242,0.74))] backdrop-blur-md p-4 cursor-pointer transition-all duration-300"
         style={{
@@ -60,27 +62,32 @@ function TopicCard({ topic, index }: { topic: ChapterTopic; index: number }) {
 
         {/* Illustration emoji */}
         <div className="flex-1 flex items-center justify-center">
-          <img src={topic.image} alt={topic.title} className="w-24 h-24 object-contain" />
+          <img
+            src={topic.image}
+            alt={topic.title}
+            className="w-24 h-24 object-contain"
+          />
         </div>
       </div>
     </Link>
   );
 }
 
-
 export default function Chapter() {
-
   useLocaleRouteSync("/learning-zone", "/en/learning-zone");
 
   const chapters = use(chaptersPromise);
-  const chapterRows = chapters.reduce<ChapterTopic[][]>((rows, topic, index) => {
-    const rowIndex = Math.floor(index / CHAPTERS_PER_LARGE_ROW);
-    if (!rows[rowIndex]) {
-      rows[rowIndex] = [];
-    }
-    rows[rowIndex].push(topic);
-    return rows;
-  }, []);
+  const chapterRows = chapters.reduce<ChapterTopic[][]>(
+    (rows, topic, index) => {
+      const rowIndex = Math.floor(index / CHAPTERS_PER_LARGE_ROW);
+      if (!rows[rowIndex]) {
+        rows[rowIndex] = [];
+      }
+      rows[rowIndex].push(topic);
+      return rows;
+    },
+    [],
+  );
 
   return (
     <>

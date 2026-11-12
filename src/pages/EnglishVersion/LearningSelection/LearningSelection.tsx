@@ -10,19 +10,20 @@ export default function LearningSelection() {
   useLocaleRouteSync("/learning-selection", "/en/learning-selection");
 
   return (
-    <div 
-      className="relative min-h-screen flex flex-col overflow-x-hidden" 
+    <div
+      className="relative min-h-screen flex flex-col overflow-x-hidden"
       style={{
         backgroundImage: `url(${bgImage})`,
         backgroundSize: "cover",
-        backgroundPosition: "center"
+        backgroundPosition: "center",
       }}
     >
       {/* Background Overlay */}
       <div
         className="absolute inset-0 pointer-events-none z-0"
         style={{
-          background: "linear-gradient(180deg, rgba(20,6,6,0.22) 0%, rgba(20,6,6,0.14) 55%, rgba(20,6,6,0.18) 100%)",
+          background:
+            "linear-gradient(180deg, rgba(20,6,6,0.22) 0%, rgba(20,6,6,0.14) 55%, rgba(20,6,6,0.18) 100%)",
         }}
       />
 
@@ -56,7 +57,6 @@ export default function LearningSelection() {
 
         {/* Selection Cards Grid */}
         <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-stretch">
-          
           {/* Card 1: Anticipatory Action */}
           <div className="card1 h-full">
             <ZoneCard
@@ -69,9 +69,12 @@ export default function LearningSelection() {
               link="/met-club-module-2"
               description={
                 <>
-                  <strong>Anticipatory Action & Impact Based Forecasting</strong>
+                  <strong>
+                    Anticipatory Action & Impact Based Forecasting
+                  </strong>
                   <br />
-                  Learn strategies for early preparation and response based on weather forecasts.
+                  Learn strategies for early preparation and response based on
+                  weather forecasts.
                 </>
               }
               blobColor="#D1CCBD"
@@ -99,7 +102,8 @@ export default function LearningSelection() {
                 <>
                   <strong>Story Based Assessment</strong>
                   <br />
-                  Learn with fun through engaging weather stories and simple interactive assessments.
+                  Learn with fun through engaging weather stories and simple
+                  interactive assessments.
                 </>
               }
               blobColor="#D1CCBD"
@@ -112,20 +116,29 @@ export default function LearningSelection() {
               }
             />
           </div>
-
         </div>
 
         {/* Back Button */}
         <div className="mt-10">
           <Link to="/en/start-journey">
-            <button 
+            <button
               className="px-6 py-2.5 rounded-full border border-[#FC4C02]/50 bg-white/20 hover:bg-white/40 text-red-950 font-bold transition duration-200 backdrop-blur-md active:scale-95 shadow-md flex items-center gap-2 cursor-pointer"
               style={{
-                textShadow: "0 1px 2px rgba(255,255,255,0.4)"
+                textShadow: "0 1px 2px rgba(255,255,255,0.4)",
               }}
             >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                />
               </svg>
               Go Back
             </button>

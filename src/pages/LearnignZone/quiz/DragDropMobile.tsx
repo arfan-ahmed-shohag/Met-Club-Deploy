@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import type { CategorizeQuestionProps, MatchQuestionProps } from "../../../types";
+import type {
+  CategorizeQuestionProps,
+  MatchQuestionProps,
+} from "../../../types";
 
 const stableHash = (text: string) => {
   let hash = 0;
@@ -18,24 +21,30 @@ function useDragDrop(onDrop: (dragId: string, dropId: string) => void) {
   const activeTouchDragId = useRef<string | null>(null);
   const activeTouchElementRef = useRef<HTMLElement | null>(null);
 
-  const getScrollableParent = useCallback((node: EventTarget | null): HTMLElement | null => {
-    if (!(node instanceof HTMLElement)) return null;
+  const getScrollableParent = useCallback(
+    (node: EventTarget | null): HTMLElement | null => {
+      if (!(node instanceof HTMLElement)) return null;
 
-    let current: HTMLElement | null = node;
-    while (current) {
-      const { overflowY } = window.getComputedStyle(current);
-      const canScroll =
-        (overflowY === "auto" || overflowY === "scroll" || overflowY === "overlay") &&
-        current.scrollHeight > current.clientHeight;
+      let current: HTMLElement | null = node;
+      while (current) {
+        const { overflowY } = window.getComputedStyle(current);
+        const canScroll =
+          (overflowY === "auto" ||
+            overflowY === "scroll" ||
+            overflowY === "overlay") &&
+          current.scrollHeight > current.clientHeight;
 
-      if (canScroll) return current;
-      if (current === document.body || current === document.documentElement) break;
-      current = current.parentElement;
-    }
+        if (canScroll) return current;
+        if (current === document.body || current === document.documentElement)
+          break;
+        current = current.parentElement;
+      }
 
-    const root = document.scrollingElement;
-    return root instanceof HTMLElement ? root : null;
-  }, []);
+      const root = document.scrollingElement;
+      return root instanceof HTMLElement ? root : null;
+    },
+    [],
+  );
 
   // স্মুথ স্ক্রলিং লুপ
   const scrollLoop = useCallback(function loop() {
@@ -45,7 +54,11 @@ function useDragDrop(onDrop: (dragId: string, dropId: string) => void) {
     const scrollSpeed = 10;
     const activeContainer = scrollContainerRef.current;
 
-    if (activeContainer && activeContainer !== document.body && activeContainer !== document.documentElement) {
+    if (
+      activeContainer &&
+      activeContainer !== document.body &&
+      activeContainer !== document.documentElement
+    ) {
       const rect = activeContainer.getBoundingClientRect();
       const distanceFromTop = mouseY.current - rect.top;
       const distanceFromBottom = rect.bottom - mouseY.current;
@@ -54,7 +67,8 @@ function useDragDrop(onDrop: (dragId: string, dropId: string) => void) {
         activeContainer.scrollBy({ top: -scrollSpeed, behavior: "auto" });
       } else if (
         distanceFromBottom < scrollThreshold &&
-        activeContainer.scrollTop + activeContainer.clientHeight < activeContainer.scrollHeight
+        activeContainer.scrollTop + activeContainer.clientHeight <
+          activeContainer.scrollHeight
       ) {
         activeContainer.scrollBy({ top: scrollSpeed, behavior: "auto" });
       }
@@ -118,7 +132,9 @@ function useDragDrop(onDrop: (dragId: string, dropId: string) => void) {
       if (!touch) return;
 
       mouseY.current = touch.clientY;
-      const container = getScrollableParent(document.elementFromPoint(touch.clientX, touch.clientY));
+      const container = getScrollableParent(
+        document.elementFromPoint(touch.clientX, touch.clientY),
+      );
       if (container) {
         scrollContainerRef.current = container;
       }
@@ -142,18 +158,25 @@ function useDragDrop(onDrop: (dragId: string, dropId: string) => void) {
 
       if (!touch || !dragId) return;
 
-      const elementAtPoint = document.elementFromPoint(touch.clientX, touch.clientY);
-      const dropZone = elementAtPoint instanceof HTMLElement
-        ? elementAtPoint.closest("[data-drop-id]")
-        : null;
-      const dropId = dropZone instanceof HTMLElement ? dropZone.dataset.dropId : undefined;
+      const elementAtPoint = document.elementFromPoint(
+        touch.clientX,
+        touch.clientY,
+      );
+      const dropZone =
+        elementAtPoint instanceof HTMLElement
+          ? elementAtPoint.closest("[data-drop-id]")
+          : null;
+      const dropId =
+        dropZone instanceof HTMLElement ? dropZone.dataset.dropId : undefined;
 
       if (dropId) {
         onDrop(dragId, dropId);
       }
     };
 
-    window.addEventListener("touchmove", handleGlobalTouchMove, { passive: false });
+    window.addEventListener("touchmove", handleGlobalTouchMove, {
+      passive: false,
+    });
     window.addEventListener("touchend", handleGlobalTouchEnd);
     window.addEventListener("touchcancel", handleGlobalTouchEnd);
 
@@ -210,7 +233,10 @@ function useDragDrop(onDrop: (dragId: string, dropId: string) => void) {
       event.preventDefault();
       mouseY.current = touch.clientY;
 
-      const nodeUnderFinger = document.elementFromPoint(touch.clientX, touch.clientY);
+      const nodeUnderFinger = document.elementFromPoint(
+        touch.clientX,
+        touch.clientY,
+      );
       const container = getScrollableParent(nodeUnderFinger);
       if (container) {
         scrollContainerRef.current = container;
@@ -241,7 +267,7 @@ function useDragDrop(onDrop: (dragId: string, dropId: string) => void) {
     onDrop: (event: React.DragEvent<HTMLElement>) => {
       event.preventDefault();
       stopAutoScroll();
-      
+
       const dragId = event.dataTransfer.getData("text/plain");
       if (dragId) {
         onDrop(dragId, dropId);
@@ -269,7 +295,8 @@ export function MatchQuestion({ q, answer, onChange }: MatchQuestionProps) {
   const allMatched = q.leftItems.every((item) => matches[item.id]);
   const isMatchCorrect = (leftId: string): boolean =>
     matches[leftId] === q.correctAnswer[leftId];
-  const isAllCorrect = allMatched && q.leftItems.every((item) => isMatchCorrect(item.id));
+  const isAllCorrect =
+    allMatched && q.leftItems.every((item) => isMatchCorrect(item.id));
 
   const handleDrop = (itemId: string, rightItem: string) => {
     if (allMatched) return;
@@ -297,7 +324,6 @@ export function MatchQuestion({ q, answer, onChange }: MatchQuestionProps) {
       </p>
 
       <div className="grid grid-cols-2 gap-4 items-stretch">
-
         {/* Left Side */}
         <div className="flex flex-col gap-3">
           <div className="flex flex-col gap-3">
@@ -305,11 +331,14 @@ export function MatchQuestion({ q, answer, onChange }: MatchQuestionProps) {
               const matched = matches[item.id];
               const correct = allMatched ? isMatchCorrect(item.id) : null;
 
-              const borderColor = correct === true
-                ? "#22c55e"
-                : correct === false
-                ? "#DA291C"
-                : matched ? "#4ade80" : "#e2e8f0";
+              const borderColor =
+                correct === true
+                  ? "#22c55e"
+                  : correct === false
+                    ? "#DA291C"
+                    : matched
+                      ? "#4ade80"
+                      : "#e2e8f0";
 
               return (
                 <div
@@ -322,11 +351,12 @@ export function MatchQuestion({ q, answer, onChange }: MatchQuestionProps) {
                     borderColor,
                     // image থাকলে 4:3 ratio, না থাকলে auto height
                     aspectRatio: hasImages ? "4/3" : undefined,
-                    background: correct === true
-                      ? "#dcfce7"
-                      : correct === false
-                      ? "#fee2e2"
-                      : "#ffffff",
+                    background:
+                      correct === true
+                        ? "#dcfce7"
+                        : correct === false
+                          ? "#fee2e2"
+                          : "#ffffff",
                   }}
                 >
                   {item.image ? (
@@ -340,11 +370,12 @@ export function MatchQuestion({ q, answer, onChange }: MatchQuestionProps) {
                       className="w-full flex items-center justify-center px-4 py-4 font-bold text-sm text-center"
                       style={{
                         fontFamily: "'Hind Siliguri',sans-serif",
-                        color: correct === true
-                          ? "#15803d"
-                          : correct === false
-                          ? "#9A3324"
-                          : "#1e40af",
+                        color:
+                          correct === true
+                            ? "#15803d"
+                            : correct === false
+                              ? "#9A3324"
+                              : "#1e40af",
                         minHeight: "56px",
                       }}
                     >
@@ -361,15 +392,23 @@ export function MatchQuestion({ q, answer, onChange }: MatchQuestionProps) {
         <div className="flex flex-col gap-3">
           <div className="flex flex-col gap-3">
             {shuffledRightItems.map((ri) => {
-              const matchedKey = Object.keys(matches).find((key) => matches[key] === ri);
-              const matchedItem = q.leftItems.find((li) => li.id === matchedKey);
-              const correct = allMatched && matchedKey ? isMatchCorrect(matchedKey) : null;
+              const matchedKey = Object.keys(matches).find(
+                (key) => matches[key] === ri,
+              );
+              const matchedItem = q.leftItems.find(
+                (li) => li.id === matchedKey,
+              );
+              const correct =
+                allMatched && matchedKey ? isMatchCorrect(matchedKey) : null;
 
-              const borderColor = correct === true
-                ? "#22c55e"
-                : correct === false
-                ? "#DA291C"
-                : matchedItem ? "#22c55e" : "#cbd5e1";
+              const borderColor =
+                correct === true
+                  ? "#22c55e"
+                  : correct === false
+                    ? "#DA291C"
+                    : matchedItem
+                      ? "#22c55e"
+                      : "#cbd5e1";
 
               return (
                 <div
@@ -381,11 +420,14 @@ export function MatchQuestion({ q, answer, onChange }: MatchQuestionProps) {
                     borderStyle: matchedItem ? "solid" : "dashed",
                     // image mode হলে 4:3, text mode হলে auto
                     aspectRatio: hasImages ? "4/3" : undefined,
-                    background: correct === true
-                      ? "#dcfce7"
-                      : correct === false
-                      ? "#fee2e2"
-                      : matchedItem ? "#f0fdf4" : "#f8fafc",
+                    background:
+                      correct === true
+                        ? "#dcfce7"
+                        : correct === false
+                          ? "#fee2e2"
+                          : matchedItem
+                            ? "#f0fdf4"
+                            : "#f8fafc",
                   }}
                 >
                   {hasImages && matchedItem?.image ? (
@@ -399,11 +441,14 @@ export function MatchQuestion({ q, answer, onChange }: MatchQuestionProps) {
                       className="w-full h-full flex items-center justify-center font-bold text-sm text-center px-3 py-4"
                       style={{
                         fontFamily: "'Hind Siliguri',sans-serif",
-                        color: correct === true
-                          ? "#15803d"
-                          : correct === false
-                          ? "#9A3324"
-                          : matchedItem ? "#166534" : "#64748b",
+                        color:
+                          correct === true
+                            ? "#15803d"
+                            : correct === false
+                              ? "#9A3324"
+                              : matchedItem
+                                ? "#166534"
+                                : "#64748b",
                         minHeight: "56px",
                       }}
                     >
@@ -435,7 +480,8 @@ export function MatchQuestion({ q, answer, onChange }: MatchQuestionProps) {
       ) : (
         <div className="bg-blue-50 p-3 rounded-xl border border-blue-100">
           <p className="text-[11px] text-blue-600 text-center font-medium">
-            💡 {hasImages
+            💡{" "}
+            {hasImages
               ? "বাম পাশের ছবি টেনে ডান পাশের সঠিক বক্সের ওপর ছেড়ে দাও।"
               : "বাম পাশের শব্দ টেনে ডান পাশের সঠিক বক্সের ওপর ছেড়ে দাও।"}
           </p>
@@ -445,11 +491,17 @@ export function MatchQuestion({ q, answer, onChange }: MatchQuestionProps) {
   );
 }
 
-export function CategorizeQuestion({ q, answer, onChange }: CategorizeQuestionProps) {
+export function CategorizeQuestion({
+  q,
+  answer,
+  onChange,
+}: CategorizeQuestionProps) {
   const grouped = answer ?? {};
 
   const assignedItemIds = new Set(Object.values(grouped).flat());
-  const unassignedItems = q.itemsToCategorize.filter((item) => !assignedItemIds.has(item.id));
+  const unassignedItems = q.itemsToCategorize.filter(
+    (item) => !assignedItemIds.has(item.id),
+  );
 
   // ── সব item place হয়েছে কিনা ──
   const allPlaced = unassignedItems.length === 0;
@@ -461,9 +513,11 @@ export function CategorizeQuestion({ q, answer, onChange }: CategorizeQuestionPr
   };
 
   // ── সব সঠিক কিনা ──
-  const isAllCorrect = allPlaced && q.categories.every((cat) =>
-    (grouped[cat] ?? []).every((id) => isItemCorrect(id, cat))
-  );
+  const isAllCorrect =
+    allPlaced &&
+    q.categories.every((cat) =>
+      (grouped[cat] ?? []).every((id) => isItemCorrect(id, cat)),
+    );
 
   const handleDrop = (itemId: string, category: string) => {
     if (allPlaced) return; // সব place হলে আর drop নেবে না
@@ -498,7 +552,6 @@ export function CategorizeQuestion({ q, answer, onChange }: CategorizeQuestionPr
       </p>
 
       <div className="grid grid-cols-2 gap-4">
-
         {/* বাম — Items */}
         <div className="flex flex-col gap-2">
           {unassignedItems.map((item) => (
@@ -512,7 +565,9 @@ export function CategorizeQuestion({ q, answer, onChange }: CategorizeQuestionPr
             </button>
           ))}
           {allPlaced && (
-            <p className="text-xs text-blue-400 italic mt-1">সব আইটেম বসানো হয়েছে।</p>
+            <p className="text-xs text-blue-400 italic mt-1">
+              সব আইটেম বসানো হয়েছে।
+            </p>
           )}
         </div>
 
@@ -526,39 +581,70 @@ export function CategorizeQuestion({ q, answer, onChange }: CategorizeQuestionPr
               <div
                 key={category}
                 {...getDropProps(category)}
-                className={`rounded-2xl border-2 p-3 min-h-18 transition-colors ${hasItems
-                  ? "border-green-300 bg-green-50"
-                  : "border-dashed border-blue-200 bg-slate-50"
-                  }`}
+                className={`rounded-2xl border-2 p-3 min-h-18 transition-colors ${
+                  hasItems
+                    ? "border-green-300 bg-green-50"
+                    : "border-dashed border-blue-200 bg-slate-50"
+                }`}
               >
-                <p className={`text-[13px] lg:text-[16px] font-medium mb-2 flex items-center gap-1.5 ${hasItems ? "text-green-800" : "text-blue-700"
-                  }`}>
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0">
-                    <circle cx="7" cy="7" r="6" stroke="currentColor" strokeWidth="1.5" />
-                    <path d="M5 7l1.5 1.5L9 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <p
+                  className={`text-[13px] lg:text-[16px] font-medium mb-2 flex items-center gap-1.5 ${
+                    hasItems ? "text-green-800" : "text-blue-700"
+                  }`}
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    className="shrink-0"
+                  >
+                    <circle
+                      cx="7"
+                      cy="7"
+                      r="6"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                    />
+                    <path
+                      d="M5 7l1.5 1.5L9 5"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                   {category}
                 </p>
 
                 <div className="flex flex-wrap gap-1.5">
                   {placedItems.map((itemId) => {
-                    const item = q.itemsToCategorize.find((i) => i.id === itemId);
-                    const correct = allPlaced ? isItemCorrect(itemId, category) : null;
+                    const item = q.itemsToCategorize.find(
+                      (i) => i.id === itemId,
+                    );
+                    const correct = allPlaced
+                      ? isItemCorrect(itemId, category)
+                      : null;
 
                     return (
                       <button
                         key={itemId}
                         type="button"
                         onClick={() => clearPlacement(itemId)}
-                        className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[12px] font-medium border transition-colors ${correct === true
-                          ? "bg-green-100 text-green-800 border-green-400 cursor-default"
-                          : correct === false
-                            ? "bg-red-100 text-red-800 border-red-400 cursor-default"
-                            : "bg-green-100 text-green-800 border-green-300 hover:bg-green-200"
-                          }`}
+                        className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[12px] font-medium border transition-colors ${
+                          correct === true
+                            ? "bg-green-100 text-green-800 border-green-400 cursor-default"
+                            : correct === false
+                              ? "bg-red-100 text-red-800 border-red-400 cursor-default"
+                              : "bg-green-100 text-green-800 border-green-300 hover:bg-green-200"
+                        }`}
                       >
                         {item?.text ?? itemId}
-                        {correct === null && <span className="text-green-500 text-xs leading-none">✕</span>}
+                        {correct === null && (
+                          <span className="text-green-500 text-xs leading-none">
+                            ✕
+                          </span>
+                        )}
                       </button>
                     );
                   })}
@@ -577,10 +663,11 @@ export function CategorizeQuestion({ q, answer, onChange }: CategorizeQuestionPr
       {/* ── Feedback banner ── */}
       {allPlaced && (
         <div
-          className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium border ${isAllCorrect
-            ? "bg-green-50 border-green-200 text-green-700"
-            : "bg-red-50 border-red-200 text-red-700"
-            }`}
+          className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium border ${
+            isAllCorrect
+              ? "bg-green-50 border-green-200 text-green-700"
+              : "bg-red-50 border-red-200 text-red-700"
+          }`}
         >
           <span className="text-base">{isAllCorrect ? "✅" : "❌"}</span>
           {isAllCorrect ? "সঠিক উত্তর! চমৎকার!" : "ভুল হয়েছে!"}

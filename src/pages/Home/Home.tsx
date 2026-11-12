@@ -14,22 +14,25 @@ import { useLocaleRouteSync } from "../../hooks/useLocaleRouteSync";
 import { getStoredLocale } from "../../utils/language";
 
 export default function HomePage(): JSX.Element {
-    useLocaleRouteSync("/", "/en");
-    const isEnglish = getStoredLocale() === "en";
+  useLocaleRouteSync("/", "/en");
+  const isEnglish = getStoredLocale() === "en";
 
-    return (
-        <div className="relative flex min-h-screen flex-col overflow-x-hidden bg-gray-50">
-            <TopNav title={isEnglish ? "Home" : "হোম"} brandName={isEnglish ? "Met Club" : "মেট ক্লাব"} />
-            <HeroSection isEnglish={isEnglish} />
-            <AboutSection isEnglish={isEnglish} />
-            <AnticipatoryActionBriefSection isEnglish={isEnglish} />
-            <ChapterOverviewSection isEnglish={isEnglish} />
-            <StatsSection isEnglish={isEnglish} />
-            <VideoShowcaseSection isEnglish={isEnglish} />
-            <PhotoGallerySection isEnglish={isEnglish} />
-            <ReviewShowcaseSection isEnglish={isEnglish} />
-            <AboutFooter isEnglish={isEnglish} />
-            <CreditsFooter isEnglish={isEnglish} />
-        </div>
-    );
+  return (
+    <div className="relative flex min-h-screen flex-col overflow-x-hidden bg-gray-50">
+      <TopNav
+        title={isEnglish ? "Home" : "হোম"}
+        brandName={isEnglish ? "Met Club" : "মেট ক্লাব"}
+      />
+      <HeroSection isEnglish={isEnglish} />
+      <AboutSection isEnglish={isEnglish} />
+      <AnticipatoryActionBriefSection isEnglish={isEnglish} />
+      <ChapterOverviewSection isEnglish={isEnglish} />
+      <StatsSection isEnglish={isEnglish} />
+      <VideoShowcaseSection isEnglish={isEnglish} />
+      <PhotoGallerySection isEnglish={isEnglish} />
+      <ReviewShowcaseSection isEnglish={isEnglish} />
+      <AboutFooter isEnglish={isEnglish} />
+      <CreditsFooter isEnglish={isEnglish} />
+    </div>
+  );
 }
