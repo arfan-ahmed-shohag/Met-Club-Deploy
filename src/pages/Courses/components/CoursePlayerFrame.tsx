@@ -18,6 +18,7 @@ export default function CoursePlayerFrame({
 }) {
   const frameRef = useRef<HTMLIFrameElement>(null);
   const [frameLoaded, setFrameLoaded] = useState(false);
+  const [frameHeight, setFrameHeight] = useState(1);
 
   useEffect(() => {
     if (!frameLoaded) return;
@@ -64,8 +65,50 @@ export default function CoursePlayerFrame({
     );
   }, [frameLoaded, soundToggleRequest]);
 
+  useEffect(() => {
+    if (!frameLoaded) return;
+
+    const frame = frameRef.current;
+    const document = frame?.contentDocument;
+    const window = frame?.contentWindow;
+    if (!document || !window) return;
+
+    let animationFrame = 0;
+    const updateHeight = () => {
+      cancelAnimationFrame(animationFrame);
+      animationFrame = requestAnimationFrame(() => {
+        const contentHeight = Math.max(
+          document.documentElement.scrollHeight,
+          document.body?.scrollHeight ?? 0,
+        );
+        setFrameHeight(contentHeight);
+      });
+    };
+
+    const resizeObserver = new ResizeObserver(updateHeight);
+    resizeObserver.observe(document.documentElement);
+    if (document.body) resizeObserver.observe(document.body);
+
+    const mutationObserver = new MutationObserver(updateHeight);
+    mutationObserver.observe(document.body ?? document.documentElement, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      characterData: true,
+    });
+    window.addEventListener("resize", updateHeight);
+    updateHeight();
+
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      resizeObserver.disconnect();
+      mutationObserver.disconnect();
+      window.removeEventListener("resize", updateHeight);
+    };
+  }, [frameLoaded]);
+
   return (
-    <div className="relative min-h-[70vh] bg-gray-50">
+    <div className="relative bg-gray-50">
       {!frameLoaded && (
         <div className="pointer-events-none absolute inset-0 z-10 bg-gray-50">
           <CourseLoadingState />
@@ -77,7 +120,8 @@ export default function CoursePlayerFrame({
         title="শিশু-কেন্দ্রিক আগাম পদক্ষেপ ও প্রভাব-ভিত্তিক পূর্বাভাস কোর্স"
         src="/courses/anticipatory-action/index.html"
         onLoad={() => setFrameLoaded(true)}
-        className="block h-[calc(100svh-4.5rem)] min-h-[680px] w-full border-0 bg-gray-50"
+        style={{ height: `${frameHeight}px` }}
+        className="block w-full border-0 bg-gray-50"
         allow="clipboard-write"
       />
     </div>

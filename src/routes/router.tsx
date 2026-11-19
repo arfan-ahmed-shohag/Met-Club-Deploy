@@ -6,7 +6,6 @@ import {
 } from "react-router";
 import type { RouteObject } from "react-router";
 import { lazy } from "react";
-import LoginPage from "../App";
 import { SuspenseWrapper } from "./SuspenseWrapper";
 import { getStoredLocale, setStoredLocale } from "../utils/language";
 import ProtectedRoute from "../components/Layouts/ProtectedRoute";
@@ -88,7 +87,7 @@ const PressReleasePage = lazy(() =>
     default: module.PressReleasePage,
   })),
 );
-const EnglishLoginPage = lazy(() => import("../pages/EnglishVersion/Home"));
+const LoginModalPage = lazy(() => import("../pages/Login/LoginModalPage"));
 const EnglishAbout = lazy(() => import("../pages/EnglishVersion/About/About"));
 const EnglishStartJourney = lazy(
   () => import("../pages/EnglishVersion/StartJourney/StartJourney"),
@@ -359,7 +358,11 @@ const routes: RouteObject[] = [
   },
   {
     path: "/login",
-    element: <LoginPage />,
+    element: (
+      <SuspenseWrapper>
+        <LoginModalPage />
+      </SuspenseWrapper>
+    ),
     loader: ({ request }) =>
       redirectToStoredLocale(request.url, "/login", "/en/login"),
   },
@@ -367,7 +370,7 @@ const routes: RouteObject[] = [
     path: "/en/login",
     element: (
       <SuspenseWrapper>
-        <EnglishLoginPage />
+        <LoginModalPage />
       </SuspenseWrapper>
     ),
     loader: ({ request }) =>

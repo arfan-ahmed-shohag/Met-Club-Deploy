@@ -5,6 +5,7 @@ import { useLocaleRouteSync } from "../../hooks/useLocaleRouteSync";
 import { getStoredLocale } from "../../utils/language";
 import { resolveMediaUrl } from "../../utils/media";
 import TopNav from "../../components/Shared/TopBar";
+import SiteFooter from "../../components/Shared/SiteFooter";
 
 type Category = "comics" | "flyer" | "pressRelease";
 type PdfResource = {
@@ -247,6 +248,7 @@ function PublicationPage({ category }: { category: Category }) {
           </p>
         )}
       </main>
+      <SiteFooter isEnglish={isEnglish} />
     </div>
   );
 }

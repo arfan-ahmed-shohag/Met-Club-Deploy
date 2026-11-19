@@ -42,6 +42,7 @@ export function validateProfile(
   if (!/^\d{1,2}$/.test(values.class) || Number(values.class) > 12)
     errors.class = "সঠিক শ্রেণি নির্বাচন করুন";
   if (validateAddress) {
+    if (values.division === "Others" && values.district === "Others" && values.thana === "Others") return errors;
     const division = locations.find((item) => item.name === values.division);
     const district = division?.districts.find(
       (item) => item.name === values.district,

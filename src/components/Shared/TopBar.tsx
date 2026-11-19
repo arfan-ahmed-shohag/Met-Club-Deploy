@@ -12,6 +12,7 @@ import {
 import useAuth from "../../hooks/useAuth";
 import { profileImageUrl } from "../../lib/profile";
 import HeaderNavigation from "./HeaderNavigation";
+import LoginModal from "./LoginModal";
 
 interface TopNavProps {
   title?: string;
@@ -82,6 +83,7 @@ export default function TopNav({
 }: TopNavProps) {
   void tone;
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -138,30 +140,6 @@ export default function TopNav({
     "header-navigation-link flex w-full items-center gap-3 rounded px-3 py-2 text-left text-sm font-semibold";
   const renderMobileAccount = (closeMenu: () => void) => (
     <div className="space-y-1">
-      {user && (
-        <div className="mb-2 flex items-center gap-3 px-3 py-2">
-          <span
-            className="relative grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-full bg-red-600 text-sm font-bold text-white"
-            style={{}}
-          >
-            {avatar}
-            {user.profileImg && (
-              <img
-                src={profileImageUrl(user.profileImg)}
-                alt=""
-                className="absolute inset-0 h-full w-full object-cover"
-                onError={(event) => {
-                  event.currentTarget.style.display = "none";
-                }}
-              />
-            )}
-          </span>
-          <div className="min-w-0">
-            <p className="break-words text-sm font-semibold">{user.fullName}</p>
-            <p className="text-xs">{roleLabel}</p>
-          </div>
-        </div>
-      )}
       {isAuthenticated ? (
         <>
           {user &&
@@ -225,14 +203,17 @@ export default function TopNav({
           </button>
         </>
       ) : (
-        <Link
-          to={getLocalizedPath("/login", locale)}
-          onClick={closeMenu}
+        <button
+          type="button"
+          onClick={() => {
+            closeMenu();
+            setLoginModalOpen(true);
+          }}
           className={mobileAccountLinkClass}
         >
           <LogIn size={17} aria-hidden="true" />
           {locale === "en" ? "Login" : "লগইন"}
-        </Link>
+        </button>
       )}
     </div>
   );
@@ -311,12 +292,13 @@ export default function TopNav({
             )}
             <div className="hidden items-center xl:flex">
               {!isAuthenticated && (
-                <Link
-                  to={getLocalizedPath("/login", locale)}
-                  className="rounded bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-md transition-colors hover:bg-red-600"
+                <button
+                  type="button"
+                  onClick={() => setLoginModalOpen(true)}
+                  className="cursor-pointer rounded bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-md transition-colors hover:bg-red-700"
                 >
                   {locale === "en" ? "Login" : "লগইন"}
-                </Link>
+                </button>
               )}
               {isAuthenticated &&
                 !user &&
@@ -573,6 +555,9 @@ export default function TopNav({
           </div>
         </div>
       </div>
+      {loginModalOpen && (
+        <LoginModal onClose={() => setLoginModalOpen(false)} />
+      )}
     </div>
   );
 }

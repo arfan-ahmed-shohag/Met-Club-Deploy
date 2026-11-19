@@ -3,8 +3,7 @@ import { useCallback, useState } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import TopNav from "../../components/Shared/TopBar";
 import useAuth from "../../hooks/useAuth";
-import AboutFooter from "../Home/components/AboutFooter";
-import CreditsFooter from "../Home/components/CreditsFooter";
+import SiteFooter from "../../components/Shared/SiteFooter";
 import { getStoredLocale } from "../../utils/language";
 import CourseLoadingState from "./components/CourseLoadingState";
 import CoursePlayerFrame, {
@@ -79,8 +78,7 @@ export default function AnticipatoryActionCoursePage(): JSX.Element {
           </button>
         </main>
       )}
-      <AboutFooter isEnglish={isEnglish} />
-      <CreditsFooter isEnglish={isEnglish} />
+      <SiteFooter isEnglish={isEnglish} />
     </div>
   );
 }
