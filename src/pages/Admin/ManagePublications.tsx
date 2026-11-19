@@ -3,7 +3,6 @@ import type { FormEvent } from "react";
 import { createPortal } from "react-dom";
 import { isAxiosError } from "axios";
 import {
-  FileText,
   LoaderCircle,
   Pencil,
   Plus,
