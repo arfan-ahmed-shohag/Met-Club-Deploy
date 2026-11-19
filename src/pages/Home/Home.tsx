@@ -1,10 +1,9 @@
 import type { JSX } from "react";
 import TopNav from "../../components/Shared/TopBar";
-import AboutFooter from "./components/AboutFooter";
+import SiteFooter from "../../components/Shared/SiteFooter";
 import AboutSection from "./components/AboutSection";
 import AnticipatoryActionBriefSection from "./components/AnticipatoryActionBriefSection";
 import ChapterOverviewSection from "./components/ChapterOverviewSection";
-import CreditsFooter from "./components/CreditsFooter";
 import HeroSection from "./components/HeroSection";
 import PhotoGallerySection from "./components/PhotoGallerySection";
 import ReviewShowcaseSection from "./components/ReviewShowcaseSection";
@@ -31,8 +30,7 @@ export default function HomePage(): JSX.Element {
       <VideoShowcaseSection isEnglish={isEnglish} />
       <PhotoGallerySection isEnglish={isEnglish} />
       <ReviewShowcaseSection isEnglish={isEnglish} />
-      <AboutFooter isEnglish={isEnglish} />
-      <CreditsFooter isEnglish={isEnglish} />
+      <SiteFooter isEnglish={isEnglish} />
     </div>
   );
 }

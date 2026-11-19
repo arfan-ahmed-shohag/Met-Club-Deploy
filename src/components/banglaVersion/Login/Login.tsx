@@ -9,16 +9,18 @@ import {
   validateEmail,
   validateLoginPassword,
 } from "../../../utils/userValidation";
+import { getLocalizedPath, getStoredLocale } from "../../../utils/language";
 
 type LoginFormValues = {
   email: string;
   password: string;
 };
 
-export default function Login() {
+export default function Login({ embedded = false }: { embedded?: boolean }) {
   const navigate = useNavigate();
   const location = useLocation();
   const axiosInstance = axiosPublic();
+  const isEnglish = getStoredLocale() === "en";
   const {
     register,
     handleSubmit,
@@ -30,9 +32,15 @@ export default function Login() {
     try {
       const res = await axiosInstance.post("/auth/login", data);
       setSessionToken(res.data.data.accessToken);
-      toast.success(res.data.message || "লগইন সফল! এখন যাত্রা শুরু করুন।", {
+      toast.success(
+        res.data.message ||
+          (isEnglish
+            ? "Login successful! Welcome back."
+            : "লগইন সফল! এখন যাত্রা শুরু করুন।"),
+        {
         id: "error",
-      });
+        },
+      );
       const requestedPage = (
         location.state as {
           from?: { pathname?: string; search?: string; hash?: string };
@@ -54,7 +62,7 @@ export default function Login() {
         navigate("/admin/overview");
         return;
       }
-      navigate("/start-journey");
+        navigate(getLocalizedPath("/start-journey", isEnglish ? "en" : "bn"));
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const fieldErrors = error.response?.data.errors;
@@ -64,28 +72,42 @@ export default function Login() {
         }
         toast.error(
           error.response?.data.errorMessage ||
-            "লগইন করা যায়নি। আবার চেষ্টা করুন।",
+            isEnglish
+              ? "Unable to log in. Please try again."
+              : "লগইন করা যায়নি। আবার চেষ্টা করুন।",
           { id: "error" },
         );
       } else {
-        toast.error("লগইন ব্যর্থ হয়েছে।", { id: "error" });
+        toast.error(isEnglish ? "Login failed." : "লগইন ব্যর্থ হয়েছে।", {
+          id: "error",
+        });
       }
     }
   };
 
   return (
-    <div className="relative overflow-hidden w-full max-w-md p-6 sm:p-8 lg:p-4 xl:p-8 bg-[linear-gradient(140deg,rgba(255,255,255,0.52),rgba(255,255,255,0.34))] rounded-3xl shadow-[0_12px_34px_rgba(15,23,42,0.28)] space-y-4 md:space-y-6 mx-auto border border-white/50">
-      <div className="pointer-events-none absolute -top-16 -right-12 h-36 w-36 rounded-full bg-red-300/16 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-16 -left-12 h-36 w-36 rounded-full bg-rose-200/14 blur-3xl" />
+    <div
+      className={
+        embedded
+          ? "relative w-full space-y-5"
+          : "relative mx-auto w-full max-w-md space-y-4 overflow-hidden rounded-3xl border border-white/50 bg-[linear-gradient(140deg,rgba(255,255,255,0.52),rgba(255,255,255,0.34))] p-6 shadow-[0_12px_34px_rgba(15,23,42,0.28)] sm:space-y-6 sm:p-8"
+      }
+    >
+      {!embedded && (
+        <>
+          <div className="pointer-events-none absolute -top-16 -right-12 h-36 w-36 rounded-full bg-red-300/16 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-16 -left-12 h-36 w-36 rounded-full bg-rose-200/14 blur-3xl" />
+        </>
+      )}
 
       <div className="relative z-10">
-        <h1 className="text-xl font-bold leading-tight text-center tracking-tight text-slate-900 md:text-2xl drop-shadow-sm">
-          লগইন করুন
+        <h1 className="text-center text-xl font-bold leading-tight tracking-tight text-slate-900 drop-shadow-sm md:text-2xl">
+          {isEnglish ? "Log in to your account" : "লগইন করুন"}
         </h1>
 
         <form
           noValidate
-          className="space-y-4 md:space-y-6 lg:space-y-2 xl:space-y-6"
+          className="space-y-4 md:space-y-5"
           onSubmit={handleSubmit(onSubmit)}
         >
           <div>
@@ -93,13 +115,13 @@ export default function Login() {
               htmlFor="email"
               className="block mb-2 text-sm font-medium text-slate-800"
             >
-              ইমেইল
+              {isEnglish ? "Email" : "ইমেইল"}
             </label>
             <input
               type="email"
               id="email"
               autoComplete="email"
-              placeholder="আপনার ইমেইল লিখুন"
+              placeholder={isEnglish ? "Enter your email" : "আপনার ইমেইল লিখুন"}
               {...register("email", {
                 setValueAs: normalizeEmail,
                 validate: validateEmail,
@@ -118,7 +140,7 @@ export default function Login() {
               htmlFor="password"
               className="block mb-2 text-sm font-medium text-slate-800"
             >
-              পাসওয়ার্ড
+              {isEnglish ? "Password" : "পাসওয়ার্ড"}
             </label>
             <input
               type="password"
@@ -139,7 +161,7 @@ export default function Login() {
 
           <div className="flex items-center justify-end">
             <p className="text-sm font-semibold text-red-700 hover:text-red-800 hover:underline cursor-pointer">
-              পাসওয়ার্ড ভুলে গেছেন?
+              {isEnglish ? "Forgot password?" : "পাসওয়ার্ড ভুলে গেছেন?"}
             </p>
           </div>
 
@@ -148,16 +170,22 @@ export default function Login() {
             disabled={isSubmitting}
             className="w-full text-white cursor-pointer bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-semibold rounded-xl text-sm px-5 py-3 text-center disabled:cursor-not-allowed disabled:opacity-60 shadow-[0_4px_12px_0_rgba(0,0,0,0.1)] transition-all duration-200 active:scale-95"
           >
-            {isSubmitting ? "অপেক্ষা করুন..." : "লগইন"}
+            {isSubmitting
+              ? isEnglish
+                ? "Please wait..."
+                : "অপেক্ষা করুন..."
+              : isEnglish
+                ? "Log in"
+                : "লগইন"}
           </button>
 
           <p className="text-sm font-normal text-slate-700 text-center mt-6">
-            অ্যাকাউন্ট নেই?{" "}
+            {isEnglish ? "Don’t have an account?" : "অ্যাকাউন্ট নেই?"}{" "}
             <Link
-              to="/registration"
+              to={getLocalizedPath("/registration", isEnglish ? "en" : "bn")}
               className="font-semibold text-red-700 hover:text-red-800 hover:underline"
             >
-              নিবন্ধন করুন
+              {isEnglish ? "Create an account" : "নিবন্ধন করুন"}
             </Link>
           </p>
         </form>

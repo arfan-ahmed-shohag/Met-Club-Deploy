@@ -364,7 +364,6 @@ export default function HeaderNavigation({
               {isEnglish ? "About MET Club" : "মেট ক্লাব সম্পর্কে"}
             </Link>
           </li>
-          {desktopDropdown(menus[0])}
           <li>
             <Link
               to={getLocalizedPath("/anticipatory-action", locale)}
@@ -386,6 +385,7 @@ export default function HeaderNavigation({
                 : "শিশুবান্ধব আগাম কার্যক্রম"}
             </Link>
           </li>
+          {desktopDropdown(menus[0])}
           <li>
             <a
               href="http://game.meteorologyclub.com/"
@@ -396,6 +396,17 @@ export default function HeaderNavigation({
             </a>
           </li>
           {desktopDropdown(menus[1])}
+          <li>
+            <a
+              href="https://ee.kobotoolbox.org/x/HtTB5kOn"
+              target="_blank"
+              rel="noreferrer"
+              onClick={closeNavigation}
+              className={`${linkClass} whitespace-nowrap`}
+            >
+              {isEnglish ? "Citizen Science Portal" : "সিটিজেন সায়েন্স পোর্টাল"}
+            </a>
+          </li>
         </ul>
       </nav>
 
@@ -447,7 +458,6 @@ export default function HeaderNavigation({
                 {isEnglish ? "About MET Club" : "মেট ক্লাব সম্পর্কে"}
               </Link>
             </li>
-            {mobileDropdown(menus[0])}
             <li>
               <Link
                 to={getLocalizedPath("/anticipatory-action", locale)}
@@ -469,6 +479,7 @@ export default function HeaderNavigation({
                   : "শিশুবান্ধব আগাম কার্যক্রম"}
               </Link>
             </li>
+            {mobileDropdown(menus[0])}
             <li>
               <a
                 href="http://game.meteorologyclub.com/"
@@ -479,8 +490,19 @@ export default function HeaderNavigation({
               </a>
             </li>
             {mobileDropdown(menus[1])}
+            <li>
+              <a
+                href="https://ee.kobotoolbox.org/x/HtTB5kOn"
+                target="_blank"
+                rel="noreferrer"
+                onClick={closeNavigation}
+                className={linkClass}
+              >
+                {isEnglish ? "Citizen Science Portal" : "সিটিজেন সায়েন্স পোর্টাল"}
+              </a>
+            </li>
           </ul>
-          <div className="mt-3 border-t border-red-100 pt-3">
+          <div className="mt-3">
             {renderMobileAccount(closeNavigation)}
           </div>
         </nav>

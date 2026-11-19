@@ -392,8 +392,8 @@ export default function ChapterDialoguePreview(): JSX.Element {
             </p>
             <h1 className="mt-1 text-2xl font-black text-red-950 sm:text-3xl">
               {isEnglish
-                ? "The Weather and Climate Story — Chapter 1"
-                : "আবহাওয়া ও জলবায়ুর গল্প — অধ্যায় ১"}
+                ? "The Weather and Climate Story"
+                : "আবহাওয়া ও জলবায়ুর গল্প"}
             </h1>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -443,7 +443,7 @@ export default function ChapterDialoguePreview(): JSX.Element {
                 className="relative z-10 flex min-h-28 items-center justify-center border-[2.5px] border-slate-900 bg-white py-5 text-center text-slate-950 shadow-[0_4px_10px_rgba(15,23,42,.14)] sm:min-h-32 sm:py-6"
               >
                 <p
-                  className={`${bubbleTextPosition[current.character]} w-full px-[12%] text-[clamp(12px,1.1vw,17px)] font-medium leading-[1.4] tracking-normal [overflow-wrap:anywhere]`}
+                  className={`${bubbleTextPosition[current.character]} w-full px-[12%] text-[clamp(12px,1.1vw,17px)] font-medium leading-[1.4] tracking-normal wrap-anywhere`}
                 >
                   {isEnglish ? scene.dialoguesEn[activeIndex] : current.text}
                 </p>

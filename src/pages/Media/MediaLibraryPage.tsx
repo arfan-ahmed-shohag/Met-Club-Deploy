@@ -6,8 +6,7 @@ import axiosPublic from "../../hooks/axiosPublic";
 import { resolveMediaUrl } from "../../utils/media";
 import { getStoredLocale } from "../../utils/language";
 import TopNav from "../../components/Shared/TopBar";
-import AboutFooter from "../Home/components/AboutFooter";
-import CreditsFooter from "../Home/components/CreditsFooter";
+import SiteFooter from "../../components/Shared/SiteFooter";
 
 const VIDEO_PAGE_SIZE = 12;
 const PHOTO_PAGE_SIZE = 9;
@@ -523,8 +522,7 @@ function MediaPage({ kind }: { kind: "gallery" | "videos" }): JSX.Element {
           <PhotoLibrary isEnglish={isEnglish} />
         )}
       </main>
-      <AboutFooter isEnglish={isEnglish} />
-      <CreditsFooter isEnglish={isEnglish} />
+      <SiteFooter isEnglish={isEnglish} />
     </div>
   );
 }

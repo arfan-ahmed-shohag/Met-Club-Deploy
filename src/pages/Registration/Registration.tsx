@@ -2,13 +2,14 @@ import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { ChevronDown, Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import bgImage from "../../assets/images/bg.png";
 import axiosPublic from "../../hooks/axiosPublic";
-import { getLocalizedPath, getStoredLocale } from "../../utils/language";
+import { getLocalizedPath } from "../../utils/language";
 import bangladeshLocations from "../../data/bangladesh-locations.json";
 import { isAxiosError } from "axios";
 import { setSessionToken } from "../../lib/authSession";
+import { transliterateBanglaLocation } from "../../utils/banglaTransliteration";
 import {
   normalizeEmail,
   normalizeName,
@@ -44,6 +45,21 @@ const controlClassName =
 
 export default function Registration() {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const isEnglish = pathname.startsWith("/en/");
+  const t = (bengali: string, english: string) => (isEnglish ? english : bengali);
+  const errorText = (field: string, message?: string) => {
+    if (!isEnglish) return message;
+    const messages: Record<string, string> = {
+      fullName: "Enter a valid name.", email: "Enter a valid email address.",
+      institution: "Enter an institution name (2–200 characters).", class: "Select a valid class.",
+      guardianPhone: isOtherLocation ? "Enter a valid international phone number, including country code." : "Enter a valid 11-digit Bangladesh mobile number.",
+      division: "Select a valid division.", district: "Select a district in the chosen division.",
+      thana: "Select a thana or upazila in the chosen district.", password: "Use a valid password with at least 8 characters.",
+      confirmPassword: "Passwords do not match.",
+    };
+    return messages[field] ?? "Please check this field and try again.";
+  };
   const axios = axiosPublic();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -67,6 +83,7 @@ export default function Registration() {
 
   const divisionId = useWatch({ control, name: "division" });
   const districtId = useWatch({ control, name: "district" });
+  const isOtherLocation = divisionId === "others";
   const selectedDivision = bangladeshLocations.find(
     (division) => division.id === divisionId,
   );
@@ -84,9 +101,9 @@ export default function Registration() {
       class: Number(data.class),
       guardianPhone: normalizePhone(data.guardianPhone),
       password: data.password,
-      division: selectedDivision?.name,
-      district: selectedDistrict?.name,
-      thana: data.thana,
+      division: isOtherLocation ? "Others" : selectedDivision?.name,
+      district: isOtherLocation ? "Others" : selectedDistrict?.name,
+      thana: isOtherLocation ? "Others" : data.thana,
       profileImg: data.profileImg?.trim() || undefined,
     };
     try {
@@ -97,8 +114,8 @@ export default function Registration() {
       if (!res.data.success)
         throw new Error(res.data.errorMessage || "নিবন্ধন ব্যর্থ হয়েছে।");
       setSessionToken(res.data.data.accessToken);
-      toast.success("নিবন্ধন সফল! এখন যাত্রা শুরু করুন।", { id: "registration" });
-      navigate("/start-journey");
+      toast.success(t("নিবন্ধন সফল! এখন যাত্রা শুরু করুন।", "Registration successful! Start your learning journey."), { id: "registration" });
+      navigate(getLocalizedPath("/start-journey", isEnglish ? "en" : "bn"));
     } catch (error) {
       const fieldErrors = isAxiosError(error)
         ? error.response?.data.errors
@@ -175,13 +192,13 @@ export default function Registration() {
         >
           <div className="mb-8 flex flex-col gap-3">
             <div className="inline-flex w-fit rounded-full bg-white/20 px-4 py-1 text-xs font-bold tracking-[0.18em] text-white border border-white/30">
-              নতুন সদস্য নিবন্ধন
+              {t("নতুন সদস্য নিবন্ধন", "NEW MEMBER REGISTRATION")}
             </div>
             <h1 className="text-3xl font-black leading-tight text-white sm:text-4xl">
-              মেট ক্লাবে আপনার প্রোফাইল তৈরি করুন
+              {t("মেট ক্লাবে আপনার প্রোফাইল তৈরি করুন", "Create your MET Club profile")}
             </h1>
             <p className="max-w-2xl text-sm leading-6 text-white/90 sm:text-base">
-              আপনার তথ্য দিন, তারপর শেখা ও খেলার যাত্রা শুরু করুন।
+              {t("আপনার তথ্য দিন, তারপর শেখা ও খেলার যাত্রা শুরু করুন।", "Enter your details to begin your learning journey.")}
             </p>
           </div>
 
@@ -196,13 +213,13 @@ export default function Registration() {
                   htmlFor="fullName"
                   className="mb-2 block text-sm font-normal text-white"
                 >
-                  শিক্ষার্থীর নাম
+                  {t("শিক্ষার্থীর নাম", "Student name")}
                 </label>
                 <input
                   type="text"
                   id="fullName"
                   autoComplete="name"
-                  placeholder="পূর্ণ নাম লিখুন"
+                  placeholder={t("পূর্ণ নাম লিখুন", "Enter your full name")}
                   {...register("fullName", {
                     setValueAs: normalizeName,
                     validate: validateName,
@@ -211,7 +228,7 @@ export default function Registration() {
                 />
                 {errors.fullName && (
                   <p className="mt-1 text-xs text-red-500">
-                    {errors.fullName.message}
+                    {errorText("fullName", errors.fullName.message)}
                   </p>
                 )}
               </div>
@@ -221,7 +238,7 @@ export default function Registration() {
                   htmlFor="email"
                   className="mb-2 block text-sm font-normal text-white"
                 >
-                  ইমেইল ঠিকানা
+                  {t("ইমেইল ঠিকানা", "Email address")}
                 </label>
                 <input
                   type="email"
@@ -236,7 +253,7 @@ export default function Registration() {
                 />
                 {errors.email && (
                   <p className="mt-1 text-xs text-red-500">
-                    {errors.email.message}
+                    {errorText("email", errors.email.message)}
                   </p>
                 )}
               </div>
@@ -245,12 +262,12 @@ export default function Registration() {
                   htmlFor="institution"
                   className="mb-2 block text-sm font-semibold text-white"
                 >
-                  স্কুল / প্রতিষ্ঠান
+                  {t("স্কুল / প্রতিষ্ঠান", "School / Institution")}
                 </label>
                 <input
                   type="text"
                   id="institution"
-                  placeholder="স্কুলের নাম লিখুন"
+                  placeholder={t("স্কুলের নাম লিখুন", "Enter your school name")}
                   {...register("institution", {
                     setValueAs: normalizeName,
                     required: "প্রতিষ্ঠানের নাম আবশ্যক",
@@ -267,7 +284,7 @@ export default function Registration() {
                 />
                 {errors.institution && (
                   <p className="mt-1 text-xs text-red-500">
-                    {errors.institution.message}
+                    {errorText("institution", errors.institution.message)}
                   </p>
                 )}
               </div>
@@ -277,7 +294,7 @@ export default function Registration() {
                   htmlFor="class"
                   className="mb-2 block text-sm font-normal text-white"
                 >
-                  শ্রেণি
+                  {t("শ্রেণি", "Class")}
                 </label>
                 <div className="relative">
                   <select
@@ -290,21 +307,21 @@ export default function Registration() {
                     className={`${controlClassName} appearance-none pr-12 ${errors.class ? "border-red-400 focus:border-red-400" : "border-red-100 focus:border-red-400"}`}
                   >
                     <option value="" disabled>
-                      শ্রেণি নির্বাচন করুন
+                      {t("শ্রেণি নির্বাচন করুন", "Select your class")}
                     </option>
-                    <option value="1">প্রথম শ্রেণি</option>
-                    <option value="2">দ্বিতীয় শ্রেণি</option>
-                    <option value="3">তৃতীয় শ্রেণি</option>
-                    <option value="4">চতুর্থ শ্রেণি</option>
-                    <option value="5">পঞ্চম শ্রেণি</option>
-                    <option value="6">ষষ্ঠ শ্রেণি</option>
-                    <option value="7">সপ্তম শ্রেণি</option>
-                    <option value="8">অষ্টম শ্রেণি</option>
-                    <option value="9">নবম শ্রেণি</option>
-                    <option value="10">দশম শ্রেণি</option>
-                    <option value="11">একাদশ শ্রেণি</option>
-                    <option value="12">দ্বাদশ শ্রেণি</option>
-                    <option value="0">অন্যান্য</option>
+                    <option value="1">{t("শ্রেণি 1", "Class 1")}</option>
+                    <option value="2">{t("শ্রেণি 2", "Class 2")}</option>
+                    <option value="3">{t("শ্রেণি 3", "Class 3")}</option>
+                    <option value="4">{t("শ্রেণি 4", "Class 4")}</option>
+                    <option value="5">{t("শ্রেণি 5", "Class 5")}</option>
+                    <option value="6">{t("শ্রেণি 6", "Class 6")}</option>
+                    <option value="7">{t("শ্রেণি 7", "Class 7")}</option>
+                    <option value="8">{t("শ্রেণি 8", "Class 8")}</option>
+                    <option value="9">{t("শ্রেণি 9", "Class 9")}</option>
+                    <option value="10">{t("শ্রেণি 10", "Class 10")}</option>
+                    <option value="11">{t("শ্রেণি 11", "Class 11")}</option>
+                    <option value="12">{t("শ্রেণি 12", "Class 12")}</option>
+                    <option value="0">{t("অন্যান্য", "Other")}</option>
                   </select>
                   <ChevronDown
                     aria-hidden="true"
@@ -313,7 +330,7 @@ export default function Registration() {
                 </div>
                 {errors.class && (
                   <p className="mt-1 text-xs text-red-500">
-                    {errors.class.message}
+                      {errorText("class", errors.class.message)}
                   </p>
                 )}
               </div>
@@ -323,7 +340,7 @@ export default function Registration() {
                   htmlFor="division"
                   className="mb-2 block text-sm font-normal text-white"
                 >
-                  বিভাগ
+                  {t("বিভাগ", "Division")}
                 </label>
                 <div className="relative">
                   <select
@@ -335,25 +352,27 @@ export default function Registration() {
                     {...register("division", {
                       required: "বিভাগ নির্বাচন করুন",
                       validate: (value) =>
-                        bangladeshLocations.some(
+                        value === "others" || bangladeshLocations.some(
                           (division) => division.id === value,
                         ) || "তালিকা থেকে বিভাগ নির্বাচন করুন",
-                      onChange: () => {
-                        setValue("district", "");
-                        setValue("thana", "");
+                      onChange: (event) => {
+                        const other = event.target.value === "others";
+                        setValue("district", other ? "Others" : "");
+                        setValue("thana", other ? "Others" : "");
                         clearErrors(["district", "thana"]);
                       },
                     })}
                     className={`${controlClassName} appearance-none pr-12 ${errors.division ? "border-red-400 focus:border-red-400" : "border-red-100 focus:border-red-400"}`}
                   >
                     <option value="" disabled>
-                      বিভাগ নির্বাচন করুন
+                      {t("বিভাগ নির্বাচন করুন", "Select a division")}
                     </option>
                     {bangladeshLocations.map((division) => (
                       <option key={division.id} value={division.id}>
-                        {division.name}
+                        {isEnglish ? transliterateBanglaLocation(division.name) : division.name}
                       </option>
                     ))}
+                    <option value="others">{t("অন্যান্য", "Other")}</option>
                   </select>
                   <ChevronDown
                     aria-hidden="true"
@@ -362,7 +381,7 @@ export default function Registration() {
                 </div>
                 {errors.division && (
                   <p id="division-error" className="mt-1 text-xs text-red-500">
-                    {errors.division.message}
+                    {errorText("division", errors.division.message)}
                   </p>
                 )}
               </div>
@@ -372,12 +391,12 @@ export default function Registration() {
                   htmlFor="district"
                   className="mb-2 block text-sm font-normal text-white"
                 >
-                  জেলা
+                  {t("জেলা", "District")}
                 </label>
                 <div className="relative">
                   <select
                     id="district"
-                    disabled={!selectedDivision}
+                    disabled={!selectedDivision && !isOtherLocation}
                     aria-invalid={Boolean(errors.district)}
                     aria-describedby={
                       errors.district ? "district-error" : undefined
@@ -385,10 +404,10 @@ export default function Registration() {
                     {...register("district", {
                       required: "জেলা নির্বাচন করুন",
                       validate: (value) =>
-                        districts.some((district) => district.id === value) ||
+                        (isOtherLocation ? value === "Others" : districts.some((district) => district.id === value)) ||
                         "নির্বাচিত বিভাগের জেলা নির্বাচন করুন",
-                      onChange: () => {
-                        setValue("thana", "");
+                      onChange: (event) => {
+                        setValue("thana", isOtherLocation && event.target.value === "Others" ? "Others" : "");
                         clearErrors("thana");
                       },
                     })}
@@ -396,12 +415,13 @@ export default function Registration() {
                   >
                     <option value="" disabled>
                       {selectedDivision
-                        ? "জেলা নির্বাচন করুন"
-                        : "আগে বিভাগ নির্বাচন করুন"}
+                        ? t("জেলা নির্বাচন করুন", "Select a district")
+                        : t("আগে বিভাগ নির্বাচন করুন", "Select a division first")}
                     </option>
+                    {isOtherLocation && <option value="Others">{t("অন্যান্য", "Other")}</option>}
                     {districts.map((district) => (
                       <option key={district.id} value={district.id}>
-                        {district.name}
+                        {isEnglish ? transliterateBanglaLocation(district.name) : district.name}
                       </option>
                     ))}
                   </select>
@@ -412,7 +432,7 @@ export default function Registration() {
                 </div>
                 {errors.district && (
                   <p id="district-error" className="mt-1 text-xs text-red-500">
-                    {errors.district.message}
+                    {errorText("district", errors.district.message)}
                   </p>
                 )}
               </div>
@@ -422,30 +442,31 @@ export default function Registration() {
                   htmlFor="thana"
                   className="mb-2 block text-sm font-normal text-white"
                 >
-                  থানা / উপজেলা
+                  {t("থানা / উপজেলা", "Thana / Upazila")}
                 </label>
                 <div className="relative">
                   <select
                     id="thana"
-                    disabled={!selectedDistrict}
+                    disabled={!selectedDistrict && !isOtherLocation}
                     aria-invalid={Boolean(errors.thana)}
                     aria-describedby={errors.thana ? "thana-error" : undefined}
                     {...register("thana", {
                       required: "থানা / উপজেলা নির্বাচন করুন",
                       validate: (value) =>
-                        thanas.includes(value) ||
+                        (isOtherLocation ? value === "Others" : thanas.includes(value)) ||
                         "নির্বাচিত জেলার থানা / উপজেলা নির্বাচন করুন",
                     })}
                     className={`${controlClassName} appearance-none pr-12 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500 ${errors.thana ? "border-red-400 focus:border-red-400" : "border-red-100 focus:border-red-400"}`}
                   >
                     <option value="" disabled>
                       {selectedDistrict
-                        ? "থানা / উপজেলা নির্বাচন করুন"
-                        : "আগে জেলা নির্বাচন করুন"}
+                        ? t("থানা / উপজেলা নির্বাচন করুন", "Select a thana / upazila")
+                        : t("আগে জেলা নির্বাচন করুন", "Select a district first")}
                     </option>
+                    {isOtherLocation && <option value="Others">{t("অন্যান্য", "Other")}</option>}
                     {thanas.map((thana) => (
                       <option key={thana} value={thana}>
-                        {thana}
+                        {isEnglish ? transliterateBanglaLocation(thana) : thana}
                       </option>
                     ))}
                   </select>
@@ -456,7 +477,7 @@ export default function Registration() {
                 </div>
                 {errors.thana && (
                   <p id="thana-error" className="mt-1 text-xs text-red-500">
-                    {errors.thana.message}
+                    {errorText("thana", errors.thana.message)}
                   </p>
                 )}
               </div>
@@ -466,22 +487,26 @@ export default function Registration() {
                   htmlFor="guardianPhone"
                   className="mb-2 block text-sm font-normal text-white"
                 >
-                  মোবাইল নম্বর
+                  {t("মোবাইল নম্বর", "Mobile number")}
                 </label>
                 <input
                   type="tel"
                   id="guardianPhone"
                   autoComplete="tel"
-                  placeholder="01XXXXXXXXX"
+                  placeholder={isOtherLocation ? "+8801XXXXXXXXX" : "01XXXXXXXXX"}
                   {...register("guardianPhone", {
                     setValueAs: normalizePhone,
-                    validate: validatePhone,
+                    validate: (value) => {
+                      if (!isOtherLocation) return validatePhone(value);
+                      const phone = value.trim().replace(/[\s()-]/g, "");
+                      return /^\+[1-9]\d{7,14}$/.test(phone) || t("সঠিক আন্তর্জাতিক ফোন নম্বর ও কান্ট্রি কোড দিন", "Enter a valid international phone number, including country code.");
+                    },
                   })}
                   className={`${controlClassName} ${errors.guardianPhone ? "border-red-400 focus:border-red-400" : "border-red-100 focus:border-red-400"}`}
                 />
                 {errors.guardianPhone && (
                   <p className="mt-1 text-xs text-red-500">
-                    {errors.guardianPhone.message}
+                    {errorText("guardianPhone", errors.guardianPhone.message)}
                   </p>
                 )}
               </div>
@@ -491,14 +516,14 @@ export default function Registration() {
                   htmlFor="password"
                   className="mb-2 block text-sm font-normal text-white"
                 >
-                  পাসওয়ার্ড
+                  {t("পাসওয়ার্ড", "Password")}
                 </label>
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
                     id="password"
                     autoComplete="new-password"
-                    placeholder="কমপক্ষে ৮ অক্ষর"
+                    placeholder={t("কমপক্ষে ৮ অক্ষর", "At least 8 characters")}
                     {...register("password", {
                       validate: validatePassword,
                       deps: ["confirmPassword"],
@@ -509,7 +534,7 @@ export default function Registration() {
                     type="button"
                     onClick={() => setShowPassword((visible) => !visible)}
                     aria-label={
-                      showPassword ? "পাসওয়ার্ড লুকান" : "পাসওয়ার্ড দেখুন"
+                      showPassword ? t("পাসওয়ার্ড লুকান", "Hide password") : t("পাসওয়ার্ড দেখুন", "Show password")
                     }
                     aria-pressed={showPassword}
                     aria-controls="password"
@@ -524,7 +549,7 @@ export default function Registration() {
                 </div>
                 {errors.password && (
                   <p className="mt-1 text-xs text-red-500">
-                    {errors.password.message}
+                    {errorText("password", errors.password.message)}
                   </p>
                 )}
               </div>
@@ -534,14 +559,14 @@ export default function Registration() {
                   htmlFor="confirmPassword"
                   className="mb-2 block text-sm font-normal text-white"
                 >
-                  পাসওয়ার্ড নিশ্চিত করুন
+                  {t("পাসওয়ার্ড নিশ্চিত করুন", "Confirm password")}
                 </label>
                 <div className="relative">
                   <input
                     type={showConfirmPassword ? "text" : "password"}
                     id="confirmPassword"
                     autoComplete="new-password"
-                    placeholder="পাসওয়ার্ড আবার লিখুন"
+                    placeholder={t("পাসওয়ার্ড আবার লিখুন", "Enter your password again")}
                     aria-invalid={Boolean(errors.confirmPassword)}
                     aria-describedby={
                       errors.confirmPassword
@@ -562,8 +587,8 @@ export default function Registration() {
                     }
                     aria-label={
                       showConfirmPassword
-                        ? "নিশ্চিত পাসওয়ার্ড লুকান"
-                        : "নিশ্চিত পাসওয়ার্ড দেখুন"
+                        ? t("নিশ্চিত পাসওয়ার্ড লুকান", "Hide confirmed password")
+                        : t("নিশ্চিত পাসওয়ার্ড দেখুন", "Show confirmed password")
                     }
                     aria-pressed={showConfirmPassword}
                     aria-controls="confirmPassword"
@@ -581,15 +606,14 @@ export default function Registration() {
                     id="confirm-password-error"
                     className="mt-1 text-xs text-red-500"
                   >
-                    {errors.confirmPassword.message}
+                    {errorText("confirmPassword", errors.confirmPassword.message)}
                   </p>
                 )}
               </div>
             </div>
 
             <div className="rounded-2xl border border-white/35 bg-white/12 px-4 py-3 text-sm leading-6 text-white/95">
-              আবহাওয়া, জলবায়ু ও দুর্যোগ বিষয়ে শেখার জন্য এই প্রোফাইল ব্যবহার হবে।
-              প্রদত্ত তথ্য সঠিকভাবে পূরণ করুন।
+              {t("আবহাওয়া, জলবায়ু ও দুর্যোগ বিষয়ে শেখার জন্য এই প্রোফাইল ব্যবহার হবে। প্রদত্ত তথ্য সঠিকভাবে পূরণ করুন.", "This profile will be used for learning about weather, climate, and disasters. Please make sure your information is correct.")}
             </div>
 
             <div className="space-y-6 pt-2">
@@ -598,7 +622,7 @@ export default function Registration() {
                   role="alert"
                   className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700"
                 >
-                  {errors.root.server.message}
+                  {isEnglish ? "Registration could not be completed. Please check your details and try again." : errors.root.server.message}
                 </p>
               )}
               <button
@@ -606,15 +630,15 @@ export default function Registration() {
                 disabled={isSubmitting}
                 className="w-full whitespace-nowrap text-white cursor-pointer bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-semibold rounded-xl text-sm px-5 py-3 text-center disabled:cursor-not-allowed disabled:opacity-60 shadow-[0_4px_12px_0_rgba(0,0,0,0.1)] transition-all duration-200 active:scale-95"
               >
-                {isSubmitting ? "অপেক্ষা করুন..." : "নিবন্ধন সম্পন্ন করুন"}
+                {isSubmitting ? t("অপেক্ষা করুন...", "Please wait...") : t("নিবন্ধন সম্পন্ন করুন", "Create account")}
               </button>
               <p className="text-sm font-normal text-slate-700 text-center">
-                অ্যাকাউন্ট আছে?{" "}
+                {t("অ্যাকাউন্ট আছে?", "Already have an account?")}{" "}
                 <Link
-                  to={getLocalizedPath("/login", getStoredLocale())}
+                  to={getLocalizedPath("/login", isEnglish ? "en" : "bn")}
                   className="font-semibold text-red-700 hover:text-red-800 hover:underline"
                 >
-                  লগইন করুন
+                  {t("লগইন করুন", "Log in")}
                 </Link>
               </p>
             </div>

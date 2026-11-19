@@ -310,7 +310,7 @@ function UserProfile({
       ...previous,
       [field]: value,
       ...(field === "division"
-        ? { district: "", thana: "" }
+        ? value === "Others" ? { district: "Others", thana: "Others" } : { district: "", thana: "" }
         : field === "district"
           ? { thana: "" }
           : {}),
@@ -411,14 +411,14 @@ function UserProfile({
                 : `${t("শ্রেণি", "Class")} ${new Intl.NumberFormat(locale).format(index)}`,
           }))
         : name === "division"
-          ? locations.map((item) => ({ value: item.name, label: item.name }))
+          ? [...locations.map((item) => ({ value: item.name, label: item.name })), { value: "Others", label: t("অন্যান্য", "Others") }]
           : name === "district"
-            ? (division?.districts ?? []).map((item) => ({
+            ? values.division === "Others" ? [{ value: "Others", label: t("অন্যান্য", "Others") }] : (division?.districts ?? []).map((item) => ({
                 value: item.name,
                 label: item.name,
               }))
             : name === "thana"
-              ? (district?.thanas ?? []).map((item) => ({
+              ? values.division === "Others" ? [{ value: "Others", label: t("অন্যান্য", "Others") }] : (district?.thanas ?? []).map((item) => ({
                   value: item,
                   label: item,
                 }))
@@ -445,8 +445,8 @@ function UserProfile({
               value={values[name]}
               disabled={
                 Boolean(busy) ||
-                (name === "district" && !division) ||
-                (name === "thana" && !district)
+                (name === "district" && !division && values.division !== "Others") ||
+                (name === "thana" && !district && values.division !== "Others")
               }
               onChange={(event) => update(name, event.target.value)}
               aria-invalid={Boolean(errors[name])}

@@ -5,8 +5,7 @@ import { useLocaleRouteSync } from "../../hooks/useLocaleRouteSync";
 import { getStoredLocale } from "../../utils/language";
 import { resolveMediaUrl } from "../../utils/media";
 import TopNav from "../../components/Shared/TopBar";
-import AboutFooter from "../Home/components/AboutFooter";
-import CreditsFooter from "../Home/components/CreditsFooter";
+import SiteFooter from "../../components/Shared/SiteFooter";
 
 const PAGE_SIZE = 9;
 type Story = {
@@ -230,8 +229,7 @@ export default function StoriesPage(): JSX.Element {
           </div>
         )}
       </main>
-      <AboutFooter isEnglish={isEnglish} />
-      <CreditsFooter isEnglish={isEnglish} />
+      <SiteFooter isEnglish={isEnglish} />
     </div>
   );
 }

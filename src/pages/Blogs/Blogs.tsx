@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { ArrowLeft, ArrowRight, PencilLine } from "lucide-react";
 import toast from "react-hot-toast";
 import TopNav from "../../components/Shared/TopBar";
+import SiteFooter from "../../components/Shared/SiteFooter";
 import axiosPublic from "../../hooks/axiosPublic";
 import useAxiosProtected from "../../hooks/axiosProtected";
 import useAuth from "../../hooks/useAuth";
@@ -330,6 +331,7 @@ export default function Blogs() {
           </section>
         )}
       </main>
+      <SiteFooter isEnglish={isEnglish} />
     </div>
   );
 }

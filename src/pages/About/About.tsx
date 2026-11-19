@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   Target,
   Eye,
@@ -10,7 +11,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import logo from "../../assets/images/logo_original.png";
-import Partners from "../../components/Shared/Partners";
+import SiteFooter from "../../components/Shared/SiteFooter";
 import coverVideo from "../../assets/videos/Drone shot for cover.mp4";
 import whatIsVideo from "../../assets/videos/What is MET Club_.mp4";
 import whatIsPoster from "../../assets/images/what_is_poster.jpg";
@@ -33,6 +34,30 @@ export default function About() {
   useLocaleRouteSync("/about", "/en/about");
   const isEnglish = getStoredLocale() === "en";
   const t = (bangla: string, english: string) => (isEnglish ? english : bangla);
+
+  useEffect(() => {
+    const sections = document.querySelectorAll<HTMLElement>("[data-about-reveal]");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      sections.forEach((section) => section.classList.add("about-is-visible"));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("about-is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.06, rootMargin: "0px 0px -36px 0px" },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
 
   const objectives = [
     {
@@ -153,12 +178,14 @@ export default function About() {
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover z-0"
+          className="about-hero-video absolute inset-0 w-full h-full object-cover z-0"
         >
           <source src={coverVideo} type="video/mp4" />
         </video>
         {/* Overlay for text readability */}
         <div className="absolute inset-0 bg-black/45 z-10"></div>
+        <div className="about-hero-glow about-hero-glow-one" aria-hidden="true" />
+        <div className="about-hero-glow about-hero-glow-two" aria-hidden="true" />
 
         <div className="site-container relative z-20 text-center px-4 sm:px-6 lg:px-8 header-anim">
           <div
@@ -190,10 +217,11 @@ export default function About() {
       {/* Mission & Vision - Solid Background, Solid Cards */}
       <section
         id="mission-vision"
+        data-about-reveal
         className="relative z-10 py-10 md:py-15 lg:py-20 bg-linear-to-br from-red-50 to-orange-50"
       >
         <div className="site-container px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-8 mb-16">
+          <div className="grid md:grid-cols-2 gap-8 mb-16" data-about-stagger>
             <div
               className="group rounded-3xl p-10 hover:scale-105 transition-all duration-500 animate-slide-right"
               style={{
@@ -334,6 +362,7 @@ export default function About() {
       {/* Objectives - Image Background, Glassy Cards */}
       <section
         id="objectives"
+        data-about-reveal
         className="relative z-10 py-10 md:py-15 lg:py-20 bg-cover bg-center"
         style={{ backgroundImage: `url(${startJourneyBg})` }}
       >
@@ -357,7 +386,7 @@ export default function About() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8" data-about-stagger>
             {objectives.map((objective, index) => (
               <div
                 key={index}
@@ -390,6 +419,7 @@ export default function About() {
       {/* Structure - Solid Background, Solid Cards */}
       <section
         id="structure"
+        data-about-reveal
         className="relative z-10 py-10 md:py-15 lg:py-20 bg-linear-to-br from-orange-50 to-red-50"
       >
         <div className="site-container px-4 sm:px-6 lg:px-8">
@@ -583,6 +613,7 @@ export default function About() {
       {/* Activities - Image Background, Glassy Cards */}
       <section
         id="activities"
+        data-about-reveal
         className="relative z-10 py-10 md:py-15 lg:py-20 bg-cover bg-center"
         style={{ backgroundImage: `url(${aboutBg})` }}
       >
@@ -605,7 +636,7 @@ export default function About() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-5 gap-6">
+          <div className="grid md:grid-cols-5 gap-6" data-about-stagger>
             {activities.map((activity, index) => (
               <div
                 key={index}
@@ -638,6 +669,7 @@ export default function About() {
       {/* Impact - Solid Background, Solid Cards */}
       <section
         id="impact"
+        data-about-reveal
         className="relative z-10 py-10 md:py-15 lg:py-20 bg-red-50"
       >
         <div className="site-container px-4 sm:px-6 lg:px-8">
@@ -673,6 +705,7 @@ export default function About() {
       {/* Locations - Image Background, Glassy Cards */}
       <section
         id="locations"
+        data-about-reveal
         className="relative z-10 py-10 md:py-15 lg:py-20 bg-cover bg-center"
         style={{ backgroundImage: `url(${chapterBg})` }}
       >
@@ -692,7 +725,7 @@ export default function About() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8" data-about-stagger>
             {locations.map((loc) => (
               <Link
                 to={
@@ -753,6 +786,7 @@ export default function About() {
       {/* Values - Solid Background, Solid Cards */}
       <section
         id="values"
+        data-about-reveal
         className="relative z-10 py-10 md:py-15 lg:py-20 bg-linear-to-br from-red-50 to-orange-50"
       >
         <div className="site-container px-4 sm:px-6 lg:px-8">
@@ -774,7 +808,7 @@ export default function About() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-5 gap-6">
+          <div className="grid md:grid-cols-5 gap-6" data-about-stagger>
             {values.map((activity, index) => (
               <div
                 key={index}
@@ -820,34 +854,7 @@ export default function About() {
         </div>
       </section>
 
-      <footer className="relative z-10 bg-[linear-gradient(180deg,rgba(20,6,6,0.9),rgba(20,6,6,1))] text-white py-10 md:py-15 lg:py-20 border-t border-red-900">
-        <div className="site-container px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row items-center justify-center space-x-4">
-            <img src={logo} alt="MET CLUB LOGO" className="w-32 h-32" />
-            <div>
-              <h3
-                className="text-2xl font-black text-red-500"
-                style={{ textShadow: "0 2px 4px rgba(0,0,0,0.5)" }}
-              >
-                {t("মেট ক্লাব", "Met Club")}
-              </h3>
-              <p className="text-sm text-gray-300 font-semibold mt-1">
-                {t("আবহাওয়া ক্লাব", "Weather Club")}
-              </p>
-              <p className="text-red-200 my-4 font-semibold italic">
-                {t(
-                  '"তরুণ মন, শক্তিশালী সতর্কতা"',
-                  '"Young Minds, Stronger Warnings"',
-                )}
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-8">
-            <Partners bg="bg-white" />
-          </div>
-        </div>
-      </footer>
+      <SiteFooter isEnglish={isEnglish} />
     </div>
   );
 }
