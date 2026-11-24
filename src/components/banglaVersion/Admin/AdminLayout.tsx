@@ -1,167 +1,118 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router";
+import { FiChevronRight, FiExternalLink, FiMenu } from "react-icons/fi";
 import Sidebar from "./Sidebar";
-import bgImage from "../../../assets/images/start-journey-page-bg.jpeg";
-import { FiHome, FiMenu, FiX } from "react-icons/fi";
-import {
-  FiGrid,
-  FiBookOpen,
-  FiImage,
-  FiVideo,
-  FiMessageSquare,
-} from "react-icons/fi";
-import { NavLink } from "react-router";
+import { getAdminPageTitle } from "./adminLinks";
 
-const sidebarLinks = [
-  { name: "ওভারভিউ", path: "/admin/overview", icon: FiGrid },
-  { name: "ব্লগ পর্যালোচনা", path: "/admin/blogs", icon: FiBookOpen },
-  { name: "ফটো গ্যালারি", path: "/admin/gallery", icon: FiImage },
-  { name: "হোম ভিডিও", path: "/admin/videos", icon: FiVideo },
-  { name: "গল্প পরিচালনা", path: "/admin/stories", icon: FiMessageSquare },
-];
+const COLLAPSED_KEY = "met-club-admin-sidebar-collapsed";
+
+function readCollapsed() {
+  try {
+    return localStorage.getItem(COLLAPSED_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
 
 export default function AdminLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(readCollapsed);
   const location = useLocation();
+  const pageTitle = getAdminPageTitle(location.pathname);
 
-  // Determine current page title from URL
-  const currentLink = sidebarLinks.find((link) =>
-    location.pathname.includes(link.path),
-  );
-  const pageTitle = currentLink ? currentLink.name : "Admin Dashboard";
-
-  // Close mobile menu on navigate
   useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [location]);
+    if (!mobileMenuOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMobileMenuOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [mobileMenuOpen]);
+
+  const toggleCollapsed = () => {
+    setCollapsed((value) => {
+      const next = !value;
+      try {
+        localStorage.setItem(COLLAPSED_KEY, next ? "1" : "0");
+      } catch {
+        // Storage can be unavailable; the toggle still works for this visit.
+      }
+      return next;
+    });
+  };
 
   return (
-    <div
-      className="relative min-h-screen"
-      style={{
-        backgroundImage: `url(${bgImage})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        backgroundAttachment: "fixed",
-      }}
-    >
-      <div
-        className="absolute inset-0 pointer-events-none z-0"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(20,6,6,0.3) 0%, rgba(20,6,6,0.2) 55%, rgba(20,6,6,0.25) 100%)",
-        }}
-      />
-      <Sidebar />
+    <div className="admin-shell relative min-h-screen">
+      {/* Desktop sidebar */}
+      <aside
+        className={`fixed inset-y-0 left-0 z-20 hidden shadow-[8px_0_32px_rgba(34,34,33,0.18)] transition-[width] duration-300 ease-out motion-reduce:transition-none lg:block ${
+          collapsed ? "w-20" : "w-72"
+        }`}
+      >
+        <Sidebar collapsed={collapsed} onToggleCollapse={toggleCollapsed} />
+      </aside>
 
-      {/* Mobile Sidebar overlay */}
+      {/* Mobile drawer */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 lg:hidden flex">
+        <div className="fixed inset-0 z-40 flex lg:hidden">
           <div
-            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            className="absolute inset-0 bg-red-950/40 backdrop-blur-sm"
             onClick={() => setMobileMenuOpen(false)}
-          ></div>
+          />
           <aside
-            className="relative w-72 h-full flex flex-col z-50 animate-in slide-in-from-left duration-300"
-            style={{
-              background: "rgba(255,255,255,0.85)",
-              backdropFilter: "blur(28px) saturate(180%)",
-              WebkitBackdropFilter: "blur(28px) saturate(180%)",
-            }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="অ্যাডমিন মেনু"
+            className="relative z-50 h-full w-72 max-w-[85vw] shadow-2xl animate-in slide-in-from-left duration-300"
           >
-            <div
-              className="flex items-center justify-between px-4 border-b"
-              style={{ height: 68, borderBottomColor: "rgba(0,0,0,0.1)" }}
-            >
-              <span className="font-black text-lg text-red-900">Admin</span>
-              <button
-                onClick={() => setMobileMenuOpen(false)}
-                className="p-2 text-red-900"
-              >
-                <FiX className="w-6 h-6" />
-              </button>
-            </div>
-            <nav className="flex-1 px-4 py-6 overflow-y-auto flex flex-col gap-2">
-              {sidebarLinks.map((link) => {
-                const Icon = link.icon;
-                return (
-                  <NavLink
-                    key={link.name}
-                    to={link.path}
-                    className={({ isActive }) =>
-                      `flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all duration-200 ${
-                        isActive ? "text-white" : ""
-                      }`
-                    }
-                    style={({ isActive }) => ({
-                      background: isActive
-                        ? "linear-gradient(135deg, #DA291C, #FC4C02)"
-                        : "transparent",
-                      color: isActive ? "#fff" : "rgba(127,29,29,0.9)",
-                    })}
-                  >
-                    <Icon className="w-5 h-5" />
-                    {link.name}
-                  </NavLink>
-                );
-              })}
-            </nav>
+            <Sidebar onClose={() => setMobileMenuOpen(false)} />
           </aside>
         </div>
       )}
 
-      {/* Main Content */}
-      <div className="lg:ml-72 flex flex-col min-h-screen relative z-10">
-        {/* Top Header */}
-        <header
-          className="flex items-center justify-between px-4 sm:px-6 shrink-0 sticky top-0 z-30"
-          style={{
-            height: 68,
-            background: "rgba(255,255,255,0.12)",
-            backdropFilter: "blur(28px) saturate(180%)",
-            WebkitBackdropFilter: "blur(28px) saturate(180%)",
-            borderBottom: "1px solid rgba(255,255,255,0.25)",
-            boxShadow: "0 10px 40px rgba(0,0,0,0.08)",
-          }}
-        >
-          <div className="flex items-center gap-3">
+      {/* Main column */}
+      <div
+        className={`relative z-10 flex min-h-screen flex-col transition-[margin] duration-300 ease-out motion-reduce:transition-none ${
+          collapsed ? "lg:ml-20" : "lg:ml-72"
+        }`}
+      >
+        <header className="admin-topbar sticky top-0 z-30 flex h-17 shrink-0 items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+          <div className="flex min-w-0 items-center gap-3">
             <button
-              className="lg:hidden p-2 rounded-xl text-white hover:bg-white/20 transition-colors"
-              style={{ background: "rgba(255,255,255,0.15)" }}
+              type="button"
+              className="rounded-xl border border-white/15 bg-white/[.06] p-2 text-white transition-colors hover:bg-white/10 lg:hidden"
               onClick={() => setMobileMenuOpen(true)}
+              aria-label="মেনু খুলুন"
+              aria-expanded={mobileMenuOpen}
             >
-              <FiMenu className="w-5 h-5" />
+              <FiMenu className="h-5 w-5" />
             </button>
-            <h1
-              className="text-xl font-bold drop-shadow-md"
-              style={{
-                color: "rgba(239,68,68,0.95)",
-                textShadow:
-                  "-0.6px -0.6px 0 rgba(255,255,255,0.95), 0.6px -0.6px 0 rgba(255,255,255,0.95), -0.6px 0.6px 0 rgba(255,255,255,0.95), 0.6px 0.6px 0 rgba(255,255,255,0.95), 0 2px 8px rgba(239,68,68,0.18)",
-                letterSpacing: "-0.5px",
-              }}
-            >
-              {pageTitle}
-            </h1>
+            <div className="min-w-0">
+              <nav
+                aria-label="ব্রেডক্রাম্ব"
+                className="hidden items-center gap-1 text-xs font-semibold text-white/45 sm:flex"
+              >
+                <span>অ্যাডমিন</span>
+                <FiChevronRight className="h-3 w-3" aria-hidden="true" />
+                <span className="text-red-300">{pageTitle}</span>
+              </nav>
+              <h1 className="truncate text-lg font-black tracking-tight text-white sm:text-xl">
+                {pageTitle}
+              </h1>
+            </div>
           </div>
 
-          {/* Universal Add Button */}
           <Link
             to="/"
-            className="flex items-center cursor-pointer gap-2 px-4 py-2 rounded-xl font-bold text-white transition-transform hover:scale-105"
-            style={{
-              background: "linear-gradient(135deg, #DA291C, #FC4C02)",
-              boxShadow: "0 4px 14px rgba(220,38,38,0.28)",
-            }}
+            className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-red-600 px-3.5 py-2 text-sm font-bold text-white shadow-md shadow-black/30 transition-colors hover:bg-red-700 sm:px-4"
           >
-            <FiHome className="w-5 h-5" />
-            <span className="hidden sm:inline">হোম</span>
+            <FiExternalLink className="h-4 w-4" aria-hidden="true" />
+            <span className="hidden sm:inline">সাইট দেখুন</span>
+            <span className="sr-only sm:hidden">হোম</span>
           </Link>
         </header>
 
-        {/* Page Content Outlet */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 custom-scrollbar">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8">
           <Outlet />
         </main>
       </div>

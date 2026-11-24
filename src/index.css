@@ -692,3 +692,44 @@ body {
     animation: none;
   }
 }
+
+/* ── Admin shell: the Home page warm cream canvas behind admin pages ── */
+.admin-shell {
+  background-color: #fff7f5;
+  background-image:
+    radial-gradient(circle at 100% 0%, rgba(218, 41, 28, 0.08), transparent 40%),
+    radial-gradient(circle at 15% 100%, rgba(252, 76, 2, 0.07), transparent 42%),
+    radial-gradient(rgba(154, 51, 36, 0.07) 1px, transparent 1px);
+  background-size: auto, auto, 22px 22px;
+  background-attachment: fixed;
+}
+
+/* Admin top bar: continues the sidebar's dark brown gradient (#40302d → #222221). */
+.admin-topbar {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(218, 41, 28, 0.18), transparent 45%),
+    linear-gradient(90deg, #3a2c29 0%, #2c2826 55%, #222221 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 24px rgba(34, 34, 33, 0.18);
+}
+
+@keyframes adminAccountMenuIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.admin-account-menu {
+  animation: adminAccountMenuIn 0.18s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-account-menu {
+    animation: none;
+  }
+}
