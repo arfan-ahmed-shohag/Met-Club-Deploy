@@ -351,12 +351,10 @@ export default function ManageStories() {
                   required={!editing}
                   type="file"
                   accept="image/png,image/jpeg,image/webp,image/gif"
-                  onChange={(event) =>
-                    setForm((current) => ({
-                      ...current,
-                      image: event.currentTarget.files?.[0] || null,
-                    }))
-                  }
+                  onChange={(event) => {
+                    const image = event.currentTarget.files?.[0] || null;
+                    setForm((current) => ({ ...current, image }));
+                  }}
                   className="mt-1 block w-full rounded-xl border border-slate-200 p-2 font-normal"
                 />
                 <span className="mt-1 block text-xs font-normal text-slate-500">
