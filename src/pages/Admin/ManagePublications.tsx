@@ -55,6 +55,12 @@ const categories: { value: Category; label: string }[] = [
   { value: "flyer", label: "Flyers" },
   { value: "pressRelease", label: "News" },
 ];
+const cardGridClass = "grid gap-4 sm:grid-cols-2 xl:grid-cols-3";
+const cardClass =
+  "flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm";
+const coverClass = "aspect-video w-full";
+const cardBodyClass = "flex flex-1 flex-col p-5";
+const cardActionsClass = "mt-4 flex justify-end gap-2";
 
 function ManagePublications({
   initialCategory,
@@ -257,19 +263,40 @@ function ManagePublications({
           )}
         </div>
         {loading ? (
-          <div
-            className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3"
-            aria-busy="true"
-          >
-            {Array.from({ length: 6 }, (_, i) => (
-              <div
-                key={i}
-                className="animate-pulse rounded-2xl border bg-white p-5"
+          <div className={cardGridClass} role="status">
+            <span className="sr-only">Loading PDF publications</span>
+            {Array.from({ length: 6 }, (_, index) => (
+              <article
+                key={index}
+                aria-hidden="true"
+                className={`${cardClass} motion-safe:animate-pulse`}
               >
-                <div className="h-10 w-10 rounded-lg bg-slate-200" />
-                <div className="mt-4 h-5 w-2/3 rounded bg-slate-200" />
-                <div className="mt-3 h-4 rounded bg-slate-100" />
-              </div>
+                <div className={`${coverClass} bg-slate-200`} />
+                <div className={cardBodyClass}>
+                  <div className="flex h-6 items-center">
+                    <div className="h-4 w-2/3 rounded bg-slate-200" />
+                  </div>
+                  <div className="flex h-5 items-center">
+                    <div className="h-3 w-1/2 rounded bg-slate-200" />
+                  </div>
+                  <div className="mt-2 flex h-5 items-center">
+                    <div className="h-3 w-full rounded bg-slate-100" />
+                  </div>
+                  <div className="flex h-5 items-center">
+                    <div className="h-3 w-5/6 rounded bg-slate-100" />
+                  </div>
+                  <div className="mt-3 flex h-5 items-center">
+                    <div className="h-3 w-32 rounded bg-slate-200" />
+                  </div>
+                  <div className="mt-1 flex h-5 items-center">
+                    <div className="h-3 w-28 rounded bg-slate-200" />
+                  </div>
+                  <div className={cardActionsClass}>
+                    <div className="h-[38px] w-[74px] rounded-lg bg-slate-100" />
+                    <div className="h-[38px] w-[89px] rounded-lg bg-slate-100" />
+                  </div>
+                </div>
+              </article>
             ))}
           </div>
         ) : items.length === 0 ? (
@@ -277,22 +304,19 @@ function ManagePublications({
             No PDFs in this category yet.
           </p>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <div className={cardGridClass}>
             {items.map((item) => (
-              <article
-                key={item.id}
-                className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
-              >
+              <article key={item.id} className={cardClass}>
                 {item.featuredImageUrl ? (
                   <img
                     src={resolveMediaUrl(item.featuredImageUrl)}
                     alt={item.titleEn}
-                    className="aspect-[16/9] w-full bg-slate-100 object-cover"
+                    className={`${coverClass} bg-slate-100 object-cover`}
                   />
                 ) : (
-                  <div className="aspect-[16/9] w-full bg-slate-100" />
+                  <div className={`${coverClass} bg-slate-100`} />
                 )}
-                <div className="flex flex-1 flex-col p-5">
+                <div className={cardBodyClass}>
                   <h4 className="font-bold text-slate-900">{item.titleBn}</h4>
                   <p className="text-sm font-semibold text-slate-700">
                     {item.titleEn}
@@ -321,7 +345,7 @@ function ManagePublications({
                       Open English PDF
                     </a>
                   )}
-                  <div className="mt-4 flex justify-end gap-2">
+                  <div className={cardActionsClass}>
                     <button
                       type="button"
                       onClick={() => startEdit(item)}
