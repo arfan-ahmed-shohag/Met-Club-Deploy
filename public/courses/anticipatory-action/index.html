@@ -16,4 +16,16 @@
 
 
 
-<script src="/courses/anticipatory-action/course-content.js"></script><script src="/courses/anticipatory-action/course-app.js"></script></body></html>
+<script>
+(function () {
+  // ?lang=en loads the English text; everything else uses Bangla.
+  var en = new URLSearchParams(location.search).get('lang') === 'en';
+  document.documentElement.lang = en ? 'en' : 'bn';
+  [en ? 'course-content.en.js' : 'course-content.js', 'course-app.js'].forEach(function (file) {
+    var script = document.createElement('script');
+    script.src = '/courses/anticipatory-action/' + file;
+    script.async = false;
+    document.body.appendChild(script);
+  });
+})();
+</script></body></html>

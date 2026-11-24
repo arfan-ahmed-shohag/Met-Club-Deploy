@@ -9,15 +9,19 @@ export interface CourseStatus {
 
 export default function CoursePlayerFrame({
   user,
+  isEnglish,
   soundToggleRequest,
   onCourseStatus,
 }: {
   user: CurrentUser;
+  isEnglish: boolean;
   soundToggleRequest: number;
   onCourseStatus: (status: CourseStatus) => void;
 }) {
   const frameRef = useRef<HTMLIFrameElement>(null);
   const [frameLoaded, setFrameLoaded] = useState(false);
+  // true once the course app has rendered its first screen (it posts "met-club-course-ready")
+  const [courseReady, setCourseReady] = useState(false);
   const [frameHeight, setFrameHeight] = useState(1);
 
   useEffect(() => {
@@ -45,6 +49,10 @@ export default function CoursePlayerFrame({
       )
         return;
       const message = event.data;
+      if (message?.type === "met-club-course-ready") {
+        setCourseReady(true);
+        return;
+      }
       if (
         message?.type === "met-club-course-status" &&
         typeof message.xp === "string" &&
@@ -109,19 +117,25 @@ export default function CoursePlayerFrame({
 
   return (
     <div className="relative bg-gray-50">
-      {!frameLoaded && (
-        <div className="pointer-events-none absolute inset-0 z-10 bg-gray-50">
-          <CourseLoadingState />
-        </div>
-      )}
+      {/* The skeleton holds the space until the course is on screen, so the page does not jump. */}
+      {!courseReady && <CourseLoadingState isEnglish={isEnglish} />}
       <iframe
         ref={frameRef}
         id="anticipatory-action-course-frame"
-        title="শিশু-কেন্দ্রিক আগাম পদক্ষেপ ও প্রভাব-ভিত্তিক পূর্বাভাস কোর্স"
-        src="/courses/anticipatory-action/index.html"
+        title={
+          isEnglish
+            ? "Child-centred anticipatory action and impact-based forecasting course"
+            : "শিশু-কেন্দ্রিক আগাম পদক্ষেপ ও প্রভাব-ভিত্তিক পূর্বাভাস কোর্স"
+        }
+        src={`/courses/anticipatory-action/index.html${isEnglish ? "?lang=en" : ""}`}
         onLoad={() => setFrameLoaded(true)}
         style={{ height: `${frameHeight}px` }}
-        className="block w-full border-0 bg-gray-50"
+        aria-hidden={!courseReady}
+        className={`block w-full border-0 bg-gray-50 ${
+          courseReady
+            ? ""
+            : "pointer-events-none invisible absolute inset-x-0 top-0"
+        }`}
         allow="clipboard-write"
       />
     </div>

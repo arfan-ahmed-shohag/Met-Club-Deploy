@@ -52,28 +52,33 @@ export default function AnticipatoryActionCoursePage(): JSX.Element {
   return (
     <div className="flex min-h-screen flex-col bg-gray-50">
       <TopNav
-        title="আগাম পদক্ষেপ কোর্স"
+        title={isEnglish ? "Anticipatory Action Course" : "আগাম পদক্ষেপ কোর্স"}
         rightContent={courseControls}
       />
       {user ? (
         <CoursePlayerFrame
+          // a new language loads a new course document, so start the frame over
+          key={isEnglish ? "en" : "bn"}
           user={user}
+          isEnglish={isEnglish}
           soundToggleRequest={soundToggleRequest}
           onCourseStatus={handleCourseStatus}
         />
       ) : isLoading ? (
-        <CourseLoadingState />
+        <CourseLoadingState isEnglish={isEnglish} />
       ) : (
         <main className="grid min-h-[70vh] place-content-center px-5 text-center">
           <p role="alert" className="font-semibold text-slate-700">
-            আপনার তথ্য আনা যায়নি। আবার চেষ্টা করুন।
+            {isEnglish
+              ? "We couldn’t load your details. Please try again."
+              : "আপনার তথ্য আনা যায়নি। আবার চেষ্টা করুন।"}
           </p>
           <button
             type="button"
             onClick={() => void reloadUser()}
             className="mx-auto mt-4 cursor-pointer rounded-xl bg-red-700 px-5 py-3 font-bold text-white hover:bg-red-800"
           >
-            আবার চেষ্টা করুন
+            {isEnglish ? "Try again" : "আবার চেষ্টা করুন"}
           </button>
         </main>
       )}
