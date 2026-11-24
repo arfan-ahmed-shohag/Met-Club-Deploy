@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import logo from "../../assets/images/logo_original.png";
 import SiteFooter from "../../components/Shared/SiteFooter";
-import coverVideo from "../../assets/videos/Drone shot for cover.mp4";
 import whatIsVideo from "../../assets/videos/What is MET Club_.mp4";
 import whatIsPoster from "../../assets/images/what_is_poster.jpg";
 import startJourneyBg from "../../assets/images/start-journey-page-bg.jpeg";
@@ -25,6 +24,7 @@ import sksLogo from "../../assets/partners/partner4.png";
 import ypsaLogo from "../../assets/partners/partner5.jpg";
 import { Link } from "react-router";
 import { getStoredLocale } from "../../utils/language";
+import AboutHeroSlider from "./AboutHeroSlider";
 
 const titleShadow =
   "-1px -1px 0 rgba(255,255,255,0.96), 1px -1px 0 rgba(255,255,255,0.96), -1px 1px 0 rgba(255,255,255,0.96), 1px 1px 0 rgba(255,255,255,0.96), 0 2px 0 rgba(185,28,28,0.20), 0 8px 20px rgba(127,29,29,0.24)";
@@ -169,21 +169,7 @@ export default function About() {
       <TopNav title={t("আমাদের সম্পর্কে", "About Us")} />
 
       {/* Hero Section */}
-      <section className="relative z-10 min-h-screen flex items-center justify-center py-10 md:py-15 lg:py-20 overflow-hidden">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="about-hero-video absolute inset-0 w-full h-full object-cover z-0"
-        >
-          <source src={coverVideo} type="video/mp4" />
-        </video>
-        {/* Overlay for text readability */}
-        <div className="absolute inset-0 bg-black/45 z-10"></div>
-        <div className="about-hero-glow about-hero-glow-one" aria-hidden="true" />
-        <div className="about-hero-glow about-hero-glow-two" aria-hidden="true" />
-
+      <AboutHeroSlider isEnglish={isEnglish}>
         <div className="site-container relative z-20 text-center px-4 sm:px-6 lg:px-8 header-anim">
           <div
             className="text-3xl md:text-5xl font-bold mb-6 animate-slide-up delay-100"
@@ -209,7 +195,7 @@ export default function About() {
             )}
           </div>
         </div>
-      </section>
+      </AboutHeroSlider>
 
       {/* Mission & Vision - Solid Background, Solid Cards */}
       <section

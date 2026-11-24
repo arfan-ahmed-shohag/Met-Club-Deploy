@@ -31,6 +31,101 @@ const quillFormats = [
   "image",
 ];
 
+const formPanelClass = "rounded-xl border border-white/60 bg-white/30 p-5";
+const titleGridClass = "grid gap-4 md:grid-cols-2";
+const contentGridClass =
+  "grid grid-cols-1 gap-5 md:grid-cols-[minmax(12rem,20%)_minmax(0,1fr)]";
+const editorGridClass = "grid gap-5 lg:grid-cols-2";
+const featuredImageSizeClass = "h-52 w-full md:h-64";
+const editorSizeClass = "h-72 md:h-80";
+const formActionsClass =
+  "flex flex-col-reverse gap-3 border-t border-slate-300/80 pt-5 sm:flex-row sm:justify-end";
+const featuredImageHelp = {
+  en: "PNG, JPEG, WEBP or GIF, up to 5 MB. It will appear as the blog cover.",
+  bn: "PNG, JPEG, WEBP বা GIF, সর্বোচ্চ ৫ MB। ছবিটি ব্লগের কভার হবে।",
+};
+const inlineImageHelp =
+  "Use the image button in either editor to add images to that language version.";
+
+function WriteBlogFormSkeleton({ isEnglish }: { isEnglish: boolean }) {
+  return (
+    <div role="status">
+      <span className="sr-only">
+        {isEnglish ? "Loading your account…" : "আপনার অ্যাকাউন্ট লোড হচ্ছে…"}
+      </span>
+      <div aria-hidden="true" className="space-y-5 motion-safe:animate-pulse">
+        <div className={formPanelClass}>
+          <div className={titleGridClass}>
+            {["bn", "en"].map((language) => (
+              <div key={language}>
+                <div className="flex h-5 items-center">
+                  <div className="h-3 w-28 rounded-full bg-slate-200" />
+                </div>
+                <div className="mt-2 h-[46px] rounded-xl bg-slate-100" />
+                <div className="mt-1 flex h-4 items-center justify-end">
+                  <div className="h-2 w-9 rounded-full bg-slate-200" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className={`${formPanelClass} space-y-4`}>
+          <div className="flex h-[37px] items-center border-b border-slate-300/80 pb-2">
+            <div className="h-4 w-32 rounded-full bg-slate-200" />
+          </div>
+          <div className={contentGridClass}>
+            <div className="min-w-0">
+              <div className="mb-2 flex h-5 items-center">
+                <div className="h-3 w-36 max-w-full rounded-full bg-slate-200" />
+              </div>
+              <div className={`${featuredImageSizeClass} rounded-xl bg-slate-100`} />
+              <p className="relative mt-2 text-xs leading-5">
+                <span className="invisible">
+                  {featuredImageHelp[isEnglish ? "en" : "bn"]}
+                </span>
+                <span className="absolute top-1.5 left-0 h-2 w-4/5 rounded-full bg-slate-200" />
+              </p>
+            </div>
+
+            <div className="min-w-0">
+              <div className={editorGridClass}>
+                {["bn", "en"].map((language) => (
+                  <div key={language} className="min-w-0">
+                    <div className="mb-2 flex h-5 items-center">
+                      <div className="h-3 w-28 rounded-full bg-slate-200" />
+                    </div>
+                    <div className={`${editorSizeClass} overflow-hidden rounded-xl border border-slate-200 bg-white`}>
+                      <div className="flex h-11 items-center gap-3 border-b border-slate-200 px-4">
+                        {["w-14", "w-10", "w-8", "w-4"].map((width) => (
+                          <div key={width} className={`h-2.5 rounded-full bg-slate-200 ${width}`} />
+                        ))}
+                      </div>
+                      <div className="m-4 h-3 w-2/3 max-w-48 rounded-full bg-slate-100" />
+                    </div>
+                    <div className="mt-2 flex h-4 items-center justify-end">
+                      <div className="h-2 w-12 rounded-full bg-slate-200" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <p className="relative mt-2 text-xs">
+                <span className="invisible">{inlineImageHelp}</span>
+                <span className="absolute top-1 left-0 h-2 w-4/5 max-w-96 rounded-full bg-slate-200" />
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className={formActionsClass}>
+          <div className="h-[50px] rounded-xl bg-slate-100 sm:w-24" />
+          <div className="h-12 rounded-xl bg-slate-200 sm:w-60" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function WriteBlog() {
   const axios = useAxiosProtected();
   const navigate = useNavigate();
@@ -289,12 +384,19 @@ export default function WriteBlog() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-orange-50 to-slate-100 text-slate-900">
       <TopNav title={isEnglish ? "Write a blog" : "ব্লগ লিখুন"} />
-      <main className="site-container px-4 py-8 sm:px-6 lg:px-8">
-        <section className="mx-auto mb-8 w-full max-w-4xl rounded-2xl border border-white/60 bg-white/40 p-5 shadow-[0_8px_32px_rgba(0,0,0,0.08)] backdrop-blur-xl sm:p-7">
+      <main className="site-container py-8">
+        <section className="mb-8 w-full rounded-2xl border border-white/60 bg-white/40 p-5 shadow-[0_8px_32px_rgba(0,0,0,0.08)] backdrop-blur-xl sm:p-7">
           <header className="mb-6 flex flex-wrap items-start justify-between gap-4">
             <div>
               <p className="text-sm font-bold uppercase tracking-[0.18em] text-red-700">
-                {roleLabel}
+                {isLoading ? (
+                  <span
+                    aria-hidden="true"
+                    className="block h-5 w-28 rounded-full bg-slate-200 motion-safe:animate-pulse"
+                  />
+                ) : (
+                  roleLabel
+                )}
               </p>
               <h1 className="mt-1 text-2xl font-bold tracking-tight text-red-700 sm:text-3xl">
                 {isEnglish ? "Write a blog" : "নতুন ব্লগ লিখুন"}
@@ -314,13 +416,7 @@ export default function WriteBlog() {
           </header>
 
           {isLoading ? (
-            <div
-              className="flex min-h-40 items-center justify-center gap-3 rounded-xl border border-white/60 bg-white/30 text-slate-600"
-              role="status"
-            >
-              <LoaderCircle size={20} className="animate-spin" />
-              {isEnglish ? "Loading your account…" : "আপনার অ্যাকাউন্ট লোড হচ্ছে…"}
-            </div>
+            <WriteBlogFormSkeleton isEnglish={isEnglish} />
           ) : error && !user ? (
             <div className="rounded-xl border border-red-200 bg-white/60 p-5 text-center">
               <p role="alert" className="text-slate-700">
@@ -341,8 +437,8 @@ export default function WriteBlog() {
               onSubmit={(event) => void submitBlog(event)}
               className="space-y-5"
             >
-              <div className="rounded-xl border border-white/60 bg-white/30 p-5">
-                <div className="grid gap-4 md:grid-cols-2">
+              <div className={formPanelClass}>
+                <div className={titleGridClass}>
                   <label className="block text-sm font-semibold text-slate-700">
                     Blog title (বাংলা)
                     <input
@@ -351,7 +447,7 @@ export default function WriteBlog() {
                       maxLength={TITLE_MAX}
                       value={titleBn}
                       onChange={(event) => setTitleBn(event.target.value)}
-                      className="mt-2 w-full min-w-0 rounded-xl border border-white/70 bg-white/65 px-4 py-3 font-normal text-slate-900 outline-none focus:border-red-300 focus:ring-2 focus:ring-red-300"
+                      className="mt-2 w-full min-w-0 rounded-xl border border-slate-300 bg-white px-4 py-3 font-normal text-slate-900 outline-none placeholder:text-slate-500 focus:border-red-300 focus:ring-2 focus:ring-red-300"
                       placeholder="ব্লগের শিরোনাম লিখুন"
                     />
                     <span className="mt-1 block text-right text-xs font-normal text-slate-500">
@@ -366,7 +462,7 @@ export default function WriteBlog() {
                       maxLength={TITLE_MAX}
                       value={titleEn}
                       onChange={(event) => setTitleEn(event.target.value)}
-                      className="mt-2 w-full min-w-0 rounded-xl border border-white/70 bg-white/65 px-4 py-3 font-normal text-slate-900 outline-none focus:border-red-300 focus:ring-2 focus:ring-red-300"
+                      className="mt-2 w-full min-w-0 rounded-xl border border-slate-300 bg-white px-4 py-3 font-normal text-slate-900 outline-none placeholder:text-slate-500 focus:border-red-300 focus:ring-2 focus:ring-red-300"
                       placeholder="Enter the blog title"
                     />
                     <span className="mt-1 block text-right text-xs font-normal text-slate-500">
@@ -376,12 +472,12 @@ export default function WriteBlog() {
                 </div>
               </div>
 
-              <div className="space-y-4 rounded-xl border border-white/60 bg-white/30 p-5">
+              <div className={`${formPanelClass} space-y-4`}>
                 <h2 className="border-b border-slate-300/80 pb-2 text-lg font-bold text-red-700">
                   {isEnglish ? "Blog content" : "ব্লগের বিষয়বস্তু"}
                 </h2>
-                <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-                  <div className="md:col-span-1">
+                <div className={contentGridClass}>
+                  <div>
                     <label
                       htmlFor="blog-featured-image"
                       className="mb-2 block text-sm font-semibold text-slate-700"
@@ -392,7 +488,7 @@ export default function WriteBlog() {
                     </label>
                     <label
                       htmlFor="blog-featured-image"
-                      className="relative flex h-52 w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-slate-300 bg-white/50 text-center transition hover:border-red-300 hover:bg-white/70 md:h-64"
+                      className={`${featuredImageSizeClass} relative flex cursor-pointer items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-slate-300 bg-white/50 text-center transition hover:border-red-300 hover:bg-white/70`}
                     >
                       <input
                         id="blog-featured-image"
@@ -445,9 +541,7 @@ export default function WriteBlog() {
                       )}
                     </label>
                     <p className="mt-2 text-xs leading-5 text-slate-500">
-                      {isEnglish
-                        ? "PNG, JPEG, WEBP or GIF, up to 5 MB. It will appear as the blog cover."
-                        : "PNG, JPEG, WEBP বা GIF, সর্বোচ্চ ৫ MB। ছবিটি ব্লগের কভার হবে।"}
+                      {featuredImageHelp[isEnglish ? "en" : "bn"]}
                     </p>
                     {featuredImage && (
                       <button
@@ -462,18 +556,18 @@ export default function WriteBlog() {
                     )}
                   </div>
 
-                  <div className="min-w-0 md:col-span-2">
-                    <div className="grid gap-5 xl:grid-cols-2">
+                  <div className="min-w-0">
+                    <div className={editorGridClass}>
                       <div className="min-w-0">
                         <label className="mb-2 block text-sm font-semibold text-slate-700">
                           Your blog (বাংলা)
                         </label>
-                        <div className="blog-quill h-72 min-w-0 overflow-hidden rounded-xl border border-white/70 bg-white/65 text-slate-900 focus-within:ring-2 focus-within:ring-red-300 md:h-80">
+                        <div className={`${editorSizeClass} blog-quill min-w-0 overflow-hidden rounded-xl border border-slate-300 bg-white text-slate-900 focus-within:ring-2 focus-within:ring-red-300`}>
                           <ReactQuill
                             ref={editorBnRef}
                             theme="snow"
                             value={contentBn}
-                            className="editor-shell h-full overflow-hidden rounded-xl bg-white"
+                            className="editor-shell"
                             readOnly={isSubmitting || isUploadingImage}
                             modules={quillModulesBn}
                             formats={quillFormats}
@@ -494,12 +588,12 @@ export default function WriteBlog() {
                         <label className="mb-2 block text-sm font-semibold text-slate-700">
                           Your blog (English)
                         </label>
-                        <div className="blog-quill h-72 min-w-0 overflow-hidden rounded-xl border border-white/70 bg-white/65 text-slate-900 focus-within:ring-2 focus-within:ring-red-300 md:h-80">
+                        <div className={`${editorSizeClass} blog-quill min-w-0 overflow-hidden rounded-xl border border-slate-300 bg-white text-slate-900 focus-within:ring-2 focus-within:ring-red-300`}>
                           <ReactQuill
                             ref={editorEnRef}
                             theme="snow"
                             value={contentEn}
-                            className="editor-shell h-full overflow-hidden rounded-xl bg-white"
+                            className="editor-shell"
                             readOnly={isSubmitting || isUploadingImage}
                             modules={quillModulesEn}
                             formats={quillFormats}
@@ -526,8 +620,7 @@ export default function WriteBlog() {
                       aria-label="Upload inline image"
                     />
                     <p className="mt-2 text-xs text-slate-500">
-                      Use the image button in either editor to add images to
-                      that language version.
+                      {inlineImageHelp}
                     </p>
                   </div>
                 </div>
@@ -542,7 +635,7 @@ export default function WriteBlog() {
                 </p>
               )}
 
-              <div className="flex flex-col-reverse gap-3 border-t border-slate-300/80 pt-5 sm:flex-row sm:justify-end">
+              <div className={formActionsClass}>
                 <Link
                   to={isEnglish ? "/en/blogs" : "/blogs"}
                   className="rounded-xl border border-white/70 bg-white/55 px-5 py-3 text-center font-semibold text-slate-700 transition hover:bg-white"
