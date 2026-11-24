@@ -358,11 +358,10 @@ export default function ChapterDialoguePreview(): JSX.Element {
       setChapterIndex((index) => index + 1);
       setActiveIndex(0);
     } else {
-      navigate(
-        location.pathname.startsWith("/en/")
-          ? "/en/learning-zone"
-          : "/learning-zone",
-      );
+      navigate({
+        pathname: location.pathname.startsWith("/en/") ? "/en" : "/",
+        hash: "#chapter-overview",
+      });
     }
   };
   const movePrevious = () => {

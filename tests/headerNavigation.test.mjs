@@ -17,7 +17,7 @@ test('About is current only on the Bangla and English home routes and aliases', 
 });
 
 test('nested blog pages keep Resources selected without matching similarly named paths', () => {
-    for (const path of ['/blogs', '/blogs/12', '/en/blogs/write', '/en/blogs/12/?draft=1#story', '/en/tutorials']) {
+    for (const path of ['/blogs', '/blogs/12', '/en/blogs/write', '/en/blogs/12/?draft=1#story']) {
         assert.equal(getHeaderNavigationState(path).section, 'resources', path);
     }
     for (const path of ['/blogs-other', '/en/blogspot', '/tutorials-other']) {
@@ -25,21 +25,14 @@ test('nested blog pages keep Resources selected without matching similarly named
     }
 });
 
-test('learning and quiz routes preserve the exact active chapter in both languages', () => {
+test('lesson routes preserve the exact active chapter in both languages', () => {
     for (const prefix of ['', '/en']) {
-        for (const path of ['/lesson/10', '/start-quiz/10', '/select-difficulty/10', '/quiz/10/easy']) {
-            const state = getHeaderNavigationState(`${prefix}${path}`);
-            assert.equal(state.section, 'chapters');
-            assert.equal(state.chapterId, 10);
-        }
-        for (const path of ['/start-journey', '/learning-selection', '/learning-zone']) {
-            const state = getHeaderNavigationState(`${prefix}${path}`);
-            assert.equal(state.section, 'chapters');
-            assert.equal(state.chapterId, null);
-        }
+        const state = getHeaderNavigationState(`${prefix}/lesson/10`);
+        assert.equal(state.section, 'chapters');
+        assert.equal(state.chapterId, 10);
     }
     assert.equal(getHeaderNavigationState('/lesson/1-other').chapterId, null);
-    assert.equal(getHeaderNavigationState('/met-club-module-2').section, 'anticipatory');
+    assert.equal(getHeaderNavigationState('/anticipatory-action').section, 'anticipatory');
 });
 
 test('English chapter links retain chapter IDs and fall back individually to Bangla', () => {

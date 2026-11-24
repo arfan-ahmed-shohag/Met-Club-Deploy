@@ -15,7 +15,6 @@ export default function SiteFooter({ isEnglish }: { isEnglish: boolean }) {
       label: t("শিশুবান্ধব আগাম কার্যক্রম", "Child Friendly Anticipatory Action"),
       path: "/anticipatory-action",
     },
-    { label: t("গেমস", "Games"), path: "/start-journey" },
     { label: t("ভিডিও", "Videos"), path: "/videos" },
     { label: t("ফটো গ্যালারি", "Photo Gallery"), path: "/gallery" },
     { label: t("ব্লগ", "Blogs"), path: "/blogs" },

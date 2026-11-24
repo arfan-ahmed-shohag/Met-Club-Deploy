@@ -4,7 +4,6 @@ import "./index.css";
 import { RouterProvider } from "react-router";
 import router from "./routes/router.tsx";
 import { Toaster } from "react-hot-toast";
-import { AudioProvider } from "./hooks/UseAudio.tsx";
 import { getStoredLocale } from "./utils/language";
 import "sweetalert2/dist/sweetalert2.min.css";
 
@@ -41,9 +40,7 @@ observer.observe(document.head, { childList: true });
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <AudioProvider>
-      <RouterProvider router={router} />
-      <Toaster />
-    </AudioProvider>
+    <RouterProvider router={router} />
+    <Toaster />
   </StrictMode>,
 );

@@ -2,8 +2,6 @@ import { Link, NavLink } from "react-router";
 import {
   FiGrid,
   FiFileText,
-  FiPlusCircle,
-  FiPlayCircle,
   FiMapPin,
   FiBookOpen,
   FiImage,
@@ -15,7 +13,6 @@ import useLogout from "../../../hooks/useLogout";
 
 const sidebarLinks = [
   { name: "ওভারভিউ", path: "/admin/overview", icon: FiGrid },
-  { name: "টিউটোরিয়াল পরিচালনা", path: "/admin/tutorials", icon: FiPlayCircle },
   { name: "ব্লগ পর্যালোচনা", path: "/admin/blogs", icon: FiBookOpen },
   { name: "ফটো গ্যালারি", path: "/admin/gallery", icon: FiImage },
   { name: "হোম ভিডিও", path: "/admin/videos", icon: FiVideo },
@@ -23,11 +20,6 @@ const sidebarLinks = [
   { name: "Comics", path: "/admin/comics", icon: FiFileText },
   { name: "Flyers", path: "/admin/flyers", icon: FiFileText },
   { name: "Press Releases", path: "/admin/press-releases", icon: FiFileText },
-  {
-    name: "টিউটোরিয়াল তৈরি করুন",
-    path: "/admin/create-tutorial",
-    icon: FiPlusCircle,
-  },
   { name: "স্কুল পরিচালনা", path: "/admin/schools", icon: FiMapPin },
 ];
 

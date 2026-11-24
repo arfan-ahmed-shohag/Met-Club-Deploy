@@ -5,8 +5,6 @@ import bgImage from "../../../assets/images/start-journey-page-bg.jpeg";
 import { FiHome, FiMenu, FiX } from "react-icons/fi";
 import {
   FiGrid,
-  FiPlusCircle,
-  FiPlayCircle,
   FiBookOpen,
   FiImage,
   FiVideo,
@@ -16,16 +14,10 @@ import { NavLink } from "react-router";
 
 const sidebarLinks = [
   { name: "ওভারভিউ", path: "/admin/overview", icon: FiGrid },
-  { name: "টিউটোরিয়াল পরিচালনা", path: "/admin/tutorials", icon: FiPlayCircle },
   { name: "ব্লগ পর্যালোচনা", path: "/admin/blogs", icon: FiBookOpen },
   { name: "ফটো গ্যালারি", path: "/admin/gallery", icon: FiImage },
   { name: "হোম ভিডিও", path: "/admin/videos", icon: FiVideo },
   { name: "গল্প পরিচালনা", path: "/admin/stories", icon: FiMessageSquare },
-  {
-    name: "টিউটোরিয়াল তৈরি করুন",
-    path: "/admin/create-tutorial",
-    icon: FiPlusCircle,
-  },
 ];
 
 export default function AdminLayout() {

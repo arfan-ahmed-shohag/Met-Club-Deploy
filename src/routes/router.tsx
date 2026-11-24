@@ -7,19 +7,8 @@ import {
 import type { RouteObject } from "react-router";
 import { lazy } from "react";
 import { SuspenseWrapper } from "./SuspenseWrapper";
-import { getStoredLocale, setStoredLocale } from "../utils/language";
+import { getStoredLocale } from "../utils/language";
 import ProtectedRoute from "../components/Layouts/ProtectedRoute";
-
-// Lazy load page components
-const StartJourney = lazy(() => import("../pages/StartJourney"));
-const Chapter = lazy(() => import("../pages/LearnignZone/Index/Chapter"));
-const Deficulty = lazy(
-  () => import("../pages/LearnignZone/Deficulty/Deficulty"),
-);
-const StartInterface = lazy(
-  () => import("../pages/LearnignZone/quiz/StartInterface"),
-);
-const Quiz = lazy(() => import("../pages/LearnignZone/quiz/quiz"));
 const Registration = lazy(() => import("../pages/Registration/Registration"));
 const HomePage = lazy(() => import("../pages/Home/Home"));
 const AnticipatoryActionCoursePage = lazy(
@@ -34,11 +23,8 @@ const AdminLayout = lazy(
   () => import("../components/banglaVersion/Admin/AdminLayout"),
 );
 const Overview = lazy(() => import("../pages/Admin/Overview"));
-const ManageTutorials = lazy(() => import("../pages/Admin/ManageTutorials"));
-const CreateTutorial = lazy(() => import("../pages/Admin/CreateTutorial"));
 const ManageSchools = lazy(() => import("../pages/Admin/ManageSchools"));
 const CreateSchool = lazy(() => import("../pages/Admin/CreateSchool"));
-const Tutorials = lazy(() => import("../pages/Tutorials/Tutorials"));
 const Blogs = lazy(() => import("../pages/Blogs/Blogs"));
 const BlogDetails = lazy(() => import("../pages/Blogs/BlogDetails"));
 const WriteBlog = lazy(() => import("../pages/Blogs/WriteBlog"));
@@ -89,36 +75,13 @@ const PressReleasePage = lazy(() =>
 );
 const LoginModalPage = lazy(() => import("../pages/Login/LoginModalPage"));
 const EnglishAbout = lazy(() => import("../pages/EnglishVersion/About/About"));
-const EnglishStartJourney = lazy(
-  () => import("../pages/EnglishVersion/StartJourney/StartJourney"),
-);
-const EnglishChapter = lazy(
-  () => import("../pages/EnglishVersion/Chapter/Chapter"),
-);
-const EnglishStartInterface = lazy(
-  () => import("../pages/EnglishVersion/QuizStartInterface/StartInterface"),
-);
-const EnglishQuizDeficultyLevel = lazy(
-  () => import("../pages/EnglishVersion/Deficulty/Deficulty"),
-);
 const EnglishProfile = lazy(
   () => import("../pages/EnglishVersion/Profile/Profile"),
-);
-const MetClubModule = lazy(() => import("../pages/MET_Club_Module"));
-const MetClubModule2 = lazy(() => import("../pages/Met_Club"));
-const LearningSelection = lazy(() => import("../pages/LearningSelection"));
-const EnglishLearningSelection = lazy(
-  () => import("../pages/EnglishVersion/LearningSelection/LearningSelection"),
 );
 const LocationDetails = lazy(() => import("../pages/Location/LocationDetails"));
 const EnglishLocationDetails = lazy(
   () => import("../pages/EnglishVersion/Location/EnglishLocationDetails"),
 );
-
-type QuizRouteData = {
-  chapterId: number;
-  difficulty: string;
-};
 
 function redirectToStoredLocale(
   requestUrl: string,
@@ -149,12 +112,6 @@ function redirectToStoredLocale(
   }
 
   return redirect(`${targetBase}${suffix}${url.search}`);
-}
-
-function syncStartJourneyLocale(requestUrl: string) {
-  const pathname = new URL(requestUrl).pathname;
-  setStoredLocale(pathname.startsWith("/en/") ? "en" : "bn");
-  return null;
 }
 
 const routes: RouteObject[] = [
@@ -377,52 +334,6 @@ const routes: RouteObject[] = [
       redirectToStoredLocale(request.url, "/login", "/en/login"),
   },
   {
-    path: "/start-journey",
-    element: (
-      <SuspenseWrapper>
-        <StartJourney />
-      </SuspenseWrapper>
-    ),
-    loader: ({ request }) => syncStartJourneyLocale(request.url),
-  },
-  {
-    path: "/en/start-journey",
-    element: (
-      <SuspenseWrapper>
-        <EnglishStartJourney />
-      </SuspenseWrapper>
-    ),
-    loader: ({ request }) => syncStartJourneyLocale(request.url),
-  },
-  {
-    path: "/learning-selection",
-    element: (
-      <SuspenseWrapper>
-        <LearningSelection />
-      </SuspenseWrapper>
-    ),
-    loader: ({ request }) =>
-      redirectToStoredLocale(
-        request.url,
-        "/learning-selection",
-        "/en/learning-selection",
-      ),
-  },
-  {
-    path: "/en/learning-selection",
-    element: (
-      <SuspenseWrapper>
-        <EnglishLearningSelection />
-      </SuspenseWrapper>
-    ),
-    loader: ({ request }) =>
-      redirectToStoredLocale(
-        request.url,
-        "/learning-selection",
-        "/en/learning-selection",
-      ),
-  },
-  {
     path: "/registration",
     element: (
       <SuspenseWrapper>
@@ -441,34 +352,6 @@ const routes: RouteObject[] = [
     ),
     loader: ({ request }) =>
       redirectToStoredLocale(request.url, "/registration", "/en/registration"),
-  },
-  {
-    path: "/learning-zone",
-    element: (
-      <SuspenseWrapper>
-        <Chapter />
-      </SuspenseWrapper>
-    ),
-    loader: ({ request }) =>
-      redirectToStoredLocale(
-        request.url,
-        "/learning-zone",
-        "/en/learning-zone",
-      ),
-  },
-  {
-    path: "/en/learning-zone",
-    element: (
-      <SuspenseWrapper>
-        <EnglishChapter />
-      </SuspenseWrapper>
-    ),
-    loader: ({ request }) =>
-      redirectToStoredLocale(
-        request.url,
-        "/learning-zone",
-        "/en/learning-zone",
-      ),
   },
   {
     path: "/lesson/1",
@@ -492,125 +375,21 @@ const routes: RouteObject[] = [
   },
   {
     path: "/lesson/:chapterId?",
-    loader: ({ request }) =>
-      redirectToStoredLocale(
-        request.url,
-        "/learning-zone",
-        "/en/learning-zone",
+    loader: () =>
+      redirect(
+        getStoredLocale() === "en"
+          ? "/en#chapter-overview"
+          : "/#chapter-overview",
       ),
   },
   {
     path: "/en/lesson/:chapterId?",
-    loader: ({ request }) =>
-      redirectToStoredLocale(
-        request.url,
-        "/learning-zone",
-        "/en/learning-zone",
+    loader: () =>
+      redirect(
+        getStoredLocale() === "en"
+          ? "/en#chapter-overview"
+          : "/#chapter-overview",
       ),
-  },
-  {
-    path: "/start-quiz/:chapterId",
-    element: (
-      <SuspenseWrapper>
-        <StartInterface />
-      </SuspenseWrapper>
-    ),
-    loader: ({ request }) =>
-      redirectToStoredLocale(request.url, "/start-quiz", "/en/start-quiz"),
-  },
-  {
-    path: "/en/start-quiz/:chapterId",
-    element: (
-      <SuspenseWrapper>
-        <EnglishStartInterface />
-      </SuspenseWrapper>
-    ),
-    loader: ({ request }) =>
-      redirectToStoredLocale(request.url, "/start-quiz", "/en/start-quiz"),
-  },
-  {
-    path: "/select-difficulty/:chapterId",
-    element: (
-      <SuspenseWrapper>
-        <Deficulty />
-      </SuspenseWrapper>
-    ),
-    loader: ({ request }) =>
-      redirectToStoredLocale(
-        request.url,
-        "/select-difficulty",
-        "/en/select-difficulty",
-      ),
-  },
-  {
-    path: "/en/select-difficulty/:chapterId",
-    element: (
-      <SuspenseWrapper>
-        <EnglishQuizDeficultyLevel />
-      </SuspenseWrapper>
-    ),
-    loader: ({ request }) =>
-      redirectToStoredLocale(
-        request.url,
-        "/select-difficulty",
-        "/en/select-difficulty",
-      ),
-  },
-  {
-    path: "/quiz/:chapterId/:difficulty",
-    element: (
-      <SuspenseWrapper>
-        <Quiz />
-      </SuspenseWrapper>
-    ),
-    loader: async ({ request, params }) => {
-      const localeRedirect = redirectToStoredLocale(
-        request.url,
-        "/quiz",
-        "/en/quiz",
-      );
-      if (localeRedirect) return localeRedirect;
-      const response = await fetch("/quiz.json");
-
-      const { chapterId, difficulty } = params;
-      const targetChapterId = Number(chapterId);
-      const quizData = (await response.json()) as QuizRouteData[];
-      const filteredQuizData = quizData.filter((quiz) => {
-        return (
-          quiz.chapterId === targetChapterId && quiz.difficulty === difficulty
-        );
-      });
-
-      return filteredQuizData;
-    },
-  },
-  {
-    path: "/en/quiz/:chapterId/:difficulty",
-    element: (
-      <SuspenseWrapper>
-        <Quiz />
-      </SuspenseWrapper>
-    ),
-    loader: async ({ request, params }) => {
-      const localeRedirect = redirectToStoredLocale(
-        request.url,
-        "/quiz",
-        "/en/quiz",
-      );
-      if (localeRedirect) return localeRedirect;
-
-      const { chapterId, difficulty } = params;
-      const targetChapterId = Number(chapterId);
-      const response = await fetch("/quiz.en.json");
-      const quizData = (await response.json()) as QuizRouteData[];
-      const filteredQuizData = quizData.filter((quiz) => {
-        return (
-          quiz.chapterId === targetChapterId && quiz.difficulty === difficulty
-        );
-      });
-
-      return filteredQuizData;
-    },
   },
   {
     path: "/about",
@@ -651,26 +430,6 @@ const routes: RouteObject[] = [
     ),
     loader: ({ request }) =>
       redirectToStoredLocale(request.url, "/location", "/en/location"),
-  },
-  {
-    path: "/tutorials",
-    element: (
-      <SuspenseWrapper>
-        <Tutorials />
-      </SuspenseWrapper>
-    ),
-    loader: ({ request }) =>
-      redirectToStoredLocale(request.url, "/tutorials", "/en/tutorials"),
-  },
-  {
-    path: "/en/tutorials",
-    element: (
-      <SuspenseWrapper>
-        <Tutorials />
-      </SuspenseWrapper>
-    ),
-    loader: ({ request }) =>
-      redirectToStoredLocale(request.url, "/tutorials", "/en/tutorials"),
   },
   {
     path: "/blogs",
@@ -757,34 +516,6 @@ const routes: RouteObject[] = [
       redirectToStoredLocale(request.url, "/profile", "/en/profile"),
   },
   {
-    path: "/met-club-module",
-    element: (
-      <SuspenseWrapper>
-        <MetClubModule />
-      </SuspenseWrapper>
-    ),
-    loader: ({ request }) =>
-      redirectToStoredLocale(
-        request.url,
-        "/select-difficulty",
-        "/en/select-difficulty",
-      ),
-  },
-  {
-    path: "/met-club-module-2",
-    element: (
-      <SuspenseWrapper>
-        <MetClubModule2 />
-      </SuspenseWrapper>
-    ),
-    loader: ({ request }) =>
-      redirectToStoredLocale(
-        request.url,
-        "/select-difficulty",
-        "/en/select-difficulty",
-      ),
-  },
-  {
     path: "/admin",
     element: (
       <SuspenseWrapper>
@@ -805,14 +536,6 @@ const routes: RouteObject[] = [
         element: (
           <SuspenseWrapper>
             <Overview />
-          </SuspenseWrapper>
-        ),
-      },
-      {
-        path: "tutorials",
-        element: (
-          <SuspenseWrapper>
-            <ManageTutorials />
           </SuspenseWrapper>
         ),
       },
@@ -869,14 +592,6 @@ const routes: RouteObject[] = [
         element: (
           <SuspenseWrapper>
             <ManagePressReleases />
-          </SuspenseWrapper>
-        ),
-      },
-      {
-        path: "create-tutorial",
-        element: (
-          <SuspenseWrapper>
-            <CreateTutorial />
           </SuspenseWrapper>
         ),
       },

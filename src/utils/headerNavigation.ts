@@ -11,20 +11,15 @@ export function getHeaderNavigationState(pathname: string) {
       .replace(/^\/en(?=\/|$)/, "")
       .replace(/\/+$/, "") || "/";
   const chapterMatch = path.match(
-    /^\/(?:lesson|start-quiz|select-difficulty|quiz)\/(\d+)(?:\/|$)/,
+    /^\/lesson\/(\d+)(?:\/|$)/,
   );
   let section: HeaderSection | null = null;
 
   if (path === "/about") section = "about";
-  else if (
-    /^\/(?:start-journey|learning-selection|learning-zone|lesson|start-quiz|select-difficulty|quiz)(?:\/|$)/.test(
-      path,
-    )
-  )
-    section = "chapters";
-  else if (/^\/(?:met-club-module(?:-2)?|anticipatory-action)$/.test(path))
+  else if (/^\/lesson(?:\/|$)/.test(path)) section = "chapters";
+  else if (/^\/anticipatory-action$/.test(path))
     section = "anticipatory";
-  else if (/^\/(?:blogs|tutorials)(?:\/|$)/.test(path)) section = "resources";
+  else if (/^\/blogs(?:\/|$)/.test(path)) section = "resources";
 
   return {
     path,

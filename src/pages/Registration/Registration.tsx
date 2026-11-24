@@ -116,7 +116,7 @@ export default function Registration() {
         throw new Error(res.data.errorMessage || "নিবন্ধন ব্যর্থ হয়েছে।");
       setSessionToken(res.data.data.accessToken);
       toast.success(t("নিবন্ধন সফল! এখন যাত্রা শুরু করুন।", "Registration successful! Start your learning journey."), { id: "registration" });
-      navigate(getLocalizedPath("/start-journey", isEnglish ? "en" : "bn"));
+      navigate(getLocalizedPath("/", isEnglish ? "en" : "bn"));
     } catch (error) {
       const fieldErrors = isAxiosError(error)
         ? error.response?.data.errors

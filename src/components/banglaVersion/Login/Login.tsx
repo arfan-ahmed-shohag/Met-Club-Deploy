@@ -62,7 +62,7 @@ export default function Login({ embedded = false }: { embedded?: boolean }) {
         navigate("/admin/overview");
         return;
       }
-        navigate(getLocalizedPath("/start-journey", isEnglish ? "en" : "bn"));
+        navigate(getLocalizedPath("/", isEnglish ? "en" : "bn"));
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const fieldErrors = error.response?.data.errors;

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import metClubLogo from "../../assets/images/logo_original.png";
-import { FiPlay } from "react-icons/fi";
 import { LogIn, LogOut } from "lucide-react";
 import useLogout from "../../hooks/useLogout";
 import {
@@ -38,12 +37,6 @@ const menuItems = [
         <circle cx="12" cy="7" r="4" />
       </svg>
     ),
-  },
-  {
-    label: "টিউটোরিয়াল",
-    englishLabel: "Tutorials",
-    href: "/tutorials",
-    icon: <FiPlay />,
   },
   {
     label: "মেট ক্লাব সম্পর্কে জানুন",
