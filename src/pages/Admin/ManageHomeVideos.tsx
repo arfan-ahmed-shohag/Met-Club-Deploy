@@ -210,9 +210,6 @@ export default function ManageHomeVideos() {
       <section className="rounded-3xl border border-white/60 bg-white/90 p-5 shadow-xl backdrop-blur sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="text-sm font-bold uppercase tracking-[.16em] text-red-700">
-              Home page
-            </p>
             <h2 className="mt-2 text-3xl font-black text-slate-900">
               Video showcase
             </h2>
@@ -236,9 +233,6 @@ export default function ManageHomeVideos() {
         <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
           <div>
             <h3 className="text-xl font-black text-slate-900">Videos</h3>
-            <p className="mt-1 text-sm text-slate-500">
-              {total} total · 10 per page
-            </p>
           </div>
           {pageCount > 1 && (
             <div className="flex items-center gap-3 text-sm font-semibold text-slate-700">

@@ -168,15 +168,11 @@ export default function ManageGallery() {
   return (
     <div className="space-y-6">
       <section className="rounded-3xl border border-white/60 bg-white/90 p-5 shadow-xl backdrop-blur sm:p-8">
-        <p className="text-sm font-bold uppercase tracking-[.16em] text-red-700">
-          Home page
-        </p>
         <h2 className="mt-2 text-3xl font-black text-slate-900">
           Photo gallery
         </h2>
         <p className="mt-2 text-slate-600">
-          Add and manage the photos displayed in the home page gallery. Images
-          are loaded 9 at a time.
+          Add and manage the photos displayed in the home page gallery.
         </p>
         <form
           onSubmit={(event) => void addImage(event)}
@@ -224,9 +220,6 @@ export default function ManageGallery() {
             <h3 className="text-xl font-black text-slate-900">
               Gallery images
             </h3>
-            <p className="mt-1 text-sm text-slate-500">
-              {total} image{total === 1 ? "" : "s"} · 9 per page
-            </p>
           </div>
           {pageCount > 1 && (
             <div className="flex items-center gap-3 text-sm font-semibold text-slate-700">

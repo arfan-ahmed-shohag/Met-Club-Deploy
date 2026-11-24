@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
-import { FiPlus, FiTrash2, FiSave, FiArrowLeft } from "react-icons/fi";
+import { FiPlus, FiTrash2, FiSave } from "react-icons/fi";
 import toast from "react-hot-toast";
 import useAxiosProtected from "../../hooks/axiosProtected";
 
@@ -179,12 +179,6 @@ export default function CreateSchool() {
       }}
     >
       <div className="flex items-center gap-4 mb-6">
-        <button
-          onClick={() => navigate("/admin/schools")}
-          className="p-2 rounded-full bg-white/50 hover:bg-white/80 transition-colors"
-        >
-          <FiArrowLeft className="w-5 h-5 text-gray-700" />
-        </button>
         <h2 className="text-2xl font-bold text-red-600">
           {id ? "স্কুল সম্পাদনা করুন" : "নতুন স্কুল যোগ করুন"}
         </h2>
