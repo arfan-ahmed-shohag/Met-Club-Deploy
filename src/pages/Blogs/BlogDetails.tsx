@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { ArrowRight, BookOpen, UserRound } from "lucide-react";
 import TopNav from "../../components/Shared/TopBar";
+import SiteFooter from "../../components/Shared/SiteFooter";
 import axiosPublic from "../../hooks/axiosPublic";
 import { getStoredLocale } from "../../utils/language";
 import {
@@ -23,6 +24,102 @@ type BlogPost = {
   publishedAt: string | null;
   author: { id: string; fullName: string; profileImg: string | null };
 };
+
+// Same dark maroon band as the blog list hero (Blogs.tsx).
+function BlogHero({ children }: { children: React.ReactNode }) {
+  return (
+    <header className="relative isolate overflow-hidden bg-[linear-gradient(115deg,#2a0806_0%,#4a0f0b_55%,#7a1d12_100%)] text-white">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_88%_20%,rgba(249,115,22,0.35),transparent_45%)]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-24 top-1/2 -z-10 h-[360px] w-[360px] -translate-y-1/4 rounded-full border border-orange-300/20"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-48 top-1/2 -z-10 h-[560px] w-[560px] -translate-y-1/3 rounded-full border border-orange-300/10"
+      />
+      <div className="site-container flex min-h-52 flex-col items-center justify-center px-6 py-14 text-center sm:min-h-60">
+        {children}
+      </div>
+    </header>
+  );
+}
+
+// Placeholder in the shape of the article page while the post loads.
+function BlogDetailsSkeleton({ isEnglish }: { isEnglish: boolean }) {
+  return (
+    <div role="status" aria-busy="true">
+      <span className="sr-only">
+        {isEnglish ? "Loading story" : "লেখাটি লোড হচ্ছে"}
+      </span>
+      <div aria-hidden="true" className="animate-pulse">
+        <BlogHero>
+          <div className="h-9 w-64 rounded-full bg-white/20 sm:w-80" />
+          <div className="mt-4 h-4 w-72 max-w-full rounded-full bg-white/15" />
+        </BlogHero>
+        <div className="site-container grid min-w-0 gap-8 p-5 sm:p-8 lg:gap-10 lg:p-10">
+          <div className="space-y-3 border-b border-red-100 pb-5">
+            <div className="h-6 w-72 max-w-full rounded-full bg-slate-200" />
+            <div className="h-4 w-full rounded-full bg-slate-100" />
+            <div className="h-4 w-2/3 rounded-full bg-slate-100" />
+          </div>
+          <div className="h-64 w-full rounded-2xl bg-red-50 sm:h-120" />
+          <div className="mt-7 grid min-w-0 grid-cols-1 gap-8 lg:grid-cols-12">
+            <div className="space-y-4 lg:col-span-8">
+              <div className="h-3.5 w-28 rounded-full bg-red-100" />
+              <div className="h-8 w-11/12 rounded-full bg-slate-200" />
+              <div className="h-8 w-2/3 rounded-full bg-slate-200" />
+              <div className="h-4 w-48 rounded-full bg-slate-100" />
+              <div className="space-y-3 pt-4">
+                {["w-full", "w-full", "w-11/12", "w-full", "w-5/6", "w-full", "w-3/4"].map(
+                  (width, index) => (
+                    <div
+                      key={index}
+                      className={`h-4 rounded-full bg-slate-100 ${width}`}
+                    />
+                  ),
+                )}
+              </div>
+            </div>
+            <div className="w-full max-w-xl space-y-5 lg:col-span-4 lg:justify-self-end">
+              <div className="rounded-2xl border border-red-100 bg-red-50/40 p-5">
+                <div className="h-5 w-24 rounded-full bg-slate-200" />
+                <div className="mt-4 flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-full bg-red-100" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-4 w-32 rounded-full bg-slate-200" />
+                    <div className="h-3 w-24 rounded-full bg-slate-100" />
+                  </div>
+                </div>
+              </div>
+              <div className="rounded-2xl border border-red-100 bg-white p-5">
+                <div className="h-3 w-20 rounded-full bg-red-100" />
+                <div className="mt-2 h-5 w-28 rounded-full bg-slate-200" />
+                <div className="mt-5 space-y-4">
+                  {[0, 1, 2].map((row) => (
+                    <div
+                      key={row}
+                      className="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-3"
+                    >
+                      <div className="aspect-square rounded-lg bg-red-100" />
+                      <div className="space-y-2 self-center">
+                        <div className="h-4 w-full rounded-full bg-slate-200" />
+                        <div className="h-4 w-2/3 rounded-full bg-slate-100" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function BlogDetails() {
   const { id } = useParams<{ id: string }>();
@@ -74,22 +171,15 @@ export default function BlogDetails() {
     : "মেট ক্লাবের শিক্ষার্থীদের অভিজ্ঞতা ও ভাবনার লেখা। তাঁদের গল্প পড়ুন, একে অন্যের কাছ থেকে শিখুন, আর আমাদের কমিউনিটির কাজগুলো জানুন।";
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-slate-100 text-slate-900">
+    <div className="min-h-screen overflow-x-hidden bg-white text-slate-900">
       <TopNav title={isEnglish ? "Community Blog" : "কমিউনিটি ব্লগ"} />
       <main className="w-full bg-white">
         {isLoading ? (
-          <div className="mx-auto w-full max-w-5xl px-5 py-8 sm:px-8 lg:px-10">
-            <div
-              className="rounded-2xl border border-slate-200 bg-white p-10 text-center text-slate-500"
-              role="status"
-            >
-              {isEnglish ? "Loading story…" : "লেখাটি লোড হচ্ছে…"}
-            </div>
-          </div>
+          <BlogDetailsSkeleton isEnglish={isEnglish} />
         ) : loadError ? (
           <div className="mx-auto w-full max-w-5xl px-5 py-8 sm:px-8 lg:px-10">
             <div
-              className="rounded-2xl border border-red-100 bg-white p-10 text-center text-red-700"
+              className="rounded-2xl border border-red-100 bg-red-50/40 p-10 text-center text-red-700"
               role="alert"
             >
               {isEnglish
@@ -99,7 +189,7 @@ export default function BlogDetails() {
           </div>
         ) : !post ? (
           <div className="mx-auto w-full max-w-5xl px-5 py-8 sm:px-8 lg:px-10">
-            <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center">
+            <div className="rounded-2xl border border-dashed border-red-200 bg-red-50/30 p-10 text-center">
               <h1 className="text-2xl font-bold text-slate-800">
                 {isEnglish ? "Story not found" : "লেখাটি পাওয়া যায়নি"}
               </h1>
@@ -130,27 +220,19 @@ export default function BlogDetails() {
 
             return (
               <div className="w-full">
-                <header className="relative isolate flex min-h-44 flex-col items-center justify-center overflow-hidden bg-linear-to-br from-[#713941] via-[#85464b] to-[#975656] px-6 py-10 text-center text-white sm:min-h-52 pt-28">
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute -left-10 top-0 -z-10 h-44 w-44 rounded-full border-[28px] border-white/5"
-                  />
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute -bottom-20 right-10 -z-10 h-52 w-52 rounded-full border-[34px] border-orange-200/10"
-                  />
-                  <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
+                <BlogHero>
+                  <h1 className="text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl">
                     {bannerTitle}
                   </h1>
-                  <p className="mt-2 max-w-2xl text-sm text-red-50 sm:text-base">
+                  <p className="mt-3 max-w-2xl text-sm text-red-100/90 sm:text-base">
                     {isEnglish
                       ? "Stories shared by our student community"
                       : "আমাদের শিক্ষার্থী কমিউনিটির লেখা ও অভিজ্ঞতা"}
                   </p>
-                </header>
+                </BlogHero>
 
                 <div className="grid min-w-0 gap-8 p-5 sm:p-8 lg:gap-10 lg:p-10 site-container">
-                  <section className="border-b border-slate-200 pb-5">
+                  <section className="border-b border-red-100 pb-5">
                     <div className="flex items-center gap-2 text-red-700">
                       <BookOpen size={19} aria-hidden="true" />
                       <h2 className="text-xl font-bold text-slate-900">
@@ -166,7 +248,7 @@ export default function BlogDetails() {
                     <img
                       src={coverImage}
                       alt={postTitle}
-                      className="h-120 rounded-xl bg-slate-100 w-full object-cover"
+                      className="h-64 w-full rounded-2xl bg-red-50 object-cover sm:h-120"
                     />
                   )}
                   <div className="mt-7 grid min-w-0 grid-cols-1 gap-8 lg:grid-cols-12">
@@ -197,7 +279,7 @@ export default function BlogDetails() {
                     </article>
 
                     <aside className="min-w-0 w-full max-w-xl space-y-5 lg:col-span-4 lg:justify-self-end">
-                      <section className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                      <section className="rounded-2xl border border-red-100 bg-red-50/40 p-5">
                         <h2 className="text-lg font-bold text-slate-900">
                           {isEnglish ? "Written by" : "লেখক"}
                         </h2>
@@ -226,8 +308,8 @@ export default function BlogDetails() {
                         </div>
                       </section>
 
-                      <section className="rounded-2xl border border-slate-200 bg-white p-5">
-                        <div className="mb-4 border-b border-slate-200 pb-3">
+                      <section className="rounded-2xl border border-red-100 bg-white p-5 shadow-[0_8px_24px_rgba(127,29,29,0.06)]">
+                        <div className="mb-4 border-b border-red-100 pb-3">
                           <p className="text-xs font-bold uppercase tracking-[0.16em] text-red-700">
                             MET CLUB
                           </p>
@@ -293,6 +375,7 @@ export default function BlogDetails() {
           })()
         )}
       </main>
+      <SiteFooter isEnglish={isEnglish} />
     </div>
   );
 }
