@@ -10,6 +10,10 @@ import {
   validateLoginPassword,
 } from "../../../utils/userValidation";
 import { getLocalizedPath, getStoredLocale } from "../../../utils/language";
+import {
+  getExternalRedirect,
+  redirectSearch,
+} from "../../../utils/gameRedirect";
 
 type LoginFormValues = {
   email: string;
@@ -21,6 +25,8 @@ export default function Login({ embedded = false }: { embedded?: boolean }) {
   const location = useLocation();
   const axiosInstance = axiosPublic();
   const isEnglish = getStoredLocale() === "en";
+  // Set when the game sent the player here: return there after signing in.
+  const externalRedirect = getExternalRedirect(location.search);
   const {
     register,
     handleSubmit,
@@ -41,6 +47,10 @@ export default function Login({ embedded = false }: { embedded?: boolean }) {
         id: "error",
         },
       );
+      if (externalRedirect) {
+        window.location.assign(externalRedirect);
+        return;
+      }
       const requestedPage = (
         location.state as {
           from?: { pathname?: string; search?: string; hash?: string };
@@ -182,7 +192,7 @@ export default function Login({ embedded = false }: { embedded?: boolean }) {
           <p className="text-sm font-normal text-slate-700 text-center mt-6">
             {isEnglish ? "Don’t have an account?" : "অ্যাকাউন্ট নেই?"}{" "}
             <Link
-              to={getLocalizedPath("/registration", isEnglish ? "en" : "bn")}
+              to={`${getLocalizedPath("/registration", isEnglish ? "en" : "bn")}${redirectSearch(externalRedirect)}`}
               className="font-semibold text-red-700 hover:text-red-800 hover:underline"
             >
               {isEnglish ? "Create an account" : "নিবন্ধন করুন"}

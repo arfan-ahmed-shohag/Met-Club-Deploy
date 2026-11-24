@@ -6,6 +6,7 @@ import { Link, useLocation, useNavigate } from "react-router";
 import bgImage from "../../assets/images/bg.png";
 import axiosPublic from "../../hooks/axiosPublic";
 import { getLocalizedPath } from "../../utils/language";
+import { getExternalRedirect, redirectSearch } from "../../utils/gameRedirect";
 import bangladeshLocations from "../../data/bangladesh-locations.json";
 import { isAxiosError } from "axios";
 import TopNav from "../../components/Shared/TopBar";
@@ -46,7 +47,7 @@ const controlClassName =
 
 export default function Registration() {
   const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
   const isEnglish = pathname.startsWith("/en/");
   const t = (bengali: string, english: string) => (isEnglish ? english : bengali);
   const errorText = (field: string, message?: string) => {
@@ -116,6 +117,12 @@ export default function Registration() {
         throw new Error(res.data.errorMessage || "নিবন্ধন ব্যর্থ হয়েছে।");
       setSessionToken(res.data.data.accessToken);
       toast.success(t("নিবন্ধন সফল! এখন যাত্রা শুরু করুন।", "Registration successful! Start your learning journey."), { id: "registration" });
+      // Players sent here by the game go straight back to it.
+      const externalRedirect = getExternalRedirect(search);
+      if (externalRedirect) {
+        window.location.assign(externalRedirect);
+        return;
+      }
       navigate(getLocalizedPath("/", isEnglish ? "en" : "bn"));
     } catch (error) {
       const fieldErrors = isAxiosError(error)
@@ -640,7 +647,7 @@ export default function Registration() {
               <p className="text-sm font-normal text-slate-700 text-center">
                 {t("অ্যাকাউন্ট আছে?", "Already have an account?")}{" "}
                 <Link
-                  to={getLocalizedPath("/login", isEnglish ? "en" : "bn")}
+                  to={`${getLocalizedPath("/login", isEnglish ? "en" : "bn")}${redirectSearch(getExternalRedirect(search))}`}
                   className="font-semibold text-red-700 hover:text-red-800 hover:underline"
                 >
                   {t("লগইন করুন", "Log in")}

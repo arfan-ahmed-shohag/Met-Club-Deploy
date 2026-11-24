@@ -6,6 +6,8 @@ The navbar fetches the authenticated user's public profile from `GET /auth/me`. 
 
 Set `VITE_API_URL` to change the backend URL. `src/lib/api.ts` otherwise uses the existing development URL, `https://api.meteorologyclub.com/api/v1`.
 
+The login and registration pages accept `?redirect=<url>` for the Unity game (`src/utils/gameRedirect.ts`). Only `https://game.meteorologyclub.com` URLs are allowed; anything else is ignored. After a successful login or registration the browser goes to that URL, and the login ↔ registration links keep the parameter. If the login page opens with an allowed `redirect` and `GET /auth/refresh-token` succeeds (the sign-in cookie is still valid), it sends the player back without showing the form. It checks the cookie rather than the stored token, so a stale token can't bounce the player between the game and the login page.
+
 Registration validates the following in both clients and API requests:
 
 - Name: 2–100 characters, letters/combining marks and ordinary name punctuation.
