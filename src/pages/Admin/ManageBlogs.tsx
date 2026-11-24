@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import { isAxiosError } from "axios";
 import toast from "react-hot-toast";
 import { Eye, Send, Undo2 } from "lucide-react";
@@ -220,97 +221,99 @@ export default function ManageBlogs() {
         </div>
       )}
 
-      {selectedPost && (
-        <div
-          className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) setSelectedPost(null);
-          }}
-        >
-          <section
-            role="dialog"
-            aria-modal="true"
-            aria-label={selectedPost.title}
-            className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl sm:p-9"
+      {selectedPost &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm"
+            onMouseDown={(event) => {
+              if (event.target === event.currentTarget) setSelectedPost(null);
+            }}
           >
-            <button
-              type="button"
-              onClick={() => setSelectedPost(null)}
-              aria-label="Close review"
-              className="absolute right-4 top-4 rounded-full px-3 py-1 text-2xl text-slate-500 hover:bg-slate-100"
+            <section
+              role="dialog"
+              aria-modal="true"
+              aria-label={selectedPost.title}
+              className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl sm:p-9"
             >
-              ×
-            </button>
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-700">
-              {selectedPost.status}
-            </p>
-            {selectedPost.status === "published" && (
               <button
                 type="button"
-                onClick={() => void unpublishPost(selectedPost)}
-                disabled={publishingId === selectedPost.id}
-                className="mt-4 inline-flex items-center gap-2 rounded-xl bg-amber-600 px-5 py-3 font-bold text-white shadow transition hover:bg-amber-700 disabled:cursor-wait disabled:opacity-60"
+                onClick={() => setSelectedPost(null)}
+                aria-label="Close review"
+                className="absolute right-4 top-4 rounded-full px-3 py-1 text-2xl text-slate-500 hover:bg-slate-100"
               >
-                <Undo2 size={17} />
-                {publishingId === selectedPost.id
-                  ? "Unpublishing…"
-                  : "Unpublish blog"}
+                ×
               </button>
-            )}
-            {selectedPost.featuredImage && (
-              <img
-                src={resolveMediaUrl(selectedPost.featuredImage)}
-                alt={selectedPost.title}
-                className="blog-featured-image mt-6 max-h-[26rem] rounded-xl"
-              />
-            )}
-            <h3 className="mt-2 pr-10 text-2xl font-black text-slate-900 sm:text-3xl">
-              {selectedPost.title}
-            </h3>
-            <p className="mt-3 text-sm text-slate-500">
-              {selectedPost.author.fullName} · {selectedPost.author.email} ·{" "}
-              {new Date(selectedPost.createdAt).toLocaleString("en-GB")}
-            </p>
-            <div
-              className="blog-rich-content mt-7 text-base leading-8 text-slate-700"
-              dangerouslySetInnerHTML={{
-                __html: sanitizeBlogHtml(selectedPost.content),
-              }}
-            />
-            {selectedPost.titleEn && (
-              <section className="mt-8 border-t border-slate-200 pt-6">
-                <p className="text-xs font-bold uppercase tracking-wider text-red-700">
-                  English version
-                </p>
-                <h3 className="mt-2 text-xl font-bold text-slate-900">
-                  {selectedPost.titleEn}
-                </h3>
-                <div
-                  className="blog-rich-content mt-4 text-base leading-8 text-slate-700"
-                  dangerouslySetInnerHTML={{
-                    __html: sanitizeBlogHtml(selectedPost.contentEn || ""),
-                  }}
-                />
-              </section>
-            )}
-            {selectedPost.status === "pending" && (
-              <div className="mt-8 flex justify-end border-t border-slate-200 pt-5">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-700">
+                {selectedPost.status}
+              </p>
+              {selectedPost.status === "published" && (
                 <button
                   type="button"
-                  onClick={() => void publishPost(selectedPost)}
+                  onClick={() => void unpublishPost(selectedPost)}
                   disabled={publishingId === selectedPost.id}
-                  className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 font-bold text-white shadow transition hover:bg-emerald-700 disabled:cursor-wait disabled:opacity-60"
+                  className="mt-4 inline-flex items-center gap-2 rounded-xl bg-amber-600 px-5 py-3 font-bold text-white shadow transition hover:bg-amber-700 disabled:cursor-wait disabled:opacity-60"
                 >
-                  <Send size={17} />{" "}
+                  <Undo2 size={17} />
                   {publishingId === selectedPost.id
-                    ? "Publishing…"
-                    : "Publish blog"}
+                    ? "Unpublishing…"
+                    : "Unpublish blog"}
                 </button>
-              </div>
-            )}
-          </section>
-        </div>
-      )}
+              )}
+              {selectedPost.featuredImage && (
+                <img
+                  src={resolveMediaUrl(selectedPost.featuredImage)}
+                  alt={selectedPost.title}
+                  className="blog-featured-image mt-6 max-h-[26rem] rounded-xl"
+                />
+              )}
+              <h3 className="mt-2 pr-10 text-2xl font-black text-slate-900 sm:text-3xl">
+                {selectedPost.title}
+              </h3>
+              <p className="mt-3 text-sm text-slate-500">
+                {selectedPost.author.fullName} · {selectedPost.author.email} ·{" "}
+                {new Date(selectedPost.createdAt).toLocaleString("en-GB")}
+              </p>
+              <div
+                className="blog-rich-content mt-7 text-base leading-8 text-slate-700"
+                dangerouslySetInnerHTML={{
+                  __html: sanitizeBlogHtml(selectedPost.content),
+                }}
+              />
+              {selectedPost.titleEn && (
+                <section className="mt-8 border-t border-slate-200 pt-6">
+                  <p className="text-xs font-bold uppercase tracking-wider text-red-700">
+                    English version
+                  </p>
+                  <h3 className="mt-2 text-xl font-bold text-slate-900">
+                    {selectedPost.titleEn}
+                  </h3>
+                  <div
+                    className="blog-rich-content mt-4 text-base leading-8 text-slate-700"
+                    dangerouslySetInnerHTML={{
+                      __html: sanitizeBlogHtml(selectedPost.contentEn || ""),
+                    }}
+                  />
+                </section>
+              )}
+              {selectedPost.status === "pending" && (
+                <div className="mt-8 flex justify-end border-t border-slate-200 pt-5">
+                  <button
+                    type="button"
+                    onClick={() => void publishPost(selectedPost)}
+                    disabled={publishingId === selectedPost.id}
+                    className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 font-bold text-white shadow transition hover:bg-emerald-700 disabled:cursor-wait disabled:opacity-60"
+                  >
+                    <Send size={17} />{" "}
+                    {publishingId === selectedPost.id
+                      ? "Publishing…"
+                      : "Publish blog"}
+                  </button>
+                </div>
+              )}
+            </section>
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }

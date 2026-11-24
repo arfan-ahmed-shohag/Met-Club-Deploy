@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import type { FormEvent } from "react";
+import { createPortal } from "react-dom";
 import {
   ImagePlus,
   LoaderCircle,
@@ -12,7 +13,10 @@ import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import useAxiosProtected from "../../hooks/axiosProtected";
 import { resolveMediaUrl } from "../../utils/media";
-import { getApiErrorMessage, getUploadErrorMessage } from "../../utils/apiError";
+import {
+  getApiErrorMessage,
+  getUploadErrorMessage,
+} from "../../utils/apiError";
 
 const PAGE_SIZE = 9;
 const ACCEPTED_TYPES = new Set([
@@ -60,7 +64,9 @@ export default function ManageGallery() {
       setImages(Array.isArray(data?.data) ? data.data.slice(0, PAGE_SIZE) : []);
       setTotal(Number(data?.meta?.total) || 0);
     } catch (error) {
-      toast.error(getApiErrorMessage(error, "Gallery images could not be loaded."));
+      toast.error(
+        getApiErrorMessage(error, "Gallery images could not be loaded."),
+      );
     } finally {
       setIsLoading(false);
     }
@@ -89,7 +95,9 @@ export default function ManageGallery() {
       if (!firstPage) setPage(1);
       else await loadImages();
     } catch (error) {
-      toast.error(getUploadErrorMessage(error, "Gallery image could not be added."));
+      toast.error(
+        getUploadErrorMessage(error, "Gallery image could not be added."),
+      );
     } finally {
       setIsSaving(false);
     }
@@ -120,7 +128,9 @@ export default function ManageGallery() {
       setEditingImage(null);
       await loadImages();
     } catch (error) {
-      toast.error(getUploadErrorMessage(error, "Gallery image could not be updated."));
+      toast.error(
+        getUploadErrorMessage(error, "Gallery image could not be updated."),
+      );
     } finally {
       setIsSaving(false);
     }
@@ -145,7 +155,9 @@ export default function ManageGallery() {
       if (images.length === 1 && page > 1) setPage((current) => current - 1);
       else await loadImages();
     } catch (error) {
-      toast.error(getApiErrorMessage(error, "Gallery image could not be removed."));
+      toast.error(
+        getApiErrorMessage(error, "Gallery image could not be removed."),
+      );
     } finally {
       setIsSaving(false);
     }
@@ -319,78 +331,80 @@ export default function ManageGallery() {
         )}
       </section>
 
-      {editingImage && (
-        <div
-          className="fixed inset-0 z-[80] flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget && !isSaving)
-              setEditingImage(null);
-          }}
-        >
-          <form
-            onSubmit={(event) => void saveEdit(event)}
-            className="relative w-full max-w-lg rounded-3xl bg-white p-5 shadow-2xl sm:p-7"
+      {editingImage &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-[80] flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm"
+            onMouseDown={(event) => {
+              if (event.target === event.currentTarget && !isSaving)
+                setEditingImage(null);
+            }}
           >
-            <button
-              type="button"
-              onClick={() => setEditingImage(null)}
-              disabled={isSaving}
-              aria-label="Close edit dialog"
-              className="absolute right-4 top-4 rounded-lg p-2 text-slate-500 hover:bg-slate-100"
+            <form
+              onSubmit={(event) => void saveEdit(event)}
+              className="relative w-full max-w-lg rounded-3xl bg-white p-5 shadow-2xl sm:p-7"
             >
-              <X size={20} />
-            </button>
-            <h3 className="pr-10 text-xl font-black text-slate-900">
-              Edit gallery image
-            </h3>
-            <img
-              src={resolveMediaUrl(editingImage.imageUrl)}
-              alt={editingImage.alt || "Current gallery image"}
-              className="mt-5 aspect-video w-full rounded-xl bg-slate-100 object-cover"
-            />
-            <label className="mt-4 block text-sm font-semibold text-slate-700">
-              Image description
-              <input
-                value={editAlt}
-                onChange={(event) => setEditAlt(event.target.value)}
-                maxLength={200}
-                className="mt-2 w-full rounded-xl border border-slate-200 px-3 py-2.5 font-normal outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100"
-              />
-            </label>
-            <label className="mt-4 block text-sm font-semibold text-slate-700">
-              Replace photo (optional)
-              <input
-                type="file"
-                accept="image/png,image/jpeg,image/webp,image/gif"
-                onChange={(event) =>
-                  setReplacementImage(event.currentTarget.files?.[0] || null)
-                }
-                className="mt-2 block w-full rounded-xl border border-slate-200 p-2 text-sm"
-              />
-            </label>
-            <div className="mt-6 flex justify-end gap-3">
               <button
                 type="button"
                 onClick={() => setEditingImage(null)}
                 disabled={isSaving}
-                className="rounded-xl border border-slate-200 px-4 py-2.5 font-semibold text-slate-700"
+                aria-label="Close edit dialog"
+                className="absolute right-4 top-4 rounded-lg p-2 text-slate-500 hover:bg-slate-100"
               >
-                Cancel
+                <X size={20} />
               </button>
-              <button
-                type="submit"
-                disabled={isSaving}
-                className="inline-flex items-center gap-2 rounded-xl bg-red-700 px-5 py-2.5 font-bold text-white disabled:opacity-50"
-              >
-                {isSaving ? (
-                  <LoaderCircle size={17} className="animate-spin" />
-                ) : null}
-                Save changes
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
+              <h3 className="pr-10 text-xl font-black text-slate-900">
+                Edit gallery image
+              </h3>
+              <img
+                src={resolveMediaUrl(editingImage.imageUrl)}
+                alt={editingImage.alt || "Current gallery image"}
+                className="mt-5 aspect-video w-full rounded-xl bg-slate-100 object-cover"
+              />
+              <label className="mt-4 block text-sm font-semibold text-slate-700">
+                Image description
+                <input
+                  value={editAlt}
+                  onChange={(event) => setEditAlt(event.target.value)}
+                  maxLength={200}
+                  className="mt-2 w-full rounded-xl border border-slate-200 px-3 py-2.5 font-normal outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100"
+                />
+              </label>
+              <label className="mt-4 block text-sm font-semibold text-slate-700">
+                Replace photo (optional)
+                <input
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp,image/gif"
+                  onChange={(event) =>
+                    setReplacementImage(event.currentTarget.files?.[0] || null)
+                  }
+                  className="mt-2 block w-full rounded-xl border border-slate-200 p-2 text-sm"
+                />
+              </label>
+              <div className="mt-6 flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setEditingImage(null)}
+                  disabled={isSaving}
+                  className="rounded-xl border border-slate-200 px-4 py-2.5 font-semibold text-slate-700"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSaving}
+                  className="inline-flex items-center gap-2 rounded-xl bg-red-700 px-5 py-2.5 font-bold text-white disabled:opacity-50"
+                >
+                  {isSaving ? (
+                    <LoaderCircle size={17} className="animate-spin" />
+                  ) : null}
+                  Save changes
+                </button>
+              </div>
+            </form>
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }
