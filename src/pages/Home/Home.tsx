@@ -12,6 +12,7 @@ import HeroSection from "./components/HeroSection";
 import PhotoGallerySection from "./components/PhotoGallerySection";
 import ReviewShowcaseSection from "./components/ReviewShowcaseSection";
 import StatsSection from "./components/StatsSection";
+import StudentReachMapSection from "./components/StudentReachMapSection";
 import VideoShowcaseSection from "./components/VideoShowcaseSection";
 import { useLocaleRouteSync } from "../../hooks/useLocaleRouteSync";
 import { getStoredLocale } from "../../utils/language";
@@ -42,6 +43,7 @@ export default function HomePage(): JSX.Element {
       <GamesSection isEnglish={isEnglish} />
       <CitizenScienceSection isEnglish={isEnglish} />
       <StatsSection isEnglish={isEnglish} />
+      <StudentReachMapSection isEnglish={isEnglish} />
       <VideoShowcaseSection isEnglish={isEnglish} />
       <LatestNewsSection isEnglish={isEnglish} />
       <PhotoGallerySection isEnglish={isEnglish} />
