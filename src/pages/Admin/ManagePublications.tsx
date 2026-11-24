@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import { createPortal } from "react-dom";
-import { isAxiosError } from "axios";
 import {
   LoaderCircle,
   Pencil,
@@ -14,6 +13,7 @@ import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import useAxiosProtected from "../../hooks/axiosProtected";
 import { resolveMediaUrl } from "../../utils/media";
+import { getApiErrorMessage } from "../../utils/apiError";
 
 type Category = "comics" | "flyer" | "pressRelease";
 type Resource = {
@@ -56,17 +56,6 @@ const categories: { value: Category; label: string }[] = [
   { value: "pressRelease", label: "Press releases" },
 ];
 
-function errorMessage(error: unknown, fallback: string) {
-  if (!isAxiosError(error)) return fallback;
-  const body = error.response?.data as
-    { errorMessage?: unknown; message?: unknown } | undefined;
-  return typeof body?.errorMessage === "string"
-    ? body.errorMessage
-    : typeof body?.message === "string"
-      ? body.message
-      : fallback;
-}
-
 function ManagePublications({
   initialCategory,
 }: {
@@ -103,7 +92,7 @@ function ManagePublications({
       setItems(Array.isArray(data?.data) ? data.data : []);
       setTotal(Number(data?.meta?.total) || 0);
     } catch (error) {
-      toast.error(errorMessage(error, "PDF publications could not be loaded."));
+      toast.error(getApiErrorMessage(error, "PDF publications could not be loaded."));
     } finally {
       setLoading(false);
     }
@@ -175,7 +164,7 @@ function ManagePublications({
       if (!editing && page !== 1) setPage(1);
       else await loadItems();
     } catch (error) {
-      toast.error(errorMessage(error, "Publication could not be saved."));
+      toast.error(getApiErrorMessage(error, "Publication could not be saved."));
     } finally {
       setSaving(false);
     }
@@ -200,7 +189,7 @@ function ManagePublications({
       if (items.length === 1 && page > 1) setPage((current) => current - 1);
       else await loadItems();
     } catch (error) {
-      toast.error(errorMessage(error, "Publication could not be removed."));
+      toast.error(getApiErrorMessage(error, "Publication could not be removed."));
     } finally {
       setSaving(false);
     }

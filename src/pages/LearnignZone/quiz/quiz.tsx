@@ -119,10 +119,7 @@ export function HotspotQuestion({ q, answer, onChange }: HotspotQuestionProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <p
-        className="font-semibold text-gray-800 text-sm"
-        style={{ fontFamily: "'Hind Siliguri',sans-serif" }}
-      >
+      <p className="font-semibold text-gray-800 text-sm">
         {q.question}
       </p>
 
@@ -222,7 +219,6 @@ export function HotspotQuestion({ q, answer, onChange }: HotspotQuestionProps) {
               ? "bg-green-50 border-green-200 text-green-700"
               : "bg-red-50 border-red-200 text-red-700"
           }`}
-          style={{ fontFamily: "'Hind Siliguri', sans-serif" }}
         >
           <span className="text-base">{allCorrect ? "✅" : "❌"}</span>
           {allCorrect
@@ -281,7 +277,6 @@ export function TrueFalseQuestion({
           style={{
             background: "rgba(239,246,255,0.85)",
             border: "1px solid rgba(191,219,254,0.9)",
-            fontFamily: "'Hind Siliguri',sans-serif",
           }}
         >
           {q.question}
@@ -305,7 +300,6 @@ export function TrueFalseQuestion({
                 onClick={() => !selectedAnswer && onChange(opt)}
                 className="w-full h-full py-5 rounded-2xl font-bold text-xl transition-all duration-300"
                 style={{
-                  fontFamily: "'Hind Siliguri',sans-serif",
                   cursor: selectedAnswer ? "default" : "pointer",
                   background: selected
                     ? isTrue
@@ -338,7 +332,6 @@ export function TrueFalseQuestion({
                 ? "bg-green-50 border-green-200 text-green-700"
                 : "bg-red-50 border-red-200 text-red-700"
             }`}
-            style={{ fontFamily: "'Hind Siliguri', sans-serif" }}
           >
             <span className="text-base">{isCorrect ? "✅" : "❌"}</span>
             {isCorrect
@@ -447,7 +440,6 @@ function FillBlanksQuestion({ q, answer, onChange }: FillBlanksQuestionProps) {
         style={{
           background: "rgba(239,246,255,0.85)",
           border: "2px solid #bfdbfe",
-          fontFamily: "'Hind Siliguri',sans-serif",
         }}
       >
         {parts.map((part, idx) => (
@@ -506,7 +498,6 @@ function FillBlanksQuestion({ q, answer, onChange }: FillBlanksQuestionProps) {
               }
               className="py-3 px-4 rounded-xl font-semibold text-base transition-all duration-200 hover:bg-blue-50 hover:shadow-md active:scale-95"
               style={{
-                fontFamily: "'Hind Siliguri',sans-serif",
                 cursor: isUsed ? "default" : "pointer",
                 opacity: isUsed ? 0.4 : 1,
                 background: isUsed
@@ -531,7 +522,6 @@ function FillBlanksQuestion({ q, answer, onChange }: FillBlanksQuestionProps) {
               ? "bg-green-50 border-green-200 text-green-700"
               : "bg-red-50 border-red-200 text-red-700"
           }`}
-          style={{ fontFamily: "'Hind Siliguri', sans-serif" }}
         >
           <span className="text-base">{isCorrect ? "✅" : "❌"}</span>
           {isCorrect
@@ -556,10 +546,7 @@ function ImageSelectionQuestion({
   return (
     <div className="flex flex-col gap-4">
       <DescriptionBox text={q.description} />
-      <p
-        className="font-semibold text-gray-800 text-sm"
-        style={{ fontFamily: "'Hind Siliguri',sans-serif" }}
-      >
+      <p className="font-semibold text-gray-800 text-sm">
         {q.question}
       </p>
 
@@ -627,7 +614,6 @@ function ImageSelectionQuestion({
               ? "bg-green-50 border-green-200 text-green-700"
               : "bg-red-50 border-red-200 text-red-700"
           }`}
-          style={{ fontFamily: "'Hind Siliguri', sans-serif" }}
         >
           <span className="text-base">{isCorrect ? "✅" : "❌"}</span>
           {isCorrect
@@ -683,7 +669,6 @@ function MCQQuestion({ q, answer, onChange }: MCQQuestionProps) {
               onClick={() => !selectedAnswer && onChange(opt)}
               className="flex items-center gap-4 px-5 py-4 rounded-xl font-semibold text-left transition-all duration-200"
               style={{
-                fontFamily: "'Hind Siliguri',sans-serif",
                 cursor: selectedAnswer ? "default" : "pointer",
                 opacity: selectedAnswer && !selected ? 0.4 : 1,
                 background: showCorrect
@@ -746,7 +731,6 @@ function MCQQuestion({ q, answer, onChange }: MCQQuestionProps) {
               ? "bg-green-50 border-green-200 text-green-700"
               : "bg-red-50 border-red-200 text-red-700"
           }`}
-          style={{ fontFamily: "'Hind Siliguri', sans-serif" }}
         >
           <span className="text-base">{isCorrect ? "✅" : "❌"}</span>
           {isCorrect
@@ -814,10 +798,7 @@ function SequenceQuestion({ q, answer, onChange }: SequenceQuestionProps) {
   return (
     <div className="flex flex-col gap-4">
       <DescriptionBox text={q.description} />
-      <p
-        className="font-semibold text-gray-800 text-sm"
-        style={{ fontFamily: "'Hind Siliguri',sans-serif" }}
-      >
+      <p className="font-semibold text-gray-800 text-sm">
         {q.question}
       </p>
 
@@ -920,10 +901,7 @@ function SequenceQuestion({ q, answer, onChange }: SequenceQuestionProps) {
       )}
 
       {isCorrectOrder && (
-        <div
-          className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium border bg-green-50 border-green-200 text-green-700"
-          style={{ fontFamily: "'Hind Siliguri', sans-serif" }}
-        >
+        <div className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium border bg-green-50 border-green-200 text-green-700">
           <span className="text-base">✅</span>
           {t("সঠিক ক্রম! চমৎকার!", "Correct order! Well done!")}
         </div>
@@ -985,10 +963,7 @@ function PuzzleQuestion({ q, answer, onChange }: PuzzleQuestionProps) {
   return (
     <div className="flex flex-col gap-4">
       <DescriptionBox text={q.description} />
-      <p
-        className="font-semibold text-gray-800 text-sm"
-        style={{ fontFamily: "'Hind Siliguri',sans-serif" }}
-      >
+      <p className="font-semibold text-gray-800 text-sm">
         {q.question}
       </p>
 
@@ -997,7 +972,6 @@ function PuzzleQuestion({ q, answer, onChange }: PuzzleQuestionProps) {
         className="rounded-2xl px-4 py-3 flex flex-wrap gap-2 items-center"
         style={{
           minHeight: "56px",
-          fontFamily: "'Hind Siliguri',sans-serif",
           background: allPlaced
             ? isCorrect
               ? "#dcfce7"
@@ -1023,7 +997,6 @@ function PuzzleQuestion({ q, answer, onChange }: PuzzleQuestionProps) {
               onClick={() => handleRemove(idx)}
               className="px-3 py-1.5 rounded-lg text-sm font-semibold transition-all active:scale-95"
               style={{
-                fontFamily: "'Hind Siliguri',sans-serif",
                 cursor: allPlaced && isCorrect ? "default" : "pointer",
                 background: allPlaced
                   ? isCorrect
@@ -1059,7 +1032,6 @@ function PuzzleQuestion({ q, answer, onChange }: PuzzleQuestionProps) {
                 onClick={() => handlePlace(id)}
                 className="px-3 py-2 rounded-xl text-sm font-semibold transition-all active:scale-95 hover:border-blue-400 hover:bg-blue-50"
                 style={{
-                  fontFamily: "'Hind Siliguri',sans-serif",
                   background: "rgba(255,255,255,0.9)",
                   border: "2px solid #93c5fd",
                   color: "#1e40af",
@@ -1080,7 +1052,6 @@ function PuzzleQuestion({ q, answer, onChange }: PuzzleQuestionProps) {
               ? "bg-green-50 border-green-200 text-green-700"
               : "bg-red-50 border-red-200 text-red-700"
           }`}
-          style={{ fontFamily: "'Hind Siliguri', sans-serif" }}
         >
           <span>{isCorrect ? "✅" : "❌"}</span>
           {isCorrect
@@ -1280,7 +1251,6 @@ export default function Quiz({ onFinish }: QuizProps) {
     );
   }
 
-  console.log(chapterId);
   const TOTAL = quizQuestions.length;
 
   const q = quizQuestions[current];
@@ -1364,7 +1334,7 @@ export default function Quiz({ onFinish }: QuizProps) {
         />
 
         {/* Top nav */}
-        <TopNav title="আবহাওয়া আঙ্কেল আর টুনির গল্প" brandName="মেট ক্লাব" />
+        <TopNav title="আবহাওয়া আঙ্কেল আর টুনির গল্প" />
 
         {/* Scrollable body */}
         <div className="relative z-10 flex-1 overflow-y-auto custom-scrollbar">

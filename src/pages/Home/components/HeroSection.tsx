@@ -1,4 +1,3 @@
-import { Sparkles } from "lucide-react";
 import { Link } from "react-router";
 import coverVideo from "../../../assets/videos/Drone shot for cover.mp4";
 import WeatherCanvas from "../../../components/Shared/WeatherCanvas";
@@ -22,27 +21,16 @@ export default function HeroSection({ isEnglish }: { isEnglish: boolean }) {
       <WeatherCanvas />
       <div className="site-container relative z-20 grid min-h-[min(820px,calc(100svh-4rem))] items-center gap-12 px-5 py-[60px] sm:px-8 lg:grid-cols-[1.08fr_.92fr] lg:gap-16 lg:py-[80px]">
         <div className="max-w-2xl text-white">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/35 bg-white/10 px-4 py-2 text-sm font-bold shadow-lg backdrop-blur-md">
-            <Sparkles className="h-4 w-4 text-amber-300" />
-            {t(
-              "শিশুদের জন্য আবহাওয়া ও দুর্যোগ সচেতনতা",
-              "Weather and disaster learning for every child",
-            )}
-          </div>
           <h1
             className="mb-5 text-4xl font-black leading-[1.12] tracking-tight sm:text-5xl lg:text-6xl"
             style={{ textShadow: "0 4px 24px rgba(0,0,0,.32)" }}
           >
-            {t("আবহাওয়া শিখি,", "Learn about weather,")}
-            <br />
-            <span className="text-red-200">
-              {t("নিরাপদ সমাজ গড়ি", "build safer communities")}
-            </span>
+            {t("মেট ক্লাব", "MET Club")}
           </h1>
           <p className="max-w-xl text-base font-normal leading-relaxed text-white/90 sm:text-lg">
             {t(
-              "মেট ক্লাব: বাংলাদেশে স্কুলভিত্তিক শিশু-কেন্দ্রিক আবহাওয়া ক্লাবের প্রথম উদ্যোগ।",
-              "MET CLUB: The first-ever school-based Child-centric Meteorological Club initiative in Bangladesh",
+              "বাংলাদেশের সর্বপ্রথম স্কুলভিত্তিক শিশু-কেন্দ্রিক আবহাওয়া ক্লাব",
+              "Bangladesh’s first school-based, child-centred weather club.",
             )}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">

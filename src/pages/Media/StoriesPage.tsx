@@ -81,10 +81,7 @@ export default function StoriesPage(): JSX.Element {
   const hasMore = stories.length < total;
   return (
     <div className="flex min-h-screen flex-col bg-gray-50">
-      <TopNav
-        title={isEnglish ? "Stories" : "গল্প"}
-        brandName={isEnglish ? "Met Club" : "মেট ক্লাব"}
-      />
+      <TopNav title={isEnglish ? "Stories" : "গল্প"} />
       <main className="site-container w-full flex-1 py-[60px] lg:py-[80px]">
         <header className="mb-10 text-center">
           <p className="mb-2 text-sm font-bold uppercase tracking-[.16em] text-red-600">

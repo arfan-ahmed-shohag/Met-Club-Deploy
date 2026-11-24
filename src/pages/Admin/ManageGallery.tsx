@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import type { FormEvent } from "react";
-import { isAxiosError } from "axios";
 import {
   ImagePlus,
   LoaderCircle,
@@ -13,6 +12,7 @@ import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import useAxiosProtected from "../../hooks/axiosProtected";
 import { resolveMediaUrl } from "../../utils/media";
+import { getApiErrorMessage } from "../../utils/apiError";
 
 const PAGE_SIZE = 9;
 const ACCEPTED_TYPES = new Set([
@@ -29,15 +29,6 @@ type GalleryImage = {
   createdAt: string;
 };
 type GalleryResponse = { data?: GalleryImage[]; meta?: { total?: number } };
-
-function errorMessage(error: unknown, fallback: string) {
-  if (!isAxiosError(error)) return fallback;
-  const body = error.response?.data as
-    { errorMessage?: unknown; message?: unknown } | undefined;
-  if (typeof body?.errorMessage === "string") return body.errorMessage;
-  if (typeof body?.message === "string") return body.message;
-  return fallback;
-}
 
 function validateImage(file: File | null) {
   if (!file) return "Choose an image first.";
@@ -69,7 +60,7 @@ export default function ManageGallery() {
       setImages(Array.isArray(data?.data) ? data.data.slice(0, PAGE_SIZE) : []);
       setTotal(Number(data?.meta?.total) || 0);
     } catch (error) {
-      toast.error(errorMessage(error, "Gallery images could not be loaded."));
+      toast.error(getApiErrorMessage(error, "Gallery images could not be loaded."));
     } finally {
       setIsLoading(false);
     }
@@ -98,7 +89,7 @@ export default function ManageGallery() {
       if (!firstPage) setPage(1);
       else await loadImages();
     } catch (error) {
-      toast.error(errorMessage(error, "Gallery image could not be added."));
+      toast.error(getApiErrorMessage(error, "Gallery image could not be added."));
     } finally {
       setIsSaving(false);
     }
@@ -129,7 +120,7 @@ export default function ManageGallery() {
       setEditingImage(null);
       await loadImages();
     } catch (error) {
-      toast.error(errorMessage(error, "Gallery image could not be updated."));
+      toast.error(getApiErrorMessage(error, "Gallery image could not be updated."));
     } finally {
       setIsSaving(false);
     }
@@ -154,7 +145,7 @@ export default function ManageGallery() {
       if (images.length === 1 && page > 1) setPage((current) => current - 1);
       else await loadImages();
     } catch (error) {
-      toast.error(errorMessage(error, "Gallery image could not be removed."));
+      toast.error(getApiErrorMessage(error, "Gallery image could not be removed."));
     } finally {
       setIsSaving(false);
     }

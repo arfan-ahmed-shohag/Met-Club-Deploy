@@ -8,6 +8,7 @@ import useAxiosProtected from "../../../hooks/axiosProtected";
 import { useLocaleRouteSync } from "../../../hooks/useLocaleRouteSync";
 import TopNav from "../../../components/Shared/TopBar";
 import { resolveMediaUrl } from "../../../utils/media";
+import { getYouTubeEmbedUrl } from "../../../utils/media";
 
 type Student = {
   id: number;
@@ -24,24 +25,6 @@ type School = {
   videoLink?: string;
   descEn: string;
   members: Student[];
-};
-
-const getYouTubeEmbedUrl = (url: string) => {
-  if (!url) return null;
-  try {
-    let videoId = "";
-    if (url.includes("youtu.be/")) {
-      videoId = url.split("youtu.be/")[1]?.split("?")[0];
-    } else if (url.includes("youtube.com/watch")) {
-      const urlParams = new URL(url).searchParams;
-      videoId = urlParams.get("v") || "";
-    } else if (url.includes("youtube.com/embed/")) {
-      videoId = url.split("embed/")[1]?.split("?")[0];
-    }
-    return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
-  } catch (e) {
-    return null;
-  }
 };
 
 export default function EnglishLocationDetails() {
@@ -84,18 +67,21 @@ export default function EnglishLocationDetails() {
 
   if (!locationInfo) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center p-8 bg-white rounded-2xl shadow-xl max-w-md">
-          <h2 className="text-3xl font-bold text-red-600 mb-4">Not Found</h2>
-          <p className="text-gray-600 mb-6">
-            No information available for this location.
-          </p>
-          <button
-            onClick={() => navigate("/en")}
-            className="px-6 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors"
-          >
-            Go Back
-          </button>
+      <div className="min-h-screen flex flex-col bg-gray-50">
+        <TopNav title="Not Found" />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center p-8 bg-white rounded-2xl shadow-xl max-w-md">
+            <h2 className="text-3xl font-bold text-red-600 mb-4">Not Found</h2>
+            <p className="text-gray-600 mb-6">
+              No information available for this location.
+            </p>
+            <button
+              onClick={() => navigate("/en")}
+              className="px-6 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors"
+            >
+              Go Back
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -104,7 +90,7 @@ export default function EnglishLocationDetails() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex flex-col bg-gray-50">
-        <TopNav title={`${locationInfo.name} Location`} brandName="MET Club" />
+        <TopNav title={`${locationInfo.name} Location`} />
         <div className="flex-1 flex items-center justify-center">
           <p className="text-gray-500 font-semibold text-lg">Loading...</p>
         </div>
@@ -114,7 +100,7 @@ export default function EnglishLocationDetails() {
 
   return (
     <div className="relative min-h-screen flex flex-col bg-gray-50">
-      <TopNav title={`${locationInfo.name} Location`} brandName="MET Club" />
+      <TopNav title={`${locationInfo.name} Location`} />
       <div className="flex-1 bg-gray-50 pb-20">
         {schools.find((s) => s.videoLink)?.videoLink && (
           <section

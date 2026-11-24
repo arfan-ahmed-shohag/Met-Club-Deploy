@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import { createPortal } from "react-dom";
-import { isAxiosError } from "axios";
 import { LoaderCircle, Pencil, Plus, Trash2, X } from "lucide-react";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import useAxiosProtected from "../../hooks/axiosProtected";
 import { resolveMediaUrl } from "../../utils/media";
+import { getApiErrorMessage } from "../../utils/apiError";
 
 const PAGE_SIZE = 10;
 const MAX_THUMBNAIL_SIZE = 5 * 1024 * 1024;
@@ -47,15 +47,6 @@ const emptyForm = (): VideoForm => ({
   videoLinkEn: "",
   thumbnail: null,
 });
-
-function responseError(error: unknown, fallback: string) {
-  if (!isAxiosError(error)) return fallback;
-  const body = error.response?.data as
-    { errorMessage?: unknown; message?: unknown } | undefined;
-  if (typeof body?.errorMessage === "string") return body.errorMessage;
-  if (typeof body?.message === "string") return body.message;
-  return fallback;
-}
 
 function isValidYouTubeUrl(value: string) {
   try {
@@ -103,7 +94,7 @@ export default function ManageHomeVideos() {
       setVideos(Array.isArray(data?.data) ? data.data.slice(0, PAGE_SIZE) : []);
       setTotal(Number(data?.meta?.total) || 0);
     } catch (error) {
-      toast.error(responseError(error, "Videos could not be loaded."));
+      toast.error(getApiErrorMessage(error, "Videos could not be loaded."));
     } finally {
       setIsLoading(false);
     }
@@ -183,7 +174,7 @@ export default function ManageHomeVideos() {
       if (!editing && page !== 1) setPage(1);
       else await loadVideos();
     } catch (error) {
-      toast.error(responseError(error, "Video could not be saved."));
+      toast.error(getApiErrorMessage(error, "Video could not be saved."));
     } finally {
       setSaving(false);
     }
@@ -208,7 +199,7 @@ export default function ManageHomeVideos() {
       if (videos.length === 1 && page > 1) setPage((current) => current - 1);
       else await loadVideos();
     } catch (error) {
-      toast.error(responseError(error, "Video could not be removed."));
+      toast.error(getApiErrorMessage(error, "Video could not be removed."));
     } finally {
       setSaving(false);
     }

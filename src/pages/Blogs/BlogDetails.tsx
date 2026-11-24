@@ -75,10 +75,7 @@ export default function BlogDetails() {
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-slate-100 text-slate-900">
-      <TopNav
-        title={isEnglish ? "Community Blog" : "কমিউনিটি ব্লগ"}
-        brandName={isEnglish ? "Met Club" : "মেট ক্লাব"}
-      />
+      <TopNav title={isEnglish ? "Community Blog" : "কমিউনিটি ব্লগ"} />
       <main className="w-full bg-white">
         {isLoading ? (
           <div className="mx-auto w-full max-w-5xl px-5 py-8 sm:px-8 lg:px-10">

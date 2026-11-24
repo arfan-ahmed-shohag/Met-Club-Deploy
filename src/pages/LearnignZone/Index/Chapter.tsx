@@ -5,22 +5,8 @@ import { Link } from "react-router";
 import TopNav from "../../../components/Shared/TopBar";
 import { useLocaleRouteSync } from "../../../hooks/useLocaleRouteSync";
 import { getLocalizedPath, getStoredLocale } from "../../../utils/language";
+import { getChapters, type ChapterTopic } from "../chapterData";
 
-export interface ChapterTopic {
-  id: number;
-  title: string;
-  image: string;
-  borderColor: string;
-  glowColor: string;
-  row: number;
-}
-
-const fetchChapters = async () => {
-  const response = await fetch("/chapter.json");
-  return response.json() as Promise<ChapterTopic[]>;
-};
-
-const chaptersPromise = fetchChapters();
 const CHAPTERS_PER_LARGE_ROW = 5;
 
 const redCardAccent = {
@@ -73,10 +59,10 @@ function TopicCard({ topic, index }: { topic: ChapterTopic; index: number }) {
   );
 }
 
-export default function Chapter() {
+export default function Chapter({ isEnglish = false }: { isEnglish?: boolean }) {
   useLocaleRouteSync("/learning-zone", "/en/learning-zone");
 
-  const chapters = use(chaptersPromise);
+  const chapters = use(getChapters(isEnglish));
   const chapterRows = chapters.reduce<ChapterTopic[][]>(
     (rows, topic, index) => {
       const rowIndex = Math.floor(index / CHAPTERS_PER_LARGE_ROW);
@@ -101,7 +87,7 @@ export default function Chapter() {
         }}
       >
         <div className="relative z-20 w-full self-stretch">
-          <TopNav title="লার্নিং জোন" brandName="মেট ক্লাব" />
+          <TopNav title={isEnglish ? "Learning Zone" : "লার্নিং জোন"} />
         </div>
 
         {/* Soft overlay so cards are readable over the bg */}

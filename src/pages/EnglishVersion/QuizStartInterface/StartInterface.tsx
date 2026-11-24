@@ -21,7 +21,7 @@ export default function StartInterface() {
       >
         {/* ───────────────── TOP BAR ───────────────── */}
         <div className="relative z-40">
-          <TopNav brandName="Met Club" />
+          <TopNav />
         </div>
 
         {/* ───────────────── MAIN CONTENT ───────────────── */}

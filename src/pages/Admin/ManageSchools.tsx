@@ -44,7 +44,6 @@ export default function ManageSchools() {
     setIsLoading(true);
     try {
       const res = await axiosInstance.get(`/schools?location=${locKey}`);
-      console.log(res.data);
       setSchools(res.data.data || []);
     } catch (err) {
       console.error(err);

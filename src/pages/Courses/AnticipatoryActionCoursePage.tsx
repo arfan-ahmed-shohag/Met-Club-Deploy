@@ -53,7 +53,6 @@ export default function AnticipatoryActionCoursePage(): JSX.Element {
     <div className="flex min-h-screen flex-col bg-gray-50">
       <TopNav
         title="আগাম পদক্ষেপ কোর্স"
-        brandName="MET Club"
         rightContent={courseControls}
       />
       {user ? (

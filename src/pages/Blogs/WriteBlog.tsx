@@ -288,10 +288,7 @@ export default function WriteBlog() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-orange-50 to-slate-100 text-slate-900">
-      <TopNav
-        title={isEnglish ? "Write a blog" : "ব্লগ লিখুন"}
-        brandName={isEnglish ? "Met Club" : "মেট ক্লাব"}
-      />
+      <TopNav title={isEnglish ? "Write a blog" : "ব্লগ লিখুন"} />
       <main className="site-container px-4 py-8 sm:px-6 lg:px-8">
         <section className="mx-auto mb-8 w-full max-w-4xl rounded-2xl border border-white/60 bg-white/40 p-5 shadow-[0_8px_32px_rgba(0,0,0,0.08)] backdrop-blur-xl sm:p-7">
           <header className="mb-6 flex flex-wrap items-start justify-between gap-4">

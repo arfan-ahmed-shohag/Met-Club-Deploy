@@ -1,13 +1,15 @@
 import bgImage from "../../../assets/images/start-journey-page-bg.jpeg";
 import { Link, useParams } from "react-router";
 import { use, useEffect, useState } from "react";
-import type { ChapterTopic } from "../Index/Chapter";
+import { getChapters } from "../chapterData";
 import useAxiosProtected from "../../../hooks/axiosProtected";
+import TopNav from "../../../components/Shared/TopBar";
 
 const DIFFICULTIES = [
   {
     key: "easy",
     label: "সহজ",
+    labelEn: "Easy",
     emoji: "☀️",
     border: "border-red-300",
     bg: "bg-gradient-to-br from-red-100 to-rose-200",
@@ -20,6 +22,7 @@ const DIFFICULTIES = [
   {
     key: "medium",
     label: "মাঝারি",
+    labelEn: "Medium",
     emoji: "⛰️",
     border: "border-rose-300",
     bg: "bg-gradient-to-br from-rose-100 to-red-200",
@@ -32,6 +35,7 @@ const DIFFICULTIES = [
   {
     key: "hard",
     label: "কঠিন",
+    labelEn: "Hard",
     emoji: "🏔️",
     border: "border-red-300",
     bg: "bg-gradient-to-br from-red-100 to-red-200",
@@ -43,17 +47,14 @@ const DIFFICULTIES = [
   },
 ];
 
-const fetchChapters = async () => {
-  const response = await fetch("/chapter.json");
-  return response.json() as Promise<ChapterTopic[]>;
-};
-
-const chaptersPromise = fetchChapters();
-
-export default function Deficulty() {
+export default function Deficulty({
+  isEnglish = false,
+}: {
+  isEnglish?: boolean;
+}) {
   const { chapterId } = useParams();
 
-  const chapters = use(chaptersPromise);
+  const chapters = use(getChapters(isEnglish));
 
   const topic = chapters.find((c) => c.id === Number(chapterId));
 
@@ -88,6 +89,10 @@ export default function Deficulty() {
           backgroundRepeat: "no-repeat",
         }}
       >
+        <div className="relative z-20 w-full self-stretch">
+          <TopNav title={isEnglish ? "Learning Zone" : "লার্নিং জোন"} />
+        </div>
+
         {/* Overlay */}
         <div
           className="absolute inset-0 pointer-events-none"
@@ -107,7 +112,7 @@ export default function Deficulty() {
             letterSpacing: "0.04em",
           }}
         >
-          লার্নিং জোন
+          {isEnglish ? "Learning Zone" : "লার্নিং জোন"}
         </h1>
 
         {/* ── Subtitle ── */}
@@ -115,7 +120,8 @@ export default function Deficulty() {
           className="sub-anim relative z-10 mt-3 text-base md:text-lg font-extrabold tracking-wide text-gray-700 text-center"
           style={{ letterSpacing: "0.06em" }}
         >
-          কঠিনতার স্তর নির্বাচন করুন:&nbsp;
+          {isEnglish ? "Select Difficulty Level:" : "কঠিনতার স্তর নির্বাচন করুন:"}
+          &nbsp;
           <span
             style={{
               color: "#9A3324",
@@ -184,7 +190,7 @@ export default function Deficulty() {
                                     }
                                 `}
                 >
-                  {d.label}
+                  {isEnglish ? d.labelEn : d.label}
                   <span className="text-[28px] leading-none">
                     {locked ? "🔒" : d.emoji}
                   </span>

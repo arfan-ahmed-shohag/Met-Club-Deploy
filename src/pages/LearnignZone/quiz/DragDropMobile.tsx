@@ -316,10 +316,7 @@ export function MatchQuestion({ q, answer, onChange }: MatchQuestionProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      <p
-        className="font-bold text-gray-800 text-base md:text-lg border-l-4 border-blue-500 pl-3"
-        style={{ fontFamily: "'Hind Siliguri',sans-serif" }}
-      >
+      <p className="font-bold text-gray-800 text-base md:text-lg border-l-4 border-blue-500 pl-3">
         {q.question}
       </p>
 
@@ -369,7 +366,6 @@ export function MatchQuestion({ q, answer, onChange }: MatchQuestionProps) {
                     <div
                       className="w-full flex items-center justify-center px-4 py-4 font-bold text-sm text-center"
                       style={{
-                        fontFamily: "'Hind Siliguri',sans-serif",
                         color:
                           correct === true
                             ? "#15803d"
@@ -440,7 +436,6 @@ export function MatchQuestion({ q, answer, onChange }: MatchQuestionProps) {
                     <div
                       className="w-full h-full flex items-center justify-center font-bold text-sm text-center px-3 py-4"
                       style={{
-                        fontFamily: "'Hind Siliguri',sans-serif",
                         color:
                           correct === true
                             ? "#15803d"
@@ -472,7 +467,6 @@ export function MatchQuestion({ q, answer, onChange }: MatchQuestionProps) {
               ? "bg-green-50 border-green-200 text-green-700"
               : "bg-red-50 border-red-200 text-red-700"
           }`}
-          style={{ fontFamily: "'Hind Siliguri', sans-serif" }}
         >
           <span className="text-base">{isAllCorrect ? "✅" : "❌"}</span>
           {isAllCorrect ? "সঠিক উত্তর! চমৎকার!" : "ভুল হয়েছে!"}
@@ -544,10 +538,7 @@ export function CategorizeQuestion({
 
   return (
     <div className="flex flex-col gap-5">
-      <p
-        className="text-base font-medium text-gray-800 border-l-[3px] border-blue-500 pl-3 leading-relaxed"
-        style={{ fontFamily: "'Hind Siliguri', sans-serif" }}
-      >
+      <p className="text-base font-medium text-gray-800 border-l-[3px] border-blue-500 pl-3 leading-relaxed">
         {q.question}
       </p>
 

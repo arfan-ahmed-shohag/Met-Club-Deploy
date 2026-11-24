@@ -18,10 +18,7 @@ export default function HomePage(): JSX.Element {
 
   return (
     <div className="relative flex min-h-screen flex-col overflow-x-hidden bg-gray-50">
-      <TopNav
-        title={isEnglish ? "Home" : "হোম"}
-        brandName={isEnglish ? "Met Club" : "মেট ক্লাব"}
-      />
+      <TopNav title={isEnglish ? "Home" : "হোম"} />
       <HeroSection isEnglish={isEnglish} />
       <AboutSection isEnglish={isEnglish} />
       <AnticipatoryActionBriefSection isEnglish={isEnglish} />

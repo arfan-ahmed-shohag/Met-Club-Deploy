@@ -67,7 +67,6 @@ export function QuestionHeader({
           style={{
             background: "#fee2e2",
             color: "#9A3324",
-            fontFamily: "'Hind Siliguri',sans-serif",
           }}
         >
           {/* xs: "৩/১০", sm+: "প্রশ্ন ৩ / ১০" */}

@@ -484,7 +484,6 @@ function MediaPage({ kind }: { kind: "gallery" | "videos" }): JSX.Element {
               ? "ভিডিও"
               : "ফটো গ্যালারি"
         }
-        brandName={isEnglish ? "Met Club" : "মেট ক্লাব"}
       />
       <main className="site-container w-full flex-1 py-[60px] lg:py-[80px]">
         <header className="mb-10 text-center">

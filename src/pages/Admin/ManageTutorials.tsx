@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import useAxiosProtected from "../../hooks/axiosProtected";
+import { resolveTutorialImageUrl } from "../../utils/media";
 
 type Tutorial = {
   id: number;
@@ -14,12 +15,6 @@ type Tutorial = {
   videoLink: string;
   updatedAt?: string;
   createdAt?: string;
-};
-
-const resolveImageUrl = (value: string) => {
-  if (!value) return "";
-  if (value.startsWith("http")) return value;
-  return ("https://api.meteorologyclub.com" + value).replace("/api/v1", "");
 };
 
 export default function ManageTutorials() {
@@ -271,7 +266,7 @@ export default function ManageTutorials() {
             <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr] items-start">
               <div className="overflow-hidden rounded-3xl border border-gray-200 shadow-lg">
                 <img
-                  src={resolveImageUrl(selectedTutorial.thumbnailImage)}
+                  src={resolveTutorialImageUrl(selectedTutorial.thumbnailImage)}
                   alt={selectedTutorial.title}
                   className="w-full object-cover"
                 />

@@ -99,10 +99,7 @@ export default function Blogs() {
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-slate-100 text-slate-900">
-      <TopNav
-        title={isEnglish ? "Community Blog" : "কমিউনিটি ব্লগ"}
-        brandName={isEnglish ? "Met Club" : "মেট ক্লাব"}
-      />
+      <TopNav title={isEnglish ? "Community Blog" : "কমিউনিটি ব্লগ"} />
 
       <main className="site-container px-4 pb-14 pt-8 sm:px-6 lg:px-8 lg:pt-10">
         <section className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">

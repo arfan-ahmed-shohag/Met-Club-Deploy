@@ -3,6 +3,7 @@ import { FiPlay, FiX } from "react-icons/fi";
 import TopNav from "../../components/Shared/TopBar";
 import bgImage from "../../assets/images/start-journey-page-bg.jpeg";
 import axiosPublic from "../../hooks/axiosPublic";
+import { resolveTutorialImageUrl } from "../../utils/media";
 
 type Tutorial = {
   id: number;
@@ -11,12 +12,6 @@ type Tutorial = {
   title: string;
   thumbnailImage: string;
   videoLink: string;
-};
-
-const resolveImageUrl = (value: string) => {
-  if (!value) return "";
-  if (value.startsWith("http")) return value;
-  return ("https://api.meteorologyclub.com" + value).replace("/api/v1", "");
 };
 
 const getYoutubeEmbedUrl = (input: string) => {
@@ -96,7 +91,7 @@ export default function Tutorials() {
             "linear-gradient(180deg, rgba(20,6,6,0.22) 0%, rgba(20,6,6,0.14) 55%, rgba(20,6,6,0.18) 100%)",
         }}
       />
-      <TopNav title="টিউটোরিয়াল ভিডিও" brandName="মেট ক্লাব" />
+      <TopNav title="টিউটোরিয়াল ভিডিও" />
 
       <div className="py-8">
         <div className="site-container px-4 sm:px-6 lg:px-8">
@@ -119,7 +114,7 @@ export default function Tutorials() {
                 >
                   <div className="relative aspect-16/10 overflow-hidden">
                     <img
-                      src={resolveImageUrl(tutorial.thumbnailImage)}
+                      src={resolveTutorialImageUrl(tutorial.thumbnailImage)}
                       alt={tutorial.title}
                       className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />

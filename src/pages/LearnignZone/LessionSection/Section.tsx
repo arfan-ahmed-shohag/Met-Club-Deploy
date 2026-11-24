@@ -380,10 +380,7 @@ export default function ChapterDialoguePreview(): JSX.Element {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <TopNav
-        title={isEnglish ? "Chapter 1: Story" : "অধ্যায় ১: গল্প"}
-        brandName="MET Club"
-      />
+      <TopNav title={isEnglish ? "Chapter 1: Story" : "অধ্যায় ১: গল্প"} />
       <main className="site-container px-4 pb-16 pt-8 sm:px-6 lg:px-8 lg:pt-10">
         <header className="mb-5 flex flex-wrap items-end justify-between gap-3">
           <div>

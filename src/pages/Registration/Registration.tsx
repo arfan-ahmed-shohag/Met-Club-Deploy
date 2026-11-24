@@ -8,6 +8,7 @@ import axiosPublic from "../../hooks/axiosPublic";
 import { getLocalizedPath } from "../../utils/language";
 import bangladeshLocations from "../../data/bangladesh-locations.json";
 import { isAxiosError } from "axios";
+import TopNav from "../../components/Shared/TopBar";
 import { setSessionToken } from "../../lib/authSession";
 import { transliterateBanglaLocation } from "../../utils/banglaTransliteration";
 import {
@@ -164,6 +165,10 @@ export default function Registration() {
         backgroundPosition: "center",
       }}
     >
+      <div className="relative z-20 text-black">
+        <TopNav title={isEnglish ? "Registration" : "নিবন্ধন"} />
+      </div>
+
       <div
         className="absolute inset-0 pointer-events-none"
         style={{

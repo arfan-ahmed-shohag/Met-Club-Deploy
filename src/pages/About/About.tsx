@@ -166,10 +166,7 @@ export default function About() {
 
   return (
     <div className="relative min-h-screen flex flex-col overflow-x-hidden bg-gray-50">
-      <TopNav
-        title={t("আমাদের সম্পর্কে", "About Us")}
-        brandName={t("মেট ক্লাব", "Met Club")}
-      />
+      <TopNav title={t("আমাদের সম্পর্কে", "About Us")} />
 
       {/* Hero Section */}
       <section className="relative z-10 min-h-screen flex items-center justify-center py-10 md:py-15 lg:py-20 overflow-hidden">

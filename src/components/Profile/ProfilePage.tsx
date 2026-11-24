@@ -800,14 +800,10 @@ export default function ProfilePage({
         backgroundImage: `url(${bgImage})`,
         backgroundSize: "cover",
         backgroundPosition: "center bottom",
-        fontFamily: "'Noto Sans Bengali', sans-serif",
       }}
     >
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.40),rgba(219,234,254,0.18),rgba(255,255,255,0.46))]" />
-      <TopNav
-        title={t("প্রোফাইল", "Profile")}
-        brandName={t("মেট ক্লাব", "Met Club")}
-      />
+      <TopNav title={t("প্রোফাইল", "Profile")} />
       <main className="site-container relative z-10 mt-10 px-4 sm:px-6 lg:px-8">
         {user ? (
           <UserProfile key={user.id} user={user} isEnglish={isEnglish} />

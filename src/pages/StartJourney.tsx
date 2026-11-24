@@ -41,7 +41,7 @@ export default function StartJourney() {
         }}
       />
 
-      <TopNav brandName={isEnglish ? "Met Club" : "মেট ক্লাব"} />
+      <TopNav />
 
       {/* ── Main Content ── */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 pt-12 pb-12">

@@ -126,7 +126,6 @@ function PublicationPage({ category }: { category: Category }) {
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <TopNav
         title={copy.title}
-        brandName={isEnglish ? "MET Club" : "মেট ক্লাব"}
       />
       <main className="site-container min-h-[60vh] px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
         <header className="mx-auto mb-9 max-w-3xl text-center">

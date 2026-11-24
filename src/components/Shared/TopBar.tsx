@@ -15,9 +15,9 @@ import HeaderNavigation from "./HeaderNavigation";
 import LoginModal from "./LoginModal";
 
 interface TopNavProps {
+  /** Page name for screen readers. */
   title?: string;
-  tone?: "default" | "red";
-  brandName: string;
+  /** Extra controls shown before the language switch (e.g. course controls). */
   rightContent?: ReactNode;
 }
 
@@ -63,25 +63,10 @@ const menuItems = [
       </svg>
     ),
   },
-  // {
-  //     label: "আমার অগ্রগতি",
-  //     href: "/progress",
-  //     icon: (
-  //         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
-  //             <polyline points="9 11 12 14 22 4" />
-  //             <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-  //         </svg>
-  //     ),
-  // },
 ];
 
-export default function TopNav({
-  title,
-  tone = "default",
-  brandName,
-  rightContent,
-}: TopNavProps) {
-  void tone;
+/** The site navbar shared by every public page. */
+export default function TopNav({ title, rightContent }: TopNavProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -89,6 +74,7 @@ export default function TopNav({
   const location = useLocation();
   const handleLogout = useLogout();
   const locale = getStoredLocale();
+  const brandName = locale === "en" ? "Met Club" : "মেট ক্লাব";
   const { user, isAuthenticated, isLoading, error, reloadUser } = useAuth();
   const avatar = user
     ? Array.from(

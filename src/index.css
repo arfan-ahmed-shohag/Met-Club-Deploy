@@ -1,11 +1,64 @@
+@import "tailwindcss";
+
 @font-face {
   font-family: "Nikosh";
-  src: url("/fonts/Nikosh.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
+  src: url("./assets/fonts/Nikosh.woff2") format("woff2");
+  font-display: swap;
+  /* Keep the fallback legible on devices without Nirmala UI. */
+  size-adjust: 145%;
+  unicode-range: U+0964-0965, U+0980-09FF, U+200C-200D;
 }
 
-@import "tailwindcss";
+/* The original Windows sans-serif stack used these faces for spaces between Bengali words. */
+@font-face {
+  font-family: "Arial Spaces";
+  src: local("Arial");
+  font-weight: 100 500;
+  unicode-range: U+0020, U+00A0;
+}
+
+@font-face {
+  font-family: "Arial Spaces";
+  src: local("Arial Bold");
+  font-weight: 600 700;
+  unicode-range: U+0020, U+00A0;
+}
+
+@font-face {
+  font-family: "Arial Spaces";
+  src: local("Arial Black");
+  font-weight: 800 900;
+  unicode-range: U+0020, U+00A0;
+}
+
+@font-face {
+  font-family: "Lato";
+  src: url("/fonts/Lato-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Lato";
+  src: url("/fonts/Lato-Italic.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Lato";
+  src: url("/fonts/Lato-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Lato";
+  src: url("/fonts/Lato-Black.woff2") format("woff2");
+  font-weight: 900;
+  font-display: swap;
+}
 
 button:not(:disabled) {
   cursor: pointer;
@@ -16,6 +69,7 @@ button:disabled {
 }
 
 @theme {
+  --font-sans: "Lato", "Nirmala UI", "Nikosh", sans-serif;
   --color-red-50: #fff7f5;
   --color-red-100: #f9e7e4;
   --color-red-200: #f0d0cb;
@@ -178,6 +232,11 @@ button:disabled {
   box-shadow: inset 0 -2px 0 #da291c;
 }
 
+.blog-quill .ql-toolbar.ql-snow,
+.blog-quill .ql-container {
+  font-family: inherit;
+}
+
 .blog-quill .ql-editor {
   height: 100%;
   min-height: 0;
@@ -246,8 +305,12 @@ button:disabled {
   text-decoration: underline;
 }
 
+:root:lang(bn) {
+  --font-sans: "Arial Spaces", "Lato", "Nirmala UI", "Nikosh", sans-serif;
+}
+
 body {
-  font-family: "Nikosh", sans-serif;
+  font-family: var(--font-sans);
 }
 
 .clipPath {

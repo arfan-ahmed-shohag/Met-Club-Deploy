@@ -7,9 +7,6 @@ import {
   updateSessionToken,
 } from "./authSession";
 
-// const defaultApiUrl = import.meta.env.DEV
-//   ? "http://localhost:5000/api/v1"
-//   : "https://api.meteorologyclub.com/api/v1";
 const baseURL = (import.meta.env.VITE_API_URL).replace(
   /\/$/,
   "",

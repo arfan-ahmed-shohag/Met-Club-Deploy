@@ -17,6 +17,7 @@ export function setStoredLocale(locale: AppLocale) {
   }
 
   window.localStorage.setItem(LANGUAGE_STORAGE_KEY, locale);
+  document.documentElement.lang = locale;
 }
 
 export function getLocalizedPath(pathname: string, locale: AppLocale) {
