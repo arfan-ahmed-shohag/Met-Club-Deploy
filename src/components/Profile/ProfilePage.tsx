@@ -165,6 +165,8 @@ function PasswordDialog({
       ref={dialog}
       aria-labelledby="password-title"
       onCancel={(event) => {
+        // A file input's picker-cancel event bubbles here; only handle the dialog's own (Escape).
+        if (event.target !== event.currentTarget) return;
         event.preventDefault();
         if (!saving) onClose();
       }}

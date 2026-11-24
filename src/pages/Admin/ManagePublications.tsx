@@ -375,6 +375,8 @@ function ManagePublications({
           <dialog
             ref={dialogRef}
             onCancel={(event) => {
+              // A file input's picker-cancel event bubbles here; only handle the dialog's own (Escape).
+              if (event.target !== event.currentTarget) return;
               event.preventDefault();
               if (!saving) setDialogOpen(false);
             }}
