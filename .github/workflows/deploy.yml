@@ -33,8 +33,9 @@ jobs:
 
             cd ~/Met_Club/frontend
 
-            git pull origin deploy
+            git fetch origin deploy
             git checkout deploy
+            git reset --hard origin/deploy
 
             pnpm install --frozen-lockfile
             pnpm run build
