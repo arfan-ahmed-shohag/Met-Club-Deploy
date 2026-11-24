@@ -1,0 +1,222 @@
+/* About page: playful, kid-friendly motion. Everything stops under reduced motion. */
+
+@keyframes aboutSpin { to { transform: rotate(360deg); } }
+@keyframes aboutBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+@keyframes aboutSway {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(28px); }
+}
+@keyframes aboutWiggle {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-14deg); }
+  40% { transform: rotate(12deg); }
+  60% { transform: rotate(-8deg); }
+  80% { transform: rotate(6deg); }
+}
+@keyframes aboutRain {
+  0% { transform: translateY(-6px); opacity: 0; }
+  25% { opacity: 1; }
+  100% { transform: translateY(46px); opacity: 0; }
+}
+@keyframes aboutWordPop {
+  0% { transform: translateY(40px) scale(0.6); opacity: 0; }
+  70% { transform: translateY(-6px) scale(1.08); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+@keyframes aboutMarch { to { background-position: 0 28px; } }
+@keyframes aboutPinDrop {
+  0% { transform: translateY(-48px); opacity: 0; }
+  55% { transform: translateY(4px); opacity: 1; }
+  75% { transform: translateY(-6px); opacity: 1; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+@keyframes aboutHeartbeat {
+  0%, 100% { transform: scale(1); }
+  14% { transform: scale(1.14); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.1); }
+  70% { transform: scale(1); }
+}
+@keyframes aboutStarBurst {
+  0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1) rotate(200deg); opacity: 0; }
+}
+@keyframes aboutRainbow { to { background-position: 200% 0; } }
+@keyframes aboutPulseRing {
+  0% { transform: scale(0.8); opacity: 0.7; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+.about-spin { animation: aboutSpin 18s linear infinite; }
+.about-bob { animation: aboutBob 3.6s ease-in-out infinite; }
+.about-sway { animation: aboutSway 9s ease-in-out infinite; }
+.about-heartbeat { animation: aboutHeartbeat 2.2s ease-in-out infinite; }
+.about-hover-wiggle:hover .about-wiggle-target,
+.about-hover-wiggle:focus-visible .about-wiggle-target {
+  animation: aboutWiggle 0.7s ease-in-out;
+}
+
+.about-rain-drop {
+  position: absolute;
+  width: 4px;
+  height: 14px;
+  border-radius: 9999px;
+  background: #7dd3fc;
+  animation: aboutRain 1.3s linear infinite;
+}
+
+.about-word {
+  opacity: 0;
+  animation: aboutWordPop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.about-progress {
+  transform: scaleX(0);
+  background: linear-gradient(90deg, #da291c, #fc4c02, #f2a900, #009ca6, #da291c);
+  background-size: 200% 100%;
+  animation: aboutRainbow 4s linear infinite;
+}
+
+/* Dashed connector that "marches" downwards like a little ant trail. */
+.about-trail {
+  width: 6px;
+  height: 56px;
+  border-radius: 9999px;
+  background-image: linear-gradient(to bottom, #fc4c02 50%, transparent 50%);
+  background-size: 100% 14px;
+  animation: aboutMarch 0.9s linear infinite;
+}
+
+/* Flip cards (Vision / Mission) */
+.about-flip { perspective: 1400px; }
+.about-flip-inner {
+  display: grid;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+.about-flip-inner.is-flipped { transform: rotateY(180deg); }
+.about-flip-face {
+  grid-area: 1 / 1;
+  display: block;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.about-flip-back { transform: rotateY(180deg); }
+
+/* Sticker cards tilt a little and straighten up on hover. */
+.about-sticker {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
+}
+.about-sticker:nth-child(odd) { transform: rotate(-2deg); }
+.about-sticker:nth-child(even) { transform: rotate(2deg); }
+.about-sticker:hover,
+.about-sticker:focus-visible {
+  transform: rotate(0deg) translateY(-8px) scale(1.04);
+}
+
+/* Floating bubbles (activities) — each one bobs at its own pace. */
+.about-bubble { animation: aboutBob 4s ease-in-out infinite; }
+.about-bubble:nth-child(2) { animation-delay: -0.8s; animation-duration: 4.6s; }
+.about-bubble:nth-child(3) { animation-delay: -1.6s; animation-duration: 3.8s; }
+.about-bubble:nth-child(4) { animation-delay: -2.4s; animation-duration: 4.3s; }
+.about-bubble:nth-child(5) { animation-delay: -3.2s; animation-duration: 5s; }
+
+/* Pins drop in when the location cards appear. */
+.about-pin { opacity: 0; }
+.about-is-visible .about-pin { animation: aboutPinDrop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+.about-is-visible [data-about-stagger] > :nth-child(2) .about-pin { animation-delay: 0.2s; }
+.about-is-visible [data-about-stagger] > :nth-child(3) .about-pin { animation-delay: 0.4s; }
+
+.about-pulse-ring::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: currentColor;
+  animation: aboutPulseRing 1.8s ease-out infinite;
+}
+
+.about-star-burst {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  font-size: 1.25rem;
+  pointer-events: none;
+  animation: aboutStarBurst 0.9s ease-out forwards;
+}
+
+/* Expanding responsibilities list */
+.about-expand {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.5s ease;
+}
+.about-expand.is-open { grid-template-rows: 1fr; }
+.about-expand > div { overflow: hidden; }
+
+/* Section reveal on scroll */
+[data-about-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 30px, 0);
+  transition: opacity 700ms ease, transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+[data-about-reveal].about-is-visible {
+  opacity: 1;
+  transform: none;
+}
+[data-about-stagger] > * {
+  opacity: 0;
+  translate: 0 24px;
+  scale: 0.92;
+  transition:
+    opacity 550ms ease,
+    translate 650ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    scale 650ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.about-is-visible [data-about-stagger] > * {
+  opacity: 1;
+  translate: 0 0;
+  scale: 1;
+}
+.about-is-visible [data-about-stagger] > :nth-child(2) { transition-delay: 90ms; }
+.about-is-visible [data-about-stagger] > :nth-child(3) { transition-delay: 180ms; }
+.about-is-visible [data-about-stagger] > :nth-child(4) { transition-delay: 270ms; }
+.about-is-visible [data-about-stagger] > :nth-child(5) { transition-delay: 360ms; }
+.about-is-visible [data-about-stagger] > :nth-child(6) { transition-delay: 450ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .about-spin,
+  .about-bob,
+  .about-sway,
+  .about-heartbeat,
+  .about-bubble,
+  .about-trail,
+  .about-progress,
+  .about-rain-drop,
+  .about-pulse-ring::before,
+  .about-hover-wiggle:hover .about-wiggle-target {
+    animation: none !important;
+  }
+  .about-rain-drop,
+  .about-star-burst { display: none; }
+  .about-word,
+  .about-pin {
+    animation: none !important;
+    opacity: 1;
+  }
+  .about-flip-inner,
+  .about-expand,
+  .about-sticker { transition: none; }
+  .about-sticker:nth-child(n) { transform: none; }
+  [data-about-reveal],
+  [data-about-stagger] > * {
+    opacity: 1;
+    transform: none;
+    translate: none;
+    scale: none;
+    transition: none;
+  }
+}
