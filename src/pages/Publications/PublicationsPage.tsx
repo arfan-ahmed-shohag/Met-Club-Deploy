@@ -51,11 +51,11 @@ const categoryCopy: Record<
   },
   pressRelease: {
     bn: {
-      title: "প্রেস রিলিজ",
+      title: "News",
       description: "মেট ক্লাবের সংবাদ ও আনুষ্ঠানিক ঘোষণা পড়ুন।",
     },
     en: {
-      title: "Press Releases",
+      title: "News",
       description: "Read news and official announcements from MET Club.",
     },
   },

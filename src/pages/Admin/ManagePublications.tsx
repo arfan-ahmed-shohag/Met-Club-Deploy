@@ -53,7 +53,7 @@ const emptyForm = (): FormValues => ({
 const categories: { value: Category; label: string }[] = [
   { value: "comics", label: "Comics" },
   { value: "flyer", label: "Flyers" },
-  { value: "pressRelease", label: "Press releases" },
+  { value: "pressRelease", label: "News" },
 ];
 
 function ManagePublications({

@@ -19,7 +19,7 @@ const sidebarLinks = [
   { name: "গল্প পরিচালনা", path: "/admin/stories", icon: FiMessageSquare },
   { name: "Comics", path: "/admin/comics", icon: FiFileText },
   { name: "Flyers", path: "/admin/flyers", icon: FiFileText },
-  { name: "Press Releases", path: "/admin/press-releases", icon: FiFileText },
+  { name: "News", path: "/admin/press-releases", icon: FiFileText },
   { name: "স্কুল পরিচালনা", path: "/admin/schools", icon: FiMapPin },
 ];
 
