@@ -30,7 +30,7 @@ export default function HeroSection({ isEnglish }: { isEnglish: boolean }) {
           <p className="max-w-xl text-base font-normal leading-relaxed text-white/90 sm:text-lg">
             {t(
               "বাংলাদেশের সর্বপ্রথম স্কুলভিত্তিক শিশু-কেন্দ্রিক আবহাওয়া ক্লাব",
-              "Bangladesh’s first school-based, child-centred weather club.",
+              "The first ever school based Child centric Meteorological Club initiative in Bangladesh.",
             )}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
