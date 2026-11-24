@@ -36,38 +36,98 @@ function useCountUp(target: number, start: boolean): number {
   return value;
 }
 
-function StatItem({
+function StatCard({
   icon,
   value,
-  suffix,
+  total,
   label,
+  note,
+  start,
+  format,
+  className = "",
+}: {
+  className?: string;
+  icon: JSX.Element;
+  value: number;
+  total?: number;
+  label: string;
+  note?: string;
+  start: boolean;
+  format: (n: number) => string;
+}): JSX.Element {
+  const shown = useCountUp(value, start);
+  const percent = total ? Math.min(100, (value / total) * 100) : 0;
+  return (
+    <div
+      className={`flex flex-col rounded-2xl bg-white p-4 shadow-[0_10px_28px_rgba(127,29,29,.07)] ring-1 ring-red-100 sm:p-5 ${className}`}
+    >
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-sm font-bold text-slate-600">{label}</p>
+        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-red-50 text-red-700">
+          {icon}
+        </span>
+      </div>
+      <p className="mt-3 text-4xl font-black leading-none text-red-950">
+        {format(shown)}
+        {total !== undefined && (
+          <span className="ml-1 text-lg font-bold text-slate-400">
+            / {format(total)}
+          </span>
+        )}
+      </p>
+      {total !== undefined ? (
+        <div className="mt-4">
+          <div className="h-2 overflow-hidden rounded-full bg-red-100">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-red-500 to-red-700 transition-[width] duration-[1400ms] ease-out motion-reduce:transition-none"
+              style={{ width: start ? `${Math.max(percent, value ? 3 : 0)}%` : 0 }}
+            />
+          </div>
+          {note && <p className="mt-2 text-xs text-slate-500">{note}</p>}
+        </div>
+      ) : (
+        note && <p className="mt-4 text-xs text-slate-500">{note}</p>
+      )}
+    </div>
+  );
+}
+
+function HeroStat({
+  value,
+  label,
+  note,
   start,
   format,
 }: {
-  icon: JSX.Element;
   value: number;
-  suffix?: string;
   label: string;
+  note: string;
   start: boolean;
   format: (n: number) => string;
 }): JSX.Element {
   const shown = useCountUp(value, start);
   return (
-    <div className="flex flex-col items-center text-center">
-      <span className="grid h-16 w-16 place-items-center rounded-2xl bg-white text-red-700 shadow-[0_10px_24px_rgba(127,29,29,.10)] ring-1 ring-red-100">
-        {icon}
-      </span>
-      <p className="mt-4 text-3xl font-black text-slate-900 sm:text-4xl">
-        {format(shown)}
-        {suffix && (
-          <span className="text-lg font-bold text-slate-400 sm:text-xl">
-            {suffix}
-          </span>
-        )}
-      </p>
-      <p className="mt-1 text-sm font-semibold text-slate-600 sm:text-base">
-        {label}
-      </p>
+    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-red-600 via-red-700 to-red-900 p-6 text-white shadow-[0_18px_40px_rgba(127,29,29,.25)] sm:p-7">
+      <div
+        aria-hidden="true"
+        className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute -bottom-16 right-16 h-32 w-32 rounded-full bg-orange-300/20"
+      />
+      <div className="relative flex items-center gap-5">
+        <span className="grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-white/15 ring-1 ring-white/25">
+          <GraduationCap size={34} aria-hidden="true" />
+        </span>
+        <div>
+          <p className="text-sm font-bold text-red-100">{label}</p>
+          <p className="text-5xl font-black leading-tight sm:text-6xl">
+            {format(shown)}
+          </p>
+        </div>
+      </div>
+      <p className="relative mt-3 text-sm text-red-100">{note}</p>
     </div>
   );
 }
@@ -161,63 +221,87 @@ export default function StudentReachMapSection({
           </p>
 
           <div
-            className="mt-10 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4"
+            className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4"
             aria-busy={!data}
           >
-            <StatItem
-              icon={<GraduationCap size={30} aria-hidden="true" />}
-              value={data?.totalStudents ?? 0}
-              label={t("মোট শিক্ষার্থী", "Students")}
-              start={ready}
-              format={format}
-            />
-            <StatItem
-              icon={<MapPinned size={30} aria-hidden="true" />}
+            <div className="col-span-2 sm:col-span-3">
+              <HeroStat
+                value={data?.totalStudents ?? 0}
+                label={t("মোট নিবন্ধিত শিক্ষার্থী", "Registered students")}
+                note={t(
+                  "সারা বাংলাদেশ থেকে মেট ক্লাবে যুক্ত হয়েছে",
+                  "have joined MET Club from across Bangladesh",
+                )}
+                start={ready}
+                format={format}
+              />
+            </div>
+            <StatCard
+              icon={<MapPinned size={20} aria-hidden="true" />}
               value={data?.districtsReached ?? 0}
-              suffix={` / ${format(data?.totalDistricts ?? 64)}`}
+              total={data?.totalDistricts ?? 64}
               label={t("জেলা", "Districts")}
+              note={t("জেলায় পৌঁছেছি", "districts reached")}
               start={ready}
               format={format}
             />
-            <StatItem
-              icon={<School size={30} aria-hidden="true" />}
+            <StatCard
+              icon={<Landmark size={20} aria-hidden="true" />}
+              value={data?.divisionsReached ?? 0}
+              total={TOTAL_DIVISIONS}
+              label={t("বিভাগ", "Divisions")}
+              note={t("বিভাগে পৌঁছেছি", "divisions reached")}
+              start={ready}
+              format={format}
+            />
+            <StatCard
+              className="col-span-2 sm:col-span-1"
+              icon={<School size={20} aria-hidden="true" />}
               value={data?.institutions ?? 0}
               label={t("শিক্ষা প্রতিষ্ঠান", "Schools")}
-              start={ready}
-              format={format}
-            />
-            <StatItem
-              icon={<Landmark size={30} aria-hidden="true" />}
-              value={data?.divisionsReached ?? 0}
-              suffix={` / ${format(TOTAL_DIVISIONS)}`}
-              label={t("বিভাগ", "Divisions")}
+              note={t("স্কুল ও প্রতিষ্ঠানের শিক্ষার্থী", "schools and institutions")}
               start={ready}
               format={format}
             />
           </div>
 
           {topDistricts.length > 0 && (
-            <div className="mt-10">
-              <p className="text-sm font-bold text-slate-700">
+            <div className="mt-4 rounded-2xl bg-white p-5 shadow-[0_10px_28px_rgba(127,29,29,.07)] ring-1 ring-red-100">
+              <p className="text-sm font-bold text-slate-600">
                 {t("সবচেয়ে বেশি শিক্ষার্থী যেসব জেলায়", "Top districts")}
               </p>
-              <ul className="mt-3 flex flex-wrap gap-2">
-                {topDistricts.map((d) => (
+              <ol className="mt-4 space-y-3">
+                {topDistricts.map((d, index) => (
                   <li
                     key={d.district}
                     onMouseEnter={() => setHovered(d.district)}
                     onMouseLeave={() => setHovered(null)}
-                    className="inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-1.5 text-sm font-semibold text-slate-800 ring-1 ring-red-100"
+                    className="grid cursor-default grid-cols-[1.75rem_minmax(5rem,8rem)_1fr_auto] items-center gap-3 text-sm"
                   >
-                    {isEnglish
-                      ? (shapeNames.get(d.district) ?? d.district)
-                      : d.district}
-                    <span className="rounded-full bg-red-600 px-2 text-xs font-bold text-white">
+                    <span
+                      className={`grid h-7 w-7 place-items-center rounded-full text-xs font-black ${index === 0 ? "bg-red-700 text-white" : "bg-red-50 text-red-800"}`}
+                    >
+                      {format(index + 1)}
+                    </span>
+                    <span className="truncate font-semibold text-slate-800">
+                      {isEnglish
+                        ? (shapeNames.get(d.district) ?? d.district)
+                        : d.district}
+                    </span>
+                    <span className="h-2 overflow-hidden rounded-full bg-red-50">
+                      <span
+                        className="block h-full rounded-full bg-red-500 transition-[width] duration-[1400ms] ease-out motion-reduce:transition-none"
+                        style={{
+                          width: ready ? `${(d.students / maxCount) * 100}%` : 0,
+                        }}
+                      />
+                    </span>
+                    <span className="min-w-8 text-right font-bold text-red-900">
                       {format(d.students)}
                     </span>
                   </li>
                 ))}
-              </ul>
+              </ol>
             </div>
           )}
         </div>
