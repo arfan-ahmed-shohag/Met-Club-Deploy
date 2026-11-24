@@ -635,6 +635,49 @@ body {
   }
 }
 
+/* Home Games card illustrations (GameArt.tsx) */
+@keyframes gameArtFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes gameArtSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes gameArtWave {
+  to {
+    transform: translateX(-80px);
+  }
+}
+
+.game-art-float {
+  animation: gameArtFloat 3.2s ease-in-out infinite;
+}
+
+.game-art-spin {
+  animation: gameArtSpin 24s linear infinite;
+}
+
+.game-art-wave {
+  animation: gameArtWave 6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-art-float,
+  .game-art-spin,
+  .game-art-wave {
+    animation: none;
+  }
+}
+
 @keyframes profileSkeletonShimmer {
   from {
     background-position: 100% 0;

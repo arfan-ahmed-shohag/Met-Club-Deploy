@@ -5,6 +5,9 @@ import SiteFooter from "../../components/Shared/SiteFooter";
 import AboutSection from "./components/AboutSection";
 import AnticipatoryActionBriefSection from "./components/AnticipatoryActionBriefSection";
 import ChapterOverviewSection from "./components/ChapterOverviewSection";
+import CitizenScienceSection from "./components/CitizenScienceSection";
+import GamesSection from "./components/GamesSection";
+import LatestNewsSection from "./components/LatestNewsSection";
 import HeroSection from "./components/HeroSection";
 import PhotoGallerySection from "./components/PhotoGallerySection";
 import ReviewShowcaseSection from "./components/ReviewShowcaseSection";
@@ -36,8 +39,11 @@ export default function HomePage(): JSX.Element {
       <AboutSection isEnglish={isEnglish} />
       <AnticipatoryActionBriefSection isEnglish={isEnglish} />
       <ChapterOverviewSection isEnglish={isEnglish} />
+      <GamesSection isEnglish={isEnglish} />
+      <CitizenScienceSection isEnglish={isEnglish} />
       <StatsSection isEnglish={isEnglish} />
       <VideoShowcaseSection isEnglish={isEnglish} />
+      <LatestNewsSection isEnglish={isEnglish} />
       <PhotoGallerySection isEnglish={isEnglish} />
       <ReviewShowcaseSection isEnglish={isEnglish} />
       <SiteFooter isEnglish={isEnglish} />
