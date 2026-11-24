@@ -45,9 +45,9 @@ const secondaryClass =
   "rounded-2xl border border-white/65 bg-white/60 px-6 py-3 font-bold text-gray-700 transition hover:bg-white/90 disabled:opacity-60";
 const valuesFromUser = (user: CurrentUser): ProfileValues => ({
   fullName: user.fullName,
-  institution: user.institution,
-  class: String(user.class),
-  guardianPhone: user.guardianPhone,
+  institution: user.institution ?? "",
+  class: user.class === null ? "" : String(user.class),
+  guardianPhone: user.guardianPhone ?? "",
   division: user.division ?? "",
   district: user.district ?? "",
   thana: user.thana ?? "",
@@ -281,6 +281,7 @@ function UserProfile({
 }) {
   const t = (bn: string, en: string) => (isEnglish ? en : bn);
   const locale = isEnglish ? "en" : "bn";
+  const isAdmin = user.role === "admin";
   const logout = useLogout();
   const [activeTab, setActiveTab] = useState<"general" | "badges">("general");
   const [editing, setEditing] = useState(false);
@@ -339,7 +340,12 @@ function UserProfile({
     const addressChanged = (["division", "district", "thana"] as const).some(
       (field) => values[field] !== (user[field] ?? ""),
     );
-    const validation = validateProfile(values, addressChanged);
+    // Admins have no student profile: only their name is editable.
+    const validation = isAdmin
+      ? (({ fullName }) => (fullName ? { fullName } : {}))(
+          validateProfile(values, false),
+        )
+      : validateProfile(values, addressChanged);
     setErrors(validation);
     if (Object.keys(validation).length) {
       focusError(validation);
@@ -348,7 +354,10 @@ function UserProfile({
     const normalized = normalizeProfile(values);
     const previous = valuesFromUser(user);
     const payload: Record<string, string | number> = {};
-    for (const field of Object.keys(normalized) as Array<keyof ProfileValues>) {
+    const editable = (
+      isAdmin ? ["fullName"] : Object.keys(normalized)
+    ) as Array<keyof ProfileValues>;
+    for (const field of editable) {
       if (String(normalized[field]) !== previous[field])
         payload[field] = normalized[field];
     }
@@ -390,7 +399,12 @@ function UserProfile({
     }
   }
   const general = [
-    { name: "fullName", label: t("শিক্ষার্থীর পূর্ণ নাম", "Full Name") },
+    {
+      name: "fullName",
+      label: isAdmin
+        ? t("পূর্ণ নাম", "Full Name")
+        : t("শিক্ষার্থীর পূর্ণ নাম", "Full Name"),
+    },
     { name: "class", label: t("শ্রেণি", "Class") },
     { name: "guardianPhone", label: t("মোবাইল নম্বর", "Mobile Number") },
   ] as const;
@@ -425,9 +439,11 @@ function UserProfile({
               : null;
     const displayValue =
       name === "class"
-        ? user.class === 0
-          ? t("অন্যান্য", "Other")
-          : new Intl.NumberFormat(locale).format(user.class)
+        ? user.class === null
+          ? ""
+          : user.class === 0
+            ? t("অন্যান্য", "Other")
+            : new Intl.NumberFormat(locale).format(user.class)
         : user[name];
     return (
       <div key={name}>
@@ -561,9 +577,11 @@ function UserProfile({
               <h2 className="break-words text-xl font-bold sm:text-3xl">
                 {user.fullName}
               </h2>
-              <p className="break-words font-medium text-gray-600">
-                {t("আইডি", "ID")}: {user.studentId}
-              </p>
+              {user.studentId && (
+                <p className="break-words font-medium text-gray-600">
+                  {t("আইডি", "ID")}: {user.studentId}
+                </p>
+              )}
             </div>
           </div>
         </section>
@@ -666,8 +684,10 @@ function UserProfile({
                     </div>
                   )}
                 </div>
-                {general.slice(1).map((item) => field(item.name, item.label))}
+                {!isAdmin &&
+                  general.slice(1).map((item) => field(item.name, item.label))}
               </div>
+              {!isAdmin && (
               <div className="space-y-5">
                 <h3 className="flex items-center gap-2 text-lg font-bold text-gray-700">
                   <span className="h-6 w-2 rounded-full bg-orange-500" />
@@ -675,6 +695,7 @@ function UserProfile({
                 </h3>
                 {address.map((item) => field(item.name, item.label))}
               </div>
+              )}
             </div>
           ) : (
             <div className="grid grid-cols-2 gap-6 md:grid-cols-4">

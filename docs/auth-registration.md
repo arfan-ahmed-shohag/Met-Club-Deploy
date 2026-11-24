@@ -1,5 +1,7 @@
 # Authentication and registration
 
+Accounts are stored in three tables. `User` holds only login data: email (unique), password hash, role and status. Student profiles (student ID, name, school, class, phone, location, photo) live in `Student`, and admin profiles (name, photo) live in `Admin`; each links to its account by a unique `userId`. Registration creates a `User` with a `Student` profile. The API flattens the account and its profile into one user object, so student-only fields are `null` for admins.
+
 The navbar fetches the authenticated user's public profile from `GET /auth/me`. It shows Login for guests and the returned name, role, email and optional profile image for an authenticated user. Profile data is kept in memory; login, registration, logout, token refresh and cross-tab account changes update the same session store. Public routes remain accessible.
 
 Set `VITE_API_URL` to change the backend URL. `src/lib/api.ts` otherwise uses the existing development URL, `https://api.meteorologyclub.com/api/v1`.
