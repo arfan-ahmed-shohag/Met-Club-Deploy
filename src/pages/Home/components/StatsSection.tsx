@@ -1,43 +1,79 @@
 import { Eye, Globe2, Users } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import axiosPublic from "../../../hooks/axiosPublic";
+import { siteVisitRecorded } from "../../../utils/visitTracker";
+
+type CommunityStats = {
+  totalVisitors: number;
+  bangladeshUsers: number;
+  otherCountryUsers: number;
+};
 
 export default function StatsSection({ isEnglish }: { isEnglish: boolean }) {
   const statsSectionRef = useRef<HTMLElement>(null);
   const [statsCounts, setStatsCounts] = useState([0, 0, 0]);
+  const [targets, setTargets] = useState<number[] | null>(null);
+  const [failed, setFailed] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    siteVisitRecorded()
+      .then(() =>
+        axiosPublic().get<{ data?: CommunityStats }>("/stats/community"),
+      )
+      .then(({ data: body }) => {
+        if (!active) return;
+        if (body?.data) {
+          const { totalVisitors, bangladeshUsers, otherCountryUsers } =
+            body.data;
+          setTargets([totalVisitors, bangladeshUsers, otherCountryUsers]);
+        } else setFailed(true);
+      })
+      .catch(() => {
+        if (active) setFailed(true);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
   useEffect(() => {
     const section = statsSectionRef.current;
     if (!section) return;
-    let frameId = 0;
-    let startedAt: number | null = null;
-    const targets = [10000, 2500, 750];
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
         observer.disconnect();
-        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-          setStatsCounts(targets);
-          return;
-        }
-        const countUp = (time: number) => {
-          startedAt ??= time;
-          const progress = Math.min((time - startedAt) / 1500, 1);
-          const easedProgress = 1 - Math.pow(1 - progress, 3);
-          setStatsCounts(
-            targets.map((target) => Math.floor(target * easedProgress)),
-          );
-          if (progress < 1) frameId = window.requestAnimationFrame(countUp);
-          else setStatsCounts(targets);
-        };
-        frameId = window.requestAnimationFrame(countUp);
+        setVisible(true);
       },
       { threshold: 0.3 },
     );
     observer.observe(section);
-    return () => {
-      observer.disconnect();
-      window.cancelAnimationFrame(frameId);
-    };
+    return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    if (!visible || !targets) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setStatsCounts(targets);
+      return;
+    }
+    let frameId = 0;
+    let startedAt: number | null = null;
+    const countUp = (time: number) => {
+      startedAt ??= time;
+      const progress = Math.min((time - startedAt) / 1500, 1);
+      const easedProgress = 1 - Math.pow(1 - progress, 3);
+      setStatsCounts(
+        targets.map((target) => Math.floor(target * easedProgress)),
+      );
+      if (progress < 1) frameId = window.requestAnimationFrame(countUp);
+      else setStatsCounts(targets);
+    };
+    frameId = window.requestAnimationFrame(countUp);
+    return () => window.cancelAnimationFrame(frameId);
+  }, [visible, targets]);
   return (
     <section
       ref={statsSectionRef}
@@ -111,10 +147,18 @@ export default function StatsSection({ isEnglish }: { isEnglish: boolean }) {
                 <p
                   className={`text-5xl font-black tracking-tighter sm:text-6xl ${index === 2 ? "text-red-950" : "text-white"}`}
                 >
-                  {value.toLocaleString(isEnglish ? "en-US" : "bn-BD")}
-                  <span className={index === 2 ? "text-white" : "text-red-300"}>
-                    +
-                  </span>
+                  {failed ? (
+                    "—"
+                  ) : (
+                    <>
+                      {value.toLocaleString(isEnglish ? "en-US" : "bn-BD")}
+                      <span
+                        className={index === 2 ? "text-white" : "text-red-300"}
+                      >
+                        +
+                      </span>
+                    </>
+                  )}
                 </p>
                 <p
                   className={`mt-2 text-xs font-bold uppercase tracking-[.18em] ${index === 2 ? "text-red-950/65" : "text-red-100/60"}`}

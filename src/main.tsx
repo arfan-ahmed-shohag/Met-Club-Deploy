@@ -5,6 +5,7 @@ import { RouterProvider } from "react-router";
 import router from "./routes/router.tsx";
 import { Toaster } from "react-hot-toast";
 import { getStoredLocale } from "./utils/language";
+import { recordSiteVisit } from "./utils/visitTracker";
 import "sweetalert2/dist/sweetalert2.min.css";
 
 const htmlElement = document.documentElement;
@@ -30,6 +31,7 @@ const nukeDarkReader = () => {
 };
 
 nukeDarkReader();
+recordSiteVisit();
 
 const observer = new MutationObserver(() => {
   nukeDarkReader();
