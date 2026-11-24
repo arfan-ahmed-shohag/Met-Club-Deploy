@@ -56,5 +56,7 @@ export function getAdminPageTitle(pathname: string) {
     (link) => pathname === link.path || pathname.startsWith(`${link.path}/`),
   );
   if (match) return match.name;
-  return pathname.replace(/\/$/, "") === "/admin" ? "ওভারভিউ" : "অ্যাডমিন";
+  const path = pathname.replace(/\/$/, "");
+  if (path === "/admin/profile") return "প্রোফাইল";
+  return path === "/admin" ? "ওভারভিউ" : "অ্যাডমিন";
 }

@@ -123,7 +123,10 @@ export default function TopNav({ title }: TopNavProps) {
             menuItems
               .filter((item) => item.href === "/profile")
               .map((item) => {
-                const target = getLocalizedPath(item.href, locale);
+                const target =
+                  user.role === "admin"
+                    ? "/admin/profile"
+                    : getLocalizedPath(item.href, locale);
                 return (
                   <Link
                     key={item.href}
@@ -455,7 +458,11 @@ export default function TopNav({ title }: TopNavProps) {
                           .map((item) => (
                             <Link
                               key={item.label}
-                              to={getLocalizedPath(item.href, locale)}
+                              to={
+                                user.role === "admin"
+                                  ? "/admin/profile"
+                                  : getLocalizedPath(item.href, locale)
+                              }
                               className="flex items-center gap-3 px-4 py-2.5 transition-colors duration-150"
                               style={{
                                 color: "#222221",

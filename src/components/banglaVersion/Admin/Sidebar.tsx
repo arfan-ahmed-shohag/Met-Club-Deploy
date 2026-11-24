@@ -13,7 +13,6 @@ import useLogout from "../../../hooks/useLogout";
 import useAuth from "../../../hooks/useAuth";
 import { profileImageUrl } from "../../../lib/profile";
 import { adminLinkGroups } from "./adminLinks";
-import { getLocalizedPath, getStoredLocale } from "../../../utils/language";
 
 interface SidebarProps {
   /** Shown in the mobile drawer to close it. */
@@ -190,7 +189,6 @@ function AccountMenu({
   const logOut = useLogout();
   const { user } = useAuth();
   const initial = user?.fullName.trim().charAt(0).toLocaleUpperCase() ?? "A";
-  const profilePath = getLocalizedPath("/profile", getStoredLocale());
   const name = user?.fullName ?? "অ্যাডমিন";
 
   useEffect(() => {
@@ -290,7 +288,7 @@ function AccountMenu({
           </div>
           <div className="p-1.5">
             <Link
-              to={profilePath}
+              to="/admin/profile"
               role="menuitem"
               onClick={() => {
                 setOpen(false);

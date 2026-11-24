@@ -23,6 +23,7 @@ const AdminLayout = lazy(
   () => import("../components/banglaVersion/Admin/AdminLayout"),
 );
 const Overview = lazy(() => import("../pages/Admin/Overview"));
+const AdminProfile = lazy(() => import("../pages/Admin/AdminProfile"));
 const ManageSchools = lazy(() => import("../pages/Admin/ManageSchools"));
 const CreateSchool = lazy(() => import("../pages/Admin/CreateSchool"));
 const Blogs = lazy(() => import("../pages/Blogs/Blogs"));
@@ -592,6 +593,14 @@ const routes: RouteObject[] = [
         element: (
           <SuspenseWrapper>
             <ManagePressReleases />
+          </SuspenseWrapper>
+        ),
+      },
+      {
+        path: "profile",
+        element: (
+          <SuspenseWrapper>
+            <AdminProfile />
           </SuspenseWrapper>
         ),
       },
