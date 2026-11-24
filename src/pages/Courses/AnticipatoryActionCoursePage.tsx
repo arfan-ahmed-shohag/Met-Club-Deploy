@@ -22,10 +22,13 @@ export default function AnticipatoryActionCoursePage(): JSX.Element {
     (status: CourseStatus) => setCourseStatus(status),
     [],
   );
+  const courseTitle = isEnglish
+    ? "Anticipatory Action Course"
+    : "আগাম পদক্ষেপ কোর্স";
   const courseControls = (
     <div className="flex shrink-0 items-center gap-2">
       <span
-        aria-label={`Points: ${courseStatus.xp}`}
+        aria-label={`${isEnglish ? "Points" : "পয়েন্ট"}: ${courseStatus.xp}`}
         className="rounded-full bg-red-50 px-3 py-2 text-sm font-bold tabular-nums text-red-700"
       >
         ★ {courseStatus.xp}
@@ -35,8 +38,12 @@ export default function AnticipatoryActionCoursePage(): JSX.Element {
         onClick={() => setSoundToggleRequest((request) => request + 1)}
         aria-label={
           courseStatus.soundEnabled
-            ? "Turn course sound off"
-            : "Turn course sound on"
+            ? isEnglish
+              ? "Turn course sound off"
+              : "কোর্সের শব্দ বন্ধ করো"
+            : isEnglish
+              ? "Turn course sound on"
+              : "কোর্সের শব্দ চালু করো"
         }
         className="grid h-10 w-10 cursor-pointer place-items-center rounded-xl bg-red-50 text-red-700 transition-colors hover:bg-red-100"
       >
@@ -51,10 +58,16 @@ export default function AnticipatoryActionCoursePage(): JSX.Element {
 
   return (
     <div className="flex min-h-screen flex-col bg-gray-50">
-      <TopNav
-        title={isEnglish ? "Anticipatory Action Course" : "আগাম পদক্ষেপ কোর্স"}
-        rightContent={courseControls}
-      />
+      <TopNav title={courseTitle} />
+      {/* Course toolbar: stays under the fixed navbar (73px) while the course scrolls. */}
+      <div className="sticky top-[73px] z-30 border-b border-red-100 bg-gray-50/95 backdrop-blur">
+        <div className="mx-auto flex w-full max-w-[1440px] items-center justify-between gap-3 px-5 py-2.5 sm:px-6 lg:px-8">
+          <h1 className="truncate text-base font-black text-red-900 sm:text-lg">
+            {courseTitle}
+          </h1>
+          {courseControls}
+        </div>
+      </div>
       {user ? (
         <CoursePlayerFrame
           // a new language loads a new course document, so start the frame over

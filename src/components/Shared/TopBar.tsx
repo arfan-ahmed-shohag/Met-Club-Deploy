@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import metClubLogo from "../../assets/images/logo_original.png";
 import { LogIn, LogOut } from "lucide-react";
@@ -16,8 +16,6 @@ import LoginModal from "./LoginModal";
 interface TopNavProps {
   /** Page name for screen readers. */
   title?: string;
-  /** Extra controls shown before the language switch (e.g. course controls). */
-  rightContent?: ReactNode;
 }
 
 const menuItems = [
@@ -59,7 +57,7 @@ const menuItems = [
 ];
 
 /** The site navbar shared by every public page. */
-export default function TopNav({ title, rightContent }: TopNavProps) {
+export default function TopNav({ title }: TopNavProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -242,7 +240,6 @@ export default function TopNav({ title, rightContent }: TopNavProps) {
             className="relative z-30 order-2 ml-auto flex shrink-0 items-center gap-2 sm:gap-3 xl:ml-0 xl:gap-4"
             ref={dropdownRef}
           >
-            {rightContent}
             {canSwitchLanguage && (
               <div
                 role="group"
