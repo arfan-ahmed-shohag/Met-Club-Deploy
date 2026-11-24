@@ -12,7 +12,7 @@ import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import useAxiosProtected from "../../hooks/axiosProtected";
 import { resolveMediaUrl } from "../../utils/media";
-import { getApiErrorMessage } from "../../utils/apiError";
+import { getApiErrorMessage, getUploadErrorMessage } from "../../utils/apiError";
 
 const PAGE_SIZE = 9;
 const ACCEPTED_TYPES = new Set([
@@ -89,7 +89,7 @@ export default function ManageGallery() {
       if (!firstPage) setPage(1);
       else await loadImages();
     } catch (error) {
-      toast.error(getApiErrorMessage(error, "Gallery image could not be added."));
+      toast.error(getUploadErrorMessage(error, "Gallery image could not be added."));
     } finally {
       setIsSaving(false);
     }
@@ -120,7 +120,7 @@ export default function ManageGallery() {
       setEditingImage(null);
       await loadImages();
     } catch (error) {
-      toast.error(getApiErrorMessage(error, "Gallery image could not be updated."));
+      toast.error(getUploadErrorMessage(error, "Gallery image could not be updated."));
     } finally {
       setIsSaving(false);
     }

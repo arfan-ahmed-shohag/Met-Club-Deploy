@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import useAxiosProtected from "../../hooks/axiosProtected";
 import { resolveMediaUrl } from "../../utils/media";
-import { getApiErrorMessage } from "../../utils/apiError";
+import { getApiErrorMessage, getUploadErrorMessage } from "../../utils/apiError";
 
 const PAGE_SIZE = 10;
 const MAX_THUMBNAIL_SIZE = 5 * 1024 * 1024;
@@ -174,7 +174,7 @@ export default function ManageHomeVideos() {
       if (!editing && page !== 1) setPage(1);
       else await loadVideos();
     } catch (error) {
-      toast.error(getApiErrorMessage(error, "Video could not be saved."));
+      toast.error(getUploadErrorMessage(error, "Video could not be saved."));
     } finally {
       setSaving(false);
     }

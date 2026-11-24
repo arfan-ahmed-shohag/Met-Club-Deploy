@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import useAxiosProtected from "../../hooks/axiosProtected";
 import { resolveMediaUrl } from "../../utils/media";
-import { getApiErrorMessage } from "../../utils/apiError";
+import { getApiErrorMessage, getUploadErrorMessage } from "../../utils/apiError";
 
 const PAGE_SIZE = 9;
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
@@ -135,7 +135,7 @@ export default function ManageStories() {
       if (!editing && page !== 1) setPage(1);
       else await loadStories();
     } catch (error) {
-      toast.error(getApiErrorMessage(error, "Story could not be saved."));
+      toast.error(getUploadErrorMessage(error, "Story could not be saved."));
     } finally {
       setIsSaving(false);
     }

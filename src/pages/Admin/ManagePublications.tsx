@@ -13,7 +13,7 @@ import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import useAxiosProtected from "../../hooks/axiosProtected";
 import { resolveMediaUrl } from "../../utils/media";
-import { getApiErrorMessage } from "../../utils/apiError";
+import { getApiErrorMessage, getUploadErrorMessage } from "../../utils/apiError";
 
 type Category = "comics" | "flyer" | "pressRelease";
 type Resource = {
@@ -170,7 +170,7 @@ function ManagePublications({
       if (!editing && page !== 1) setPage(1);
       else await loadItems();
     } catch (error) {
-      toast.error(getApiErrorMessage(error, "Publication could not be saved."));
+      toast.error(getUploadErrorMessage(error, "Publication could not be saved."));
     } finally {
       setSaving(false);
     }
