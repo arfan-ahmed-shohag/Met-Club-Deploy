@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 import { createPortal } from "react-dom";
 import { isAxiosError } from "axios";
 import toast from "react-hot-toast";
@@ -21,6 +27,87 @@ type BlogPost = {
 };
 
 type BlogFilter = "pending" | "published" | "all";
+
+const SKELETON_ROWS = 5;
+// Fixed widths sized like real titles, so the auto-sized columns split the
+// table the same way they do once posts load.
+const TITLE_WIDTHS = ["w-52", "w-56", "w-20", "w-60", "w-40"];
+
+// Card, table and header shared by the loaded table and its skeleton so both
+// render with exactly the same frame.
+function BlogTableFrame({
+  children,
+  loading = false,
+}: {
+  children: ReactNode;
+  loading?: boolean;
+}) {
+  return (
+    <div
+      role={loading ? "status" : undefined}
+      className="overflow-hidden rounded-3xl border border-white/50 bg-white/90 shadow-xl"
+    >
+      {loading && <span className="sr-only">Loading blog submissions</span>}
+      <div className="overflow-x-auto" aria-hidden={loading || undefined}>
+        <table className="w-full min-w-[680px] text-left text-sm">
+          <thead className="bg-slate-100 text-xs uppercase tracking-wide text-slate-600">
+            <tr>
+              <th className="px-5 py-4">Title</th>
+              <th className="px-5 py-4">Student</th>
+              <th className="px-5 py-4">Submitted</th>
+              <th className="px-5 py-4">Status</th>
+              <th className="px-5 py-4">Review</th>
+            </tr>
+          </thead>
+          <tbody className={loading ? "motion-safe:animate-pulse" : undefined}>
+            {children}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+// Each placeholder uses the same element, padding and font size as the real
+// cell it stands in for, with a non-breaking space or transparent text inside,
+// so every line, pill and button has the loaded row's exact height.
+function BlogTableSkeleton() {
+  return (
+    <BlogTableFrame loading>
+      {Array.from({ length: SKELETON_ROWS }, (_, index) => (
+        <tr key={index} className="border-t border-slate-200 align-top">
+          <td className="max-w-sm px-5 py-4 font-semibold">
+            <div
+              className={`rounded-md bg-slate-200 ${TITLE_WIDTHS[index % TITLE_WIDTHS.length]}`}
+            >
+              &nbsp;
+            </div>
+          </td>
+          <td className="px-5 py-4">
+            <div className="w-24 rounded-md bg-slate-200">&nbsp;</div>
+            <div className="mt-1 w-32 rounded-md bg-slate-100 text-xs">
+              &nbsp;
+            </div>
+          </td>
+          <td className="whitespace-nowrap px-5 py-4 text-transparent">
+            <span className="rounded-md bg-slate-200">00/00/0000</span>
+          </td>
+          <td className="px-5 py-4">
+            <span className="rounded-full bg-slate-200 px-3 py-1 text-xs font-bold text-transparent">
+              pending
+            </span>
+          </td>
+          <td className="px-5 py-4">
+            <span className="inline-flex items-center gap-2 rounded-lg bg-white px-3 py-2 font-semibold text-transparent shadow-sm ring-1 ring-slate-200">
+              <span className="size-4 rounded bg-slate-200" />
+              <span className="rounded bg-slate-200">Review</span>
+            </span>
+          </td>
+        </tr>
+      ))}
+    </BlogTableFrame>
+  );
+}
 
 export default function ManageBlogs() {
   const axios = useAxiosProtected();
@@ -134,7 +221,7 @@ export default function ManageBlogs() {
                 className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${filter === item.id ? "bg-red-600 text-white shadow" : "bg-white text-slate-700 hover:bg-red-50"}`}
               >
                 {item.label}
-                {item.id === "pending"
+                {item.id === "pending" && !isLoading
                   ? ` (${posts.filter((post) => post.status === "pending").length})`
                   : ""}
               </button>
@@ -144,9 +231,7 @@ export default function ManageBlogs() {
       </section>
 
       {isLoading ? (
-        <div className="rounded-3xl bg-white/90 p-10 text-center text-slate-600">
-          Loading submissions…
-        </div>
+        <BlogTableSkeleton />
       ) : loadError ? (
         <section className="rounded-3xl bg-white/90 p-8 text-center">
           <p role="alert" className="text-red-700">
@@ -167,58 +252,43 @@ export default function ManageBlogs() {
             : "No blog posts found."}
         </div>
       ) : (
-        <div className="overflow-hidden rounded-3xl border border-white/50 bg-white/90 shadow-xl">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[680px] text-left text-sm">
-              <thead className="bg-slate-100 text-xs uppercase tracking-wide text-slate-600">
-                <tr>
-                  <th className="px-5 py-4">Title</th>
-                  <th className="px-5 py-4">Student</th>
-                  <th className="px-5 py-4">Submitted</th>
-                  <th className="px-5 py-4">Status</th>
-                  <th className="px-5 py-4">Review</th>
-                </tr>
-              </thead>
-              <tbody>
-                {visiblePosts.map((post) => (
-                  <tr
-                    key={post.id}
-                    className="border-t border-slate-200 align-top hover:bg-red-50/40"
-                  >
-                    <td className="max-w-sm px-5 py-4 font-semibold text-slate-900">
-                      {post.title}
-                    </td>
-                    <td className="px-5 py-4 text-slate-700">
-                      <div>{post.author.fullName}</div>
-                      <div className="mt-1 text-xs text-slate-500">
-                        {post.author.email}
-                      </div>
-                    </td>
-                    <td className="whitespace-nowrap px-5 py-4 text-slate-600">
-                      {new Date(post.createdAt).toLocaleDateString("en-GB")}
-                    </td>
-                    <td className="px-5 py-4">
-                      <span
-                        className={`rounded-full px-3 py-1 text-xs font-bold ${post.status === "published" ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"}`}
-                      >
-                        {post.status}
-                      </span>
-                    </td>
-                    <td className="px-5 py-4">
-                      <button
-                        type="button"
-                        onClick={() => setSelectedPost(post)}
-                        className="inline-flex items-center gap-2 rounded-lg bg-white px-3 py-2 font-semibold text-red-700 shadow-sm ring-1 ring-slate-200 hover:bg-red-50"
-                      >
-                        <Eye size={16} /> Review
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <BlogTableFrame>
+          {visiblePosts.map((post) => (
+            <tr
+              key={post.id}
+              className="border-t border-slate-200 align-top hover:bg-red-50/40"
+            >
+              <td className="max-w-sm px-5 py-4 font-semibold text-slate-900">
+                {post.title}
+              </td>
+              <td className="px-5 py-4 text-slate-700">
+                <div>{post.author.fullName}</div>
+                <div className="mt-1 text-xs text-slate-500">
+                  {post.author.email}
+                </div>
+              </td>
+              <td className="whitespace-nowrap px-5 py-4 text-slate-600">
+                {new Date(post.createdAt).toLocaleDateString("en-GB")}
+              </td>
+              <td className="px-5 py-4">
+                <span
+                  className={`rounded-full px-3 py-1 text-xs font-bold ${post.status === "published" ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"}`}
+                >
+                  {post.status}
+                </span>
+              </td>
+              <td className="px-5 py-4">
+                <button
+                  type="button"
+                  onClick={() => setSelectedPost(post)}
+                  className="inline-flex items-center gap-2 rounded-lg bg-white px-3 py-2 font-semibold text-red-700 shadow-sm ring-1 ring-slate-200 hover:bg-red-50"
+                >
+                  <Eye size={16} /> Review
+                </button>
+              </td>
+            </tr>
+          ))}
+        </BlogTableFrame>
       )}
 
       {selectedPost &&
