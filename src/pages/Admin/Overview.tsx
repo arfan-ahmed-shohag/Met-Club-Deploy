@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router";
 import type { IconType } from "react-icons";
 import {
@@ -17,6 +17,10 @@ import {
 } from "react-icons/fi";
 import useAxiosProtected from "../../hooks/axiosProtected";
 import { getApiErrorMessage } from "../../utils/apiError";
+import DashboardAnalytics, {
+  type DashboardAnalyticsData,
+} from "./DashboardAnalytics";
+import { bn, glass, headingStyle } from "./dashboardFormat";
 
 type DashboardStats = {
   students: {
@@ -52,6 +56,7 @@ type DashboardStats = {
     authorName: string;
     createdAt: string;
   }[];
+  analytics: DashboardAnalyticsData;
 };
 
 type Activity = {
@@ -62,22 +67,6 @@ type Activity = {
   createdAt: string;
   link?: string;
 };
-
-const glass: CSSProperties = {
-  background: "rgba(255,255,255,0.4)",
-  backdropFilter: "blur(20px) saturate(140%)",
-  border: "1.5px solid rgba(255,255,255,0.44)",
-  boxShadow: "0 8px 32px rgba(0,0,0,0.05)",
-};
-
-const headingStyle: CSSProperties = {
-  color: "rgba(239,68,68,0.95)",
-  textShadow:
-    "-0.6px -0.6px 0 rgba(255,255,255,0.95), 0.6px -0.6px 0 rgba(255,255,255,0.95), -0.6px 0.6px 0 rgba(255,255,255,0.95), 0.6px 0.6px 0 rgba(255,255,255,0.95), 0 2px 8px rgba(239,68,68,0.18)",
-  letterSpacing: "-0.5px",
-};
-
-const bn = (value: number) => value.toLocaleString("bn-BD");
 
 const relativeTime = new Intl.RelativeTimeFormat("bn", { numeric: "auto" });
 const timeUnits: [Intl.RelativeTimeFormatUnit, number][] = [
@@ -356,6 +345,8 @@ export default function Overview() {
           color="from-purple-500 to-purple-600"
         />
       </div>
+
+      <DashboardAnalytics analytics={stats.analytics} />
 
       <div className="rounded-2xl p-6" style={glass}>
         <h2 className="mb-4 text-xl font-bold" style={headingStyle}>
