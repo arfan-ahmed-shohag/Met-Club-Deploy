@@ -69,7 +69,11 @@ export default function Login({ embedded = false }: { embedded?: boolean }) {
         return;
       }
       if (res.data.data.user.role === "admin") {
-        navigate("/admin/overview");
+        // Back to the admin page that sent them to login, else the overview.
+        const adminPage = requestedPage?.pathname?.startsWith("/admin")
+          ? `${requestedPage.pathname}${requestedPage.search || ""}${requestedPage.hash || ""}`
+          : "/admin/overview";
+        navigate(adminPage, { replace: true });
         return;
       }
         navigate(getLocalizedPath("/", isEnglish ? "en" : "bn"));

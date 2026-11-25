@@ -9,6 +9,7 @@ import { lazy } from "react";
 import { SuspenseWrapper } from "./SuspenseWrapper";
 import { getStoredLocale } from "../utils/language";
 import ProtectedRoute from "../components/Layouts/ProtectedRoute";
+import AdminRoute from "../components/Layouts/AdminRoute";
 const Registration = lazy(() => import("../pages/Registration/Registration"));
 const HomePage = lazy(() => import("../pages/Home/Home"));
 const AnticipatoryActionCoursePage = lazy(
@@ -520,7 +521,9 @@ const routes: RouteObject[] = [
     path: "/admin",
     element: (
       <SuspenseWrapper>
-        <AdminLayout />
+        <AdminRoute>
+          <AdminLayout />
+        </AdminRoute>
       </SuspenseWrapper>
     ),
     children: [
