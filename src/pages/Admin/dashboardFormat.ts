@@ -1,7 +1,21 @@
 import type { CSSProperties } from "react";
 
 // Shared styles and formatters for the admin overview and its charts.
-export const CHART_BLUE = "#2a78d6";
+// Chart colours come from the site theme (index.css @theme) and were checked
+// with the dataviz palette validator against the light admin surface.
+export const CHART_RED = "#da291c"; // --color-red-600, site primary
+export const CHART_BRICK = "#9a3324"; // --color-red-800
+export const CHART_TEAL = "#009ca6"; // --color-teal-600
+// Ordinal ramp (largest share darkest) for the division donut, built around
+// the theme reds; passes the ordinal checks. Sand (--color-red-300) = "rest".
+export const DONUT_RAMP = [
+  "#5c1f16",
+  "#9a3324",
+  "#da291c",
+  "#e8705c",
+  "#ee9585",
+];
+export const DONUT_REST = "#d1ccbd";
 
 export const glass: CSSProperties = {
   background: "rgba(255,255,255,0.4)",

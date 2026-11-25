@@ -59,8 +59,10 @@ type DashboardStats = {
   analytics: DashboardAnalyticsData;
 };
 
+type ActivityKind = "student" | "blog";
 type Activity = {
   key: string;
+  kind: ActivityKind;
   icon: IconType;
   title: string;
   detail: string;
@@ -90,6 +92,7 @@ function timeAgo(date: string) {
 function toActivities(stats: DashboardStats): Activity[] {
   const students: Activity[] = stats.recentStudents.map((student) => ({
     key: `student-${student.id}`,
+    kind: "student",
     icon: FiUserPlus,
     title: `${student.fullName} নিবন্ধিত হয়েছেন`,
     detail: [
@@ -102,6 +105,7 @@ function toActivities(stats: DashboardStats): Activity[] {
   }));
   const blogs: Activity[] = stats.recentBlogs.map((blog) => ({
     key: `blog-${blog.id}`,
+    kind: "blog",
     icon: FiBookOpen,
     title: `নতুন ব্লগ: ${blog.title}`,
     detail: `${blog.authorName || "অজানা লেখক"} · ${blog.status === "pending" ? "পর্যালোচনার অপেক্ষায়" : "প্রকাশিত"}`,
@@ -116,6 +120,28 @@ function toActivities(stats: DashboardStats): Activity[] {
     .slice(0, 6);
 }
 
+// Counts from 0 up to `value` (skipped under reduced motion).
+function useCountUp(value: number, duration = 1100) {
+  const [shown, setShown] = useState(0);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setShown(value);
+      return;
+    }
+    let frame = 0;
+    let start: number | null = null;
+    const tick = (time: number) => {
+      start ??= time;
+      const progress = Math.min((time - start) / duration, 1);
+      setShown(Math.round(value * (1 - Math.pow(1 - progress, 3))));
+      if (progress < 1) frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [value, duration]);
+  return shown;
+}
+
 function StatCard({
   title,
   value,
@@ -123,6 +149,7 @@ function StatCard({
   icon: Icon,
   color,
   link,
+  index,
 }: {
   title: string;
   value: number;
@@ -130,34 +157,43 @@ function StatCard({
   icon: IconType;
   color: string;
   link?: string;
+  index: number;
 }) {
+  const shown = useCountUp(value);
   const body = (
     <div className="relative z-10 flex items-center justify-between gap-3">
       <div className="min-w-0">
         <p className="text-sm font-semibold text-gray-700">{title}</p>
-        <p className="mt-1 text-3xl font-black text-gray-900">{bn(value)}</p>
+        <p className="mt-1 text-3xl font-black tabular-nums text-gray-900">
+          {bn(shown)}
+        </p>
         <p className="mt-1 truncate text-xs font-medium text-gray-600">
           {note}
         </p>
       </div>
       <div
-        className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${color} text-white shadow-lg`}
+        className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${color} text-white shadow-lg transition-transform duration-500 group-hover:rotate-12 group-hover:scale-110 motion-reduce:transition-none`}
       >
         <Icon className="h-6 w-6" aria-hidden="true" />
       </div>
     </div>
   );
-  const className = "relative block overflow-hidden rounded-2xl p-6";
+  const className =
+    "dash-rise group relative block overflow-hidden rounded-2xl p-6 transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(154,51,36,0.16)] motion-reduce:hover:translate-y-0";
+  const decoration = (
+    <span
+      className={`pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-gradient-to-br ${color} opacity-10 transition-transform duration-700 group-hover:scale-150`}
+    />
+  );
+  const style = { ...glass, animationDelay: `${index * 70}ms` };
   return link ? (
-    <Link
-      to={link}
-      className={`${className} transition-transform hover:-translate-y-0.5`}
-      style={glass}
-    >
+    <Link to={link} className={className} style={style}>
+      {decoration}
       {body}
     </Link>
   ) : (
-    <div className={className} style={glass}>
+    <div className={className} style={style}>
+      {decoration}
       {body}
     </div>
   );
@@ -192,6 +228,9 @@ export default function Overview() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [activityFilter, setActivityFilter] = useState<ActivityKind | null>(
+    null,
+  );
 
   const loadStats = useCallback(async () => {
     setIsLoading(true);
@@ -236,6 +275,9 @@ export default function Overview() {
 
   const { students, blogs, content } = stats;
   const activities = toActivities(stats);
+  const shownActivities = activityFilter
+    ? activities.filter((activity) => activity.kind === activityFilter)
+    : activities;
   const contentTiles: {
     label: string;
     value: number;
@@ -320,21 +362,24 @@ export default function Overview() {
           value={students.active}
           note={`এই সপ্তাহে নতুন ${bn(students.newThisWeek)} জন · ব্লকড ${bn(students.blocked)}`}
           icon={FiUsers}
-          color="from-blue-500 to-blue-600"
+          color="from-red-600 to-red-800"
+          index={0}
         />
         <StatCard
           title="মোট দর্শনার্থী"
           value={stats.visitors}
           note={`বাংলাদেশ ${bn(students.bangladesh)} · অন্যান্য দেশ ${bn(students.otherCountries)} শিক্ষার্থী`}
           icon={FiEye}
-          color="from-green-500 to-green-600"
+          color="from-teal-500 to-teal-600"
+          index={1}
         />
         <StatCard
           title="প্রকাশিত ব্লগ"
           value={blogs.published}
           note={`${bn(blogs.pending)}টি পর্যালোচনার অপেক্ষায়`}
           icon={FiBookOpen}
-          color="from-orange-500 to-orange-600"
+          color="from-orange-500 to-red-600"
+          index={2}
           link="/admin/blogs"
         />
         <StatCard
@@ -342,7 +387,8 @@ export default function Overview() {
           value={stats.gamePlayers}
           note="গেম শেষ করা শিক্ষার্থী"
           icon={FiPlay}
-          color="from-purple-500 to-purple-600"
+          color="from-red-800 to-red-900"
+          index={3}
         />
       </div>
 
@@ -357,9 +403,12 @@ export default function Overview() {
             <Link
               key={link}
               to={link}
-              className="rounded-xl border border-white/40 bg-white/30 p-3 transition-colors hover:bg-white/50"
+              className="group rounded-xl border border-white/40 bg-white/30 p-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-red-200 hover:bg-white/70 hover:shadow-md motion-reduce:hover:translate-y-0"
             >
-              <Icon className="h-4 w-4 text-red-600" aria-hidden="true" />
+              <Icon
+                className="h-4 w-4 text-red-600 transition-transform duration-300 group-hover:scale-125"
+                aria-hidden="true"
+              />
               <p className="mt-2 text-2xl font-black text-gray-900">
                 {bn(value)}
               </p>
@@ -370,18 +419,48 @@ export default function Overview() {
       </div>
 
       <div className="rounded-2xl p-6" style={glass}>
-        <h2 className="mb-4 text-xl font-bold" style={headingStyle}>
-          সাম্প্রতিক কার্যকলাপ
-        </h2>
-        {activities.length === 0 ? (
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <h2 className="text-xl font-bold" style={headingStyle}>
+            সাম্প্রতিক কার্যকলাপ
+          </h2>
+          <div
+            role="group"
+            aria-label="কার্যকলাপ ফিল্টার"
+            className="inline-flex rounded-xl bg-white/50 p-1 ring-1 ring-white/60"
+          >
+            {(
+              [
+                [null, "সব"],
+                ["student", "নিবন্ধন"],
+                ["blog", "ব্লগ"],
+              ] as const
+            ).map(([kind, label]) => (
+              <button
+                key={label}
+                type="button"
+                aria-pressed={activityFilter === kind}
+                onClick={() => setActivityFilter(kind)}
+                className={`rounded-lg px-3 py-1 text-sm font-semibold transition-all duration-200 ${
+                  activityFilter === kind
+                    ? "bg-red-600 text-white shadow-md shadow-red-600/20"
+                    : "text-slate-600 hover:bg-white/70 hover:text-slate-900"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+        {shownActivities.length === 0 ? (
           <p className="text-sm text-gray-600">এখনও কোনো কার্যকলাপ নেই।</p>
         ) : (
-          <ul className="space-y-3">
-            {activities.map(
-              ({ key, icon: Icon, title, detail, createdAt, link }) => (
+          <ul key={activityFilter ?? "all"} className="space-y-3">
+            {shownActivities.map(
+              ({ key, icon: Icon, title, detail, createdAt, link }, index) => (
                 <li
                   key={key}
-                  className="flex items-center justify-between gap-3 rounded-xl border border-white/40 bg-white/30 p-4"
+                  className="dash-rise flex items-center justify-between gap-3 rounded-xl border border-white/40 bg-white/30 p-4 transition-colors duration-200 hover:border-red-200 hover:bg-white/70"
+                  style={{ animationDelay: `${index * 60}ms` }}
                 >
                   <div className="flex min-w-0 items-center gap-4">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600">
