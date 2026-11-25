@@ -119,7 +119,9 @@ function Panel({
       <h2 className="text-xl font-bold" style={headingStyle}>
         {title}
       </h2>
-      {subtitle && <div className="mt-1 text-sm text-slate-600">{subtitle}</div>}
+      {subtitle && (
+        <div className="mt-1 text-sm text-slate-600">{subtitle}</div>
+      )}
       <div className="mt-5">{children}</div>
     </section>
   );
@@ -192,7 +194,10 @@ function TrendPanel({ trend }: { trend: DashboardAnalyticsData["trend"] }) {
               {change !== null &&
                 change !== 0 &&
                 (change > 0 ? (
-                  <FiTrendingUp className="text-emerald-600" aria-hidden="true" />
+                  <FiTrendingUp
+                    className="text-emerald-600"
+                    aria-hidden="true"
+                  />
                 ) : (
                   <FiTrendingDown className="text-red-600" aria-hidden="true" />
                 ))}
@@ -207,7 +212,10 @@ function TrendPanel({ trend }: { trend: DashboardAnalyticsData["trend"] }) {
             {range.bucket === "month" ? "মাসিক গড়" : "দৈনিক গড়"}
           </p>
           <p className="mt-1 text-3xl font-black text-slate-900">
-            {average.toLocaleString("bn-BD", { maximumFractionDigits: 1 })}
+            {/* Small averages (e.g. 1 in 30 days) keep 2 decimals instead of showing 0. */}
+            {average.toLocaleString("bn-BD", {
+              maximumFractionDigits: average > 0 && average < 1 ? 2 : 1,
+            })}
           </p>
         </div>
         <div className="rounded-xl bg-white/45 p-4 ring-1 ring-white/60">
@@ -239,8 +247,8 @@ function TrendPanel({ trend }: { trend: DashboardAnalyticsData["trend"] }) {
 
       {metric === "visitors" && (
         <p className="mt-2 text-xs text-slate-500">
-          দৈনিক দর্শনার্থীর হিসাব এই ফিচার চালু হওয়ার দিন থেকে শুরু; এর আগের
-          দিনগুলো ০ দেখাবে।
+          দৈনিক দর্শনার্থীর হিসাব এই ফিচার চালু হওয়ার দিন থেকে শুরু; এর আগের দিনগুলো ০
+          দেখাবে।
         </p>
       )}
 
@@ -295,7 +303,9 @@ export default function DashboardAnalytics({
     .map((row) => ({
       label: placeName(row.district),
       note:
-        row.district === OTHERS ? undefined : `${placeName(row.division)} বিভাগ`,
+        row.district === OTHERS
+          ? undefined
+          : `${placeName(row.division)} বিভাগ`,
       value: row.students,
     }));
   const classes = analytics.byClass.map((row) => ({

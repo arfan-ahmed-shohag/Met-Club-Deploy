@@ -47,6 +47,40 @@ function niceTicks(max: number) {
   return Array.from({ length: Math.round(top / step) + 1 }, (_, i) => i * step);
 }
 
+/**
+ * Smooth SVG path through the points (monotone cubic, like d3's
+ * curveMonotoneX). Unlike a plain spline it never overshoots: the curve
+ * stays between neighbouring values, so counts never dip below 0 and
+ * peaks are drawn at their real height.
+ */
+function smoothPath(xs: number[], ys: number[]) {
+  const n = xs.length;
+  if (n === 0) return "";
+  if (n === 1) return `M${xs[0]},${ys[0]}`;
+  if (n === 2) return `M${xs[0]},${ys[0]}L${xs[1]},${ys[1]}`;
+
+  const slope = (i: number) => (ys[i + 1] - ys[i]) / (xs[i + 1] - xs[i] || 1);
+  const secants = Array.from({ length: n - 1 }, (_, i) => slope(i));
+  const tangents = xs.map((_, i) => {
+    if (i === 0) return secants[0];
+    if (i === n - 1) return secants[n - 2];
+    const a = secants[i - 1];
+    const b = secants[i];
+    // Flat at local peaks/valleys; otherwise a weighted harmonic mean.
+    if (a * b <= 0) return 0;
+    const h0 = xs[i] - xs[i - 1];
+    const h1 = xs[i + 1] - xs[i];
+    return (3 * (h0 + h1)) / ((2 * h1 + h0) / a + (h1 + 2 * h0) / b);
+  });
+
+  let d = `M${xs[0]},${ys[0]}`;
+  for (let i = 0; i < n - 1; i++) {
+    const dx = (xs[i + 1] - xs[i]) / 3;
+    d += `C${xs[i] + dx},${ys[i] + dx * tangents[i]} ${xs[i + 1] - dx},${ys[i + 1] - dx * tangents[i + 1]} ${xs[i + 1]},${ys[i + 1]}`;
+  }
+  return d;
+}
+
 function useWidth<T extends HTMLElement>() {
   const ref = useRef<T>(null);
   const [width, setWidth] = useState(0);
@@ -157,9 +191,10 @@ export function TrendChart({
   const y = (value: number) =>
     pad.top + innerHeight - (value / top) * innerHeight;
 
-  const line = points
-    .map((p, i) => `${i ? "L" : "M"}${x(i)},${y(p.count)}`)
-    .join("");
+  const line = smoothPath(
+    points.map((_, i) => x(i)),
+    points.map((p) => y(p.count)),
+  );
   const area = points.length
     ? `${line}L${x(points.length - 1)},${y(0)}L${x(0)},${y(0)}Z`
     : "";
